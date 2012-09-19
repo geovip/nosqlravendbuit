@@ -5,7 +5,7 @@ using System.Web;
 
 namespace UIT.NoSQL.Web.Models
 {
-    public class User
+    public class UserObject
     {
         public string ID {get;set;}
         public string Username { get; set; }
@@ -14,6 +14,6 @@ namespace UIT.NoSQL.Web.Models
         public string Email { get; set; }
         public DateTime CreateDate { get; set; }
 
-        public List<GroupRole> ListGroupRole { get; set; }
+        public List<GroupRoleObject> ListGroupRole { get; set; }
     }
 }

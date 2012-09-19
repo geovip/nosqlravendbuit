@@ -5,11 +5,11 @@ using System.Web;
 
 namespace UIT.NoSQL.Web.Models
 {
-    public class Role
+    public class RoleObject
     {
         public string RoleID { get; set; }
         public string RoleName { get; set; }
 
-        List<GroupRole> ListGroupRole { get; set; }
+        List<GroupRoleObject> ListGroupRole { get; set; }
     }
 }
