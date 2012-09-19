@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="UIT.NoSQL.Web.Models.CommentObject">
+    <Position X="5.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAgAAAAAAAAAAAAAAAAAAAAAgAAAAACAAAAA=</HashCode>
+      <FileName>Models\CommentObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIT.NoSQL.Web.Models.UserObject">
+    <Position X="3.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAgIAAAQAAAAAAAABAAAACAAABAAAAAAA=</HashCode>
+      <FileName>Models\UserObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIT.NoSQL.Web.Models.GroupObject">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Models\GroupObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIT.NoSQL.Web.Models.GroupRoleObject">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAFAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgE=</HashCode>
+      <FileName>Models\GroupRoleObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIT.NoSQL.Web.Models.GroupSettingObject">
+    <Position X="7.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEMAAAAAAAAAAAAAAQAAAAAAABAACAAAAACAAAAA=</HashCode>
+      <FileName>Models\GroupSettingObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIT.NoSQL.Web.Models.RoleObject">
+    <Position X="5.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAABAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Models\RoleObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIT.NoSQL.Web.Models.TopicObject">
+    <Position X="5.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAARAEAAAgAAAEAAAAAAAAAAAAAAAgABgAABAAAAAAA=</HashCode>
+      <FileName>Models\TopicObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
