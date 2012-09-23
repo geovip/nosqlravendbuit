@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F1677C1F-4785-447B-B117-ED16EBC452FF}</ProjectGuid>
+    <ProjectGuid>{AF804DA5-B589-46AB-8A0A-BE847EE3D019}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UIT.NoSQL.Service</RootNamespace>
-    <AssemblyName>UIT.NoSQL.Service</AssemblyName>
+    <RootNamespace>UIT.NoSQL.Core</RootNamespace>
+    <AssemblyName>UIT.NoSQL.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,29 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Raven_Client\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\Raven_Client\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\Raven_Client\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Debug">
-      <HintPath>..\Raven_Client\Raven.Client.Debug.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\Raven_Client\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight.FSharp">
-      <HintPath>..\Raven_Client\Raven.Client.Lightweight.FSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.MvcIntegration">
-      <HintPath>..\Raven_Client\Raven.Client.MvcIntegration.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,15 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base.cs" />
-    <Compile Include="TopicService.cs" />
+    <Compile Include="Domain\CommentObject.cs" />
+    <Compile Include="Domain\GroupObject.cs" />
+    <Compile Include="Domain\GroupRoleObject.cs" />
+    <Compile Include="Domain\GroupSettingObject.cs" />
+    <Compile Include="Domain\RoleObject.cs" />
+    <Compile Include="Domain\TopicObject.cs" />
+    <Compile Include="Domain\UserObject.cs" />
+    <Compile Include="IService\ITopicService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UIT.NoSQL.Core\UIT.NoSQL.Core.csproj">
-      <Project>{AF804DA5-B589-46AB-8A0A-BE847EE3D019}</Project>
-      <Name>UIT.NoSQL.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
