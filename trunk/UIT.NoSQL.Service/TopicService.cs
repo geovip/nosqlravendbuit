@@ -17,16 +17,31 @@ namespace UIT.NoSQL.Service
             this.session = session;
         }
 
+        //Load Topic based on Id
+        public TopicObject Load(string id)
+        {
+            return session.Load<TopicObject>(id);
+        }
+
+        // Get all topics
         public List<TopicObject> GetAll()
         {
-            return null;
+            var topics = session.Query<TopicObject>();
+            return topics.ToList();
         }
 
         public void Save(TopicObject topic)
         {
             session.Store(topic);
             session.SaveChanges();
+        }
 
+        //Delete a topic
+        public void Delete(string id)
+        {
+            var topic = Load(id);
+            session.Delete<TopicObject>(topic);
+            session.SaveChanges();
         }
     }
 }

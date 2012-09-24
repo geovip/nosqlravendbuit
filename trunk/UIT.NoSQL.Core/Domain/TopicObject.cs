@@ -17,5 +17,10 @@ namespace UIT.NoSQL.Core.Domain
         public bool IsDetele { get; set; }
 
         public List<CommentObject> ListComment { get; set; }
+
+        public TopicObject()
+        {
+            ListComment = new List<CommentObject>();
+        }
     }
 }
