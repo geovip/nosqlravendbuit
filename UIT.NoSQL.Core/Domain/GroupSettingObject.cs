@@ -19,5 +19,13 @@ namespace UIT.NoSQL.Core.Domain
 
         //posting permission
         public List<GroupRoleObject> CanAttachFile { get; set; }
+
+        public GroupSettingObject()
+        {
+            CanViewTopic = new List<GroupRoleObject>();
+            CanPost = new List<GroupRoleObject>();
+
+            CanAttachFile = new List<GroupRoleObject>();
+        }
     }
 }

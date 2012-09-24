@@ -15,5 +15,10 @@ namespace UIT.NoSQL.Core.Domain
         public DateTime CreateDate { get; set; }
 
         public List<GroupRoleObject> ListGroupRole { get; set; }
+
+        public UserObject()
+        {
+            ListGroupRole = new List<GroupRoleObject>();
+        }
     }
 }

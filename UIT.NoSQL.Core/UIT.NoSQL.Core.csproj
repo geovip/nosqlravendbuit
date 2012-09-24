@@ -47,7 +47,13 @@
     <Compile Include="Domain\RoleObject.cs" />
     <Compile Include="Domain\TopicObject.cs" />
     <Compile Include="Domain\UserObject.cs" />
+    <Compile Include="IService\ICommentService.cs" />
+    <Compile Include="IService\IGroupRoleService.cs" />
+    <Compile Include="IService\IGroupService.cs" />
+    <Compile Include="IService\IGroupSettingService.cs" />
+    <Compile Include="IService\IRoleService.cs" />
     <Compile Include="IService\ITopicService.cs" />
+    <Compile Include="IService\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

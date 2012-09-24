@@ -6,11 +6,11 @@ using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Core.IService
 {
-    public interface ITopicService
+    public interface ICommentService
     {
-        TopicObject Load(string id);
-        List<TopicObject> GetAll();
-        void Save(TopicObject topic);
+        CommentObject Load(string id);
+        List<CommentObject> GetAll();
+        void Save(CommentObject comment);
         void Delete(string id);
     }
 }

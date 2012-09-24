@@ -6,11 +6,11 @@ using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Core.IService
 {
-    public interface ITopicService
+    public interface IGroupRoleService
     {
-        TopicObject Load(string id);
-        List<TopicObject> GetAll();
-        void Save(TopicObject topic);
+        GroupRoleObject Load(string id);
+        List<GroupRoleObject> GetAll();
+        void Save(GroupRoleObject groupRole);
         void Delete(string id);
     }
 }

@@ -12,5 +12,11 @@ namespace UIT.NoSQL.Core.Domain
 
         public List<TopicObject> ListTopic { get; set; }
         public List<GroupRoleObject> ListGroupRole { get; set; }
+
+        public GroupObject()
+        {
+            ListTopic = new List<TopicObject>();
+            ListGroupRole = new List<GroupRoleObject>();
+        }
     }
 }
