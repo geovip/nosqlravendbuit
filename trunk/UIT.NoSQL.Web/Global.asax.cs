@@ -20,6 +20,7 @@ namespace UIT.NoSQL.Web
     public class MvcApplication : System.Web.HttpApplication
     {
         private const string RavenSessionKey = "RavenMVC.Session";
+        private static string databaseName;
         private static IDocumentStore documentStore;
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
@@ -48,7 +49,7 @@ namespace UIT.NoSQL.Web
         {
             //Create a DocumentSession on BeginRequest   
             //create a document session for every unit of work
-            BeginRequest += (sender, args) => HttpContext.Current.Items[RavenSessionKey] = documentStore.OpenSession();
+            BeginRequest += (sender, args) => HttpContext.Current.Items[RavenSessionKey] = documentStore.OpenSession(databaseName);
             //Destroy the DocumentSession on EndRequest
             EndRequest += (o, eventArgs) =>
             {
@@ -69,7 +70,13 @@ namespace UIT.NoSQL.Web
 
             //Create a DocumentStore in Application_Start
             //DocumentStore should be created once per application and stored as a singleton.
-            documentStore = new DocumentStore { Url = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectRavenDB"].ConnectionString };
+            databaseName = System.Configuration.ConfigurationManager.AppSettings["databaseName"];
+            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectRavenDB"].ConnectionString;
+            //connection += "/databases/" + databaseName;
+            //Raven.Client.Extensions.MultiDatabase.CreateDatabaseDocument(databaseName);
+            
+            
+            documentStore = new DocumentStore { Url = connection };
             documentStore.Initialize();
 
             ConfigureUnity();
@@ -86,7 +93,9 @@ namespace UIT.NoSQL.Web
             //Create UnityContainer          
             IUnityContainer container = new UnityContainer()
             .RegisterType<IDocumentSession>(new InjectionFactory(c => MvcApplication.CurrentSession))
-            .RegisterType<IUserService, UserService>();
+            .RegisterType<IUserService, UserService>()
+            .RegisterType<IGroupService, GroupService>()
+            .RegisterType<ITopicService, TopicService>();
 
             //Set container for Controller Factory
             Factory.MvcUnityContainer.Container = container;
