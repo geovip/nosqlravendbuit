@@ -12,25 +12,10 @@ namespace UIT.NoSQL.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private ITopicService topicService;
-
-        public HomeController(ITopicService topicService)
-        {
-            this.topicService = topicService;
-        }
 
         public ActionResult Index()
         {
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-            
-            TopicObject topic = new TopicObject();
-            topic.TopicID = "T02";
-            topic.Title = "new title";
-            topic.Content = "new content";
-            topic.CreateDate = DateTime.Now;
-
-            topicService.Save(topic);
-
             return View();
         }
 

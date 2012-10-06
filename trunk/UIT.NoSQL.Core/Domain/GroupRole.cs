@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UIT.NoSQL.Core.NewDomain
+namespace UIT.NoSQL.Core.Domain
 {
-    public class GroupRole
+    public class GroupRoleObject
     {
         public string GroupRoleID { get; set; }
         public string GroupName { get; set; }
 
-        public List<Role> ListRole { get; set; }
+        public List<RoleObject> ListRole { get; set; }
 
-        public GroupRole()
+        public GroupRoleObject()
         {
-            ListRole = new List<Role>();
+            ListRole = new List<RoleObject>();
         }
     }
 }
