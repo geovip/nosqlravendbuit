@@ -11,6 +11,7 @@ namespace UIT.NoSQL.Core.Domain
         public string GroupName { get; set; }
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
+        public string CreateBy { get; set; }
 
         public List<DenormalizedTopic> ListTopic { get; set; }
         public List<UserGroupObject> ListUserGroup { get; set; }
