@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UIT.NoSQL.Core.NewDomain
+namespace UIT.NoSQL.Core.Domain
 {
-    public class Topic
+    public class TopicObject
     {
         public string TopicId { get; set; }
         public string TopicName { get; set; }
@@ -16,11 +16,11 @@ namespace UIT.NoSQL.Core.NewDomain
         public UInt32 NumberOfView { get; set; }
         public UInt32 NumberOfComment { get; set; }
 
-        public List<Comment> ListComment { get; set; }
+        public List<CommentObject> ListComment { get; set; }
 
-        public Topic()
+        public TopicObject()
         {
-            ListComment = new List<Comment>();
+            ListComment = new List<CommentObject>();
         }
 
         public UInt32 GetNumberOfComment()
@@ -41,7 +41,7 @@ namespace UIT.NoSQL.Core.NewDomain
         public UInt32 NumberOfComment { get; set; }
     }
 
-    public class Comment
+    public class CommentObject
     {
         public string CommentId { get; set; }
         public string Content { get; set; }

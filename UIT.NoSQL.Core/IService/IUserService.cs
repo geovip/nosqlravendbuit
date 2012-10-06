@@ -12,5 +12,6 @@ namespace UIT.NoSQL.Core.IService
         List<UserObject> GetAll();
         void Save(UserObject user);
         void Delete(string id);
+        bool CheckLoginSuccess(string username, string password);
     }
 }

@@ -17,7 +17,7 @@ namespace UIT.NoSQL.Service
             this.session = session;
         }
 
-        //Load User based on Id
+        //Load UserObject based on Id
         public UserObject Load(string id)
         {
             return session.Load<UserObject>(id);
@@ -42,6 +42,19 @@ namespace UIT.NoSQL.Service
             var user = Load(id);
             session.Delete<UserObject>(user);
             session.SaveChanges();
+        }
+
+        //Check Login success or not
+        public bool CheckLoginSuccess(string username, string password)
+        {
+            //var userLogin = session.Query<UserObject>().Where(u => u.UserName.Equals(username) && u.Password.Equals(password));
+            var userLogin = (from user in session.Query<UserObject>()
+                             where user.UserName.Equals(username) && user.Password.Equals(password)
+                            select user).SingleOrDefault();
+            //var userLogin = session.Load<UserObject>("33");
+            if (userLogin == null)
+                return false;
+            return true;
         }
     }
 }

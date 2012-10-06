@@ -86,7 +86,7 @@ namespace UIT.NoSQL.Web
             //Create UnityContainer          
             IUnityContainer container = new UnityContainer()
             .RegisterType<IDocumentSession>(new InjectionFactory(c => MvcApplication.CurrentSession))
-            .RegisterType<ITopicService, TopicService>();
+            .RegisterType<IUserService, UserService>();
 
             //Set container for Controller Factory
             Factory.MvcUnityContainer.Container = container;

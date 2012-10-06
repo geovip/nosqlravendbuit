@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UIT.NoSQL.Core.NewDomain
+namespace UIT.NoSQL.Core.Domain
 {
-    public class User
+    public class UserObject
     {
         public string UserId { get; set; }
         public string UserName { get; set; }
@@ -13,11 +13,11 @@ namespace UIT.NoSQL.Core.NewDomain
         public string FullName { get; set; }
         public DateTime CreateDate { get; set; }
 
-        public List<UserGroup> ListUserGroup { get; set; }
+        public List<UserGroupObject> ListUserGroup { get; set; }
 
-        public User()
+        public UserObject()
         {
-            ListUserGroup = new List<UserGroup>();
+            ListUserGroup = new List<UserGroupObject>();
         }
 
     }
