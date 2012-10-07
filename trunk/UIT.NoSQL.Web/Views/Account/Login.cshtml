@@ -1,41 +1,42 @@
-@model UIT.NoSQL.Web.Models.LoginModel
+﻿@model UIT.NoSQL.Core.Domain.UserObject
 
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Login";
+    Layout = null;
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-    <h2>Enter your user name and password below.</h2>
-</hgroup>
+<h2>Login</h2>
 
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-
-@using (Html.BeginForm((string)ViewBag.FormAction, "Account")) {
-    @Html.ValidationSummary(true, "Log in was unsuccessful. Please correct the errors and try again.")
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
-            </li>
-            <li>
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
+        <legend>UserObject</legend>
+        
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+        
+        <p>
+            <input type="submit" value="Create" />
+        </p>
     </fieldset>
-    <p>
-        @Html.ActionLink("Register", "Register") if you don't have an account.
-    </p>
 }
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
