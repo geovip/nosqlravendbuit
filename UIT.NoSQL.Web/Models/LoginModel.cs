@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UIT.NoSQL.Web.Models
 {
-    public class LoginModel
+    public class MyLoginModel
     {
         [Required]
         [Display(Name = "User Name")]

@@ -7,7 +7,7 @@ namespace UIT.NoSQL.Core.Domain
 {
     public class GroupObject
     {
-        public string GroupId { get; set; }
+        public string Id { get; set; }
         public string GroupName { get; set; }
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
@@ -15,11 +15,17 @@ namespace UIT.NoSQL.Core.Domain
 
         public List<DenormalizedTopic> ListTopic { get; set; }
         public List<UserGroupObject> ListUserGroup { get; set; }
+
+        public GroupObject()
+        {
+            ListTopic = new List<DenormalizedTopic>();
+            ListUserGroup = new List<UserGroupObject>();
+        }
     }
 
     public class DenormalizedGroup
     {
-        public string GroupId { get; set; }
+        public string Id { get; set; }
         public string GroupName { get; set; }
         public string Description { get; set; }
     }

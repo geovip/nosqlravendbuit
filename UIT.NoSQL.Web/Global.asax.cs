@@ -95,6 +95,7 @@ namespace UIT.NoSQL.Web
             .RegisterType<IDocumentSession>(new InjectionFactory(c => MvcApplication.CurrentSession))
             .RegisterType<IUserService, UserService>()
             .RegisterType<IGroupService, GroupService>()
+            .RegisterType<IUserGroupService, UserGroupService>()
             .RegisterType<ITopicService, TopicService>();
 
             //Set container for Controller Factory

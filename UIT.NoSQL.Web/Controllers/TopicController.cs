@@ -3,47 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using UIT.NoSQL.Web.Models;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Web.Controllers
 {
-    public class LoginController : Controller
+    public class TopicController : Controller
     {
-        private IUserService userService;
+        private ITopicService topicService;
+        private IGroupService groupService;
 
-        public LoginController(IUserService userService)
+        public TopicController(ITopicService topicService, IGroupService groupService)
         {
-            this.userService = userService;
+            this.topicService = topicService;
+            this.groupService = groupService;
         }
+
         //
-        // GET: /Login/
+        // GET: /Topic/
 
         public ActionResult Index()
         {
-            ViewBag.ErrorMessage = "";
             return View();
         }
 
-        public ActionResult Login(LoginModel myLoginModel)
-        {
-            if (userService.CheckLoginSuccess(myLoginModel.UserName, myLoginModel.Password))
-            {
-                Session["user"] = userService.LoadByUserName(myLoginModel.UserName);
-                return RedirectToAction("Index", "UserGroup");
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "Login Failed!";
-                return View("Index");
-            }
-            
-        }
-
-
         //
-        // GET: /Login/Details/5
+        // GET: /Topic/Details/5
 
         public ActionResult Details(int id)
         {
@@ -51,24 +36,40 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // GET: /Login/Create
+        // GET: /Topic/Create
 
         public ActionResult Create()
         {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             return View();
         }
 
         //
-        // POST: /Login/Create
+        // POST: /Topic/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(TopicObject topic)
         {
             try
             {
                 // TODO: Add insert logic here
+                var user = (UserObject)Session["user"];
 
-                return RedirectToAction("Index");
+                //topic.Id = Guid.NewGuid().ToString();
+                topic.CreateDate = DateTime.Now;
+                topic.LastModified = DateTime.Now;
+                topic.NumberOfView = 0;
+                topic.NumberOfComment = 0;
+                topic.CreateBy = user;
+
+                topicService.Save(topic);
+
+                //var group = 
+
+                return RedirectToAction("Index");   
             }
             catch
             {
@@ -77,7 +78,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // GET: /Login/Edit/5
+        // GET: /Topic/Edit/5
 
         public ActionResult Edit(int id)
         {
@@ -85,7 +86,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // POST: /Login/Edit/5
+        // POST: /Topic/Edit/5
 
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
@@ -103,7 +104,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // GET: /Login/Delete/5
+        // GET: /Topic/Delete/5
 
         public ActionResult Delete(int id)
         {
@@ -111,7 +112,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // POST: /Login/Delete/5
+        // POST: /Topic/Delete/5
 
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)

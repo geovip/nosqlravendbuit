@@ -3,47 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using UIT.NoSQL.Web.Models;
+using UIT.NoSQL.Service;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Web.Controllers
 {
-    public class LoginController : Controller
+    public class UserGroupController : Controller
     {
-        private IUserService userService;
-
-        public LoginController(IUserService userService)
+        private IUserGroupService userGroupService;
+        public UserGroupController(IUserGroupService userGroupService)
         {
-            this.userService = userService;
+            this.userGroupService = userGroupService;
         }
+
         //
-        // GET: /Login/
+        // GET: /UserGroup/
 
         public ActionResult Index()
         {
-            ViewBag.ErrorMessage = "";
-            return View();
-        }
-
-        public ActionResult Login(LoginModel myLoginModel)
-        {
-            if (userService.CheckLoginSuccess(myLoginModel.UserName, myLoginModel.Password))
+            var user = (UserObject)Session["user"];
+            if (user == null)
             {
-                Session["user"] = userService.LoadByUserName(myLoginModel.UserName);
-                return RedirectToAction("Index", "UserGroup");
+                ViewBag.IsLogined = false;
+                return View();
             }
             else
             {
-                ViewBag.ErrorMessage = "Login Failed!";
-                return View("Index");
-            }
-            
+                ViewBag.IsLogined = true;
+                var userGroups = userGroupService.GetByUser(user.Id);
+                return View(userGroups);
+            }         
         }
 
-
         //
-        // GET: /Login/Details/5
+        // GET: /UserGroup/Details/5
 
         public ActionResult Details(int id)
         {
@@ -51,7 +45,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // GET: /Login/Create
+        // GET: /UserGroup/Create
 
         public ActionResult Create()
         {
@@ -59,7 +53,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // POST: /Login/Create
+        // POST: /UserGroup/Create
 
         [HttpPost]
         public ActionResult Create(FormCollection collection)
@@ -77,7 +71,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // GET: /Login/Edit/5
+        // GET: /UserGroup/Edit/5
 
         public ActionResult Edit(int id)
         {
@@ -85,7 +79,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // POST: /Login/Edit/5
+        // POST: /UserGroup/Edit/5
 
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
@@ -103,7 +97,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // GET: /Login/Delete/5
+        // GET: /UserGroup/Delete/5
 
         public ActionResult Delete(int id)
         {
@@ -111,7 +105,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         //
-        // POST: /Login/Delete/5
+        // POST: /UserGroup/Delete/5
 
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)

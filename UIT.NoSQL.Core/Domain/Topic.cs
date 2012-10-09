@@ -7,10 +7,10 @@ namespace UIT.NoSQL.Core.Domain
 {
     public class TopicObject
     {
-        public string TopicId { get; set; }
+        public string Id { get; set; }
         public string TopicName { get; set; }
         public string Content { get; set; }
-        public DenormalizedUser CreateBy { get; set; }
+        public DenormalizedUser<UserObject> CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModified { get; set; }
         public UInt32 NumberOfView { get; set; }
@@ -32,9 +32,9 @@ namespace UIT.NoSQL.Core.Domain
 
     public class DenormalizedTopic
     {
-        public string TopicId { get; set; }
+        public string Id { get; set; }
         public string TopicName { get; set; }
-        public DenormalizedUser CreateBy { get; set; }
+        public DenormalizedUser<UserObject> CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModified { get; set; }
         public UInt32 NumberOfView { get; set; }
@@ -43,9 +43,10 @@ namespace UIT.NoSQL.Core.Domain
 
     public class CommentObject
     {
-        public string CommentId { get; set; }
+        public string Id { get; set; }
         public string Content { get; set; }
-        public DenormalizedUser CreateBy { get; set; }
+        public DenormalizedUser<UserObject> CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
+        public bool isDeleted { get; set; }
     }
 }

@@ -17,6 +17,18 @@ namespace UIT.NoSQL.Service
             this.session = session;
         }
 
+        public GroupObject Load(string id)
+        {
+            return session.Load<GroupObject>(id);
+        }
+
+        public GroupObject LoadByUser(string userId)
+        {
+            //var userGroup = session.Include<UserGroupObject>(u => u.GroupId).Where(u => u.UserId == userId);
+            //return session.Query<GroupObject>().Where(g => g.);
+            return null;
+        }
+
         public void Save(GroupObject group)
         {
             session.Store(group);
@@ -27,6 +39,13 @@ namespace UIT.NoSQL.Service
         {
             var groups = session.Query<GroupObject>();
             return groups.ToList();
+        }
+
+        public List<GroupObject> GetByUser(string userId)
+        {
+            //var groups = session.Query<GroupObject>().Where;
+            //return groups.ToList();
+            return null;
         }
     }
 }

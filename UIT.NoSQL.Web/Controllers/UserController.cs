@@ -51,7 +51,7 @@ namespace UIT.NoSQL.Web.Controllers
             try
             {
                 // TODO: Add insert logic here
-                user.UserId = Guid.NewGuid().ToString();
+                //user.Id = Guid.NewGuid().ToString();
                 user.CreateDate = DateTime.Now;
                 userService.Save(user);
                 return RedirectToAction("Index");

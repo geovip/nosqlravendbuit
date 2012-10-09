@@ -23,6 +23,12 @@ namespace UIT.NoSQL.Service
             return session.Load<UserObject>(id);
         }
 
+        //Load UserObject based on UserName
+        public UserObject LoadByUserName(string username)
+        {
+            return session.Query<UserObject>().Where(u => u.UserName == username).SingleOrDefault();
+        }
+
         // Get all users
         public List<UserObject> GetAll()
         {
@@ -47,11 +53,9 @@ namespace UIT.NoSQL.Service
         //Check Login success or not
         public bool CheckLoginSuccess(string username, string password)
         {
-            //var userLogin = session.Query<UserObject>().Where(u => u.UserName.Equals(username) && u.Password.Equals(password));
             var userLogin = (from user in session.Query<UserObject>()
                              where user.UserName.Equals(username) && user.Password.Equals(password)
                             select user).SingleOrDefault();
-            //var userLogin = session.Load<UserObject>("33");
             if (userLogin == null)
                 return false;
             return true;

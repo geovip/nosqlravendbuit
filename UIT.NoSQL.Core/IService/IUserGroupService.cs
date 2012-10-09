@@ -6,8 +6,9 @@ using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Core.IService
 {
-    public interface ITopicService
+    public interface IUserGroupService
     {
-        void Save(TopicObject topic);
+        void Save(UserGroupObject userGroup);
+        List<UserGroupObject> GetByUser(string userId);
     }
 }

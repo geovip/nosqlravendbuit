@@ -9,6 +9,7 @@ namespace UIT.NoSQL.Core.IService
     public interface IUserService
     {
         UserObject Load(string id);
+        UserObject LoadByUserName(string username);
         List<UserObject> GetAll();
         void Save(UserObject user);
         void Delete(string id);
