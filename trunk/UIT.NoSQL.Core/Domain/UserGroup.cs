@@ -7,7 +7,7 @@ namespace UIT.NoSQL.Core.Domain
 {
     public class UserGroupObject
     {
-        public string UserGroupId { get; set; }
+        public string Id { get; set; }
         public string UserId { get; set; }
         public string GroupId { get; set; }
         public string GroupName { get; set; }

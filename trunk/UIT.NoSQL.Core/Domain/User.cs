@@ -5,9 +5,15 @@ using System.Text;
 
 namespace UIT.NoSQL.Core.Domain
 {
-    public class UserObject
+    public interface IUserObjectDocument
     {
-        public string UserId { get; set; }
+        string Id { get; set; }
+        string FullName { get; set; }
+    }
+
+    public class UserObject: IUserObjectDocument
+    {
+        public string Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
@@ -22,9 +28,18 @@ namespace UIT.NoSQL.Core.Domain
 
     }
 
-    public class DenormalizedUser
+    public class DenormalizedUser<T> where T : IUserObjectDocument
     {
-        public string UserId { get; set; }
+        public string Id { get; set; }
         public string FullName { get; set; }
+
+        public static implicit operator DenormalizedUser<T>(T doc)
+        {
+            return new DenormalizedUser<T>
+            {
+                Id = doc.Id,
+                FullName = doc.FullName
+            };
+        }
     }
 }

@@ -8,6 +8,10 @@ namespace UIT.NoSQL.Core.IService
 {
     public interface IGroupService
     {
+        //GroupObject Load(string id);
+        GroupObject LoadByUser(string userId);
+        List<GroupObject> GetAll();
+        List<GroupObject> GetByUser(string userId);
         void Save(GroupObject group);
     }
 }

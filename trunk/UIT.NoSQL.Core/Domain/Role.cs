@@ -7,7 +7,7 @@ namespace UIT.NoSQL.Core.Domain
 {
     public class RoleObject
     {
-        public string RoleID { get; set; }
+        public string Id { get; set; }
         public string RoleName { get; set; }
     }
 }
