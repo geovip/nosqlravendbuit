@@ -51,20 +51,20 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Create(GroupObject group)
         {
             string userId = ((UserObject)Session["user"]).Id;
-            //group.Id = Guid.NewGuid().ToString();
+            group.Id = Guid.NewGuid().ToString();
             group.CreateDate = DateTime.Now;
             group.CreateBy = userId;
             groupService.Save(group);
 
             var userGroup = new UserGroupObject();
-            //userGroup.Id = Guid.NewGuid().ToString();
+            userGroup.Id = Guid.NewGuid().ToString();
             userGroup.UserId = userId;
             userGroup.GroupId = group.Id;
             userGroup.GroupName = group.GroupName;
             userGroup.Description = group.Description;
             userGroupService.Save(userGroup);
 
-            return View();
+            return RedirectToAction("Index", "UserGroup");
         }
 
     }

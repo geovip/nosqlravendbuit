@@ -1,13 +1,13 @@
-﻿@model UIT.NoSQL.Core.Domain.UserObject
+﻿@model UIT.NoSQL.Web.Models.LoginModel
 
 @{
     ViewBag.Title = "Login";
     Layout = null;
 }
 
-<h2>Login</h2>
+<h2>Logins</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm((string)ViewBag.FormAction, "Account"))
 {
     @Html.ValidationSummary(true)
 
