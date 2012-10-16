@@ -5,18 +5,21 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using UIT.NoSQL.Web.Models;
+using UIT.NoSQL.Core.IService;
+using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Web.Controllers
 {
-
-    [Authorize]
     public class AccountController : Controller
     {
+        private IUserService userService;
 
+        public AccountController(IUserService userService)
+        {
+            this.userService = userService;
+        }
         //
         // GET: /Account/Login
-
-        [AllowAnonymous]
         public ActionResult Login()
         {
             return ContextDependentView();
@@ -24,17 +27,15 @@ namespace UIT.NoSQL.Web.Controllers
 
         //
         // POST: /Account/JsonLogin
-
-        [AllowAnonymous]
         [HttpPost]
         public JsonResult JsonLogin(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, model.Password))
+                if (userService.CheckLoginSuccess(model.UserName, model.Password))
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    return Json(new { success = true, redirect = returnUrl });
+                    Session["user"] = userService.LoadByUserName(model.UserName);
+                    return Json(new { success = true, redirect = "/UserGroup/Index" });
                 }
                 else
                 {
@@ -45,44 +46,13 @@ namespace UIT.NoSQL.Web.Controllers
             // If we got this far, something failed
             return Json(new { errors = GetErrorsFromModelState() });
         }
-
-        //
-        // POST: /Account/Login
-
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult Login(LoginModel model, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                if (Membership.ValidateUser(model.UserName, model.Password))
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    if (Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
+        
         //
         // GET: /Account/LogOff
 
         public ActionResult LogOff()
         {
-            FormsAuthentication.SignOut();
+            Session.Remove("user");
 
             return RedirectToAction("Index", "Home");
         }
@@ -105,19 +75,21 @@ namespace UIT.NoSQL.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(model.UserName, model.Password, model.Email, passwordQuestion: null, passwordAnswer: null, isApproved: true, providerUserKey: null, status: out createStatus);
+                UserObject user = new UserObject();
 
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                }
+                // TODO: Add insert logic here
+                user.Id = Guid.NewGuid().ToString();
+                user.FullName = model.FullName;
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                user.Password = model.Password;
+                user.CreateDate = DateTime.Now;
+                userService.Save(user);
+
+                //
+                //ModelState.AddModelError("", ErrorCodeToString(createStatus));
+                    
+                return Json(new { success = true });
             }
 
             // If we got this far, something failed

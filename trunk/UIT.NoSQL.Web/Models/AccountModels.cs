@@ -45,6 +45,10 @@ namespace UIT.NoSQL.Web.Models
     public class RegisterModel
     {
         [Required]
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; }
+
+        [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
 
