@@ -22,8 +22,9 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult Index()
         {
-            var topics = topicService.GetAll();
-            return View(topics);
+            //var topics = topicService.GetAll();
+            //return View(topics);
+            return View();
         }
 
     }
