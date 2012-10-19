@@ -8,8 +8,23 @@
         <link href="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/themes/base/css")" rel="stylesheet" type="text/css" />
         <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Scripts/js")"></script>
         <meta name="viewport" content="width=device-width" />
+
+        <script type="text/javascript" language="javascript">
+            function AutoResize() {
+                var windowWidth = window.innerWidth;
+                var windowHeight = window.innerHeight;
+
+                var main = document.getElementById("main");
+                main.style.width = (windowWidth - 270) + "px";
+                main.style.height = (windowHeight - 145) + "px";
+
+                var leftmenu = document.getElementById("leftmenu");
+                leftmenu.style.height = (windowHeight - 145) + "px";
+            }
+            window.onresize = AutoResize;
+        </script>
     </head>
-    <body>
+    <body onr>
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
@@ -30,10 +45,17 @@
             </div>
         </header>
         <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
+            <section id="leftmenu">
+                @Html.Partial("_LeftMenuPartial")
             </section>
+
+            <div id="main">
+                @RenderSection("featured", required: false)
+                <section class="content-wrapper main-content clear-fix">
+                    @RenderBody()
+                </section>
+            </div>
+            <div class="clear-fix"></div>
         </div>
         <footer>
             <div class="content-wrapper">
@@ -48,5 +70,9 @@
                 </div>
             </div>
         </footer>
+
+        <script type="text/javascript" language="javascript">
+            AutoResize();
+        </script>
     </body>
 </html>

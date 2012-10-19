@@ -41,6 +41,10 @@ namespace UIT.NoSQL.Web.Controllers
             
         }
 
+        public string Hello(int name)
+        {
+            return "Hello "  + name;
+        }
 
         //
         // GET: /Login/Details/5
