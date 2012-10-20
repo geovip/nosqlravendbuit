@@ -48,5 +48,6 @@ namespace UIT.NoSQL.Core.Domain
         public DenormalizedUser<UserObject> CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
         public bool isDeleted { get; set; }
+        public List<CommentObject> ChildComments { get; set; }
     }
 }

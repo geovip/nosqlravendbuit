@@ -1,54 +1,58 @@
-﻿<ul>
-    <li>
-        <a href="#">
-            My Group
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            Home
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            Share
-        </a>
-    </li>
+﻿@using UIT.NoSQL.Core.Domain
 
-    <hr />
+@if (Session["user"] != null) {
+    <ul>
+        <li>
+            <a href="#">
+                My Group
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Share
+            </a>
+        </li>
 
-    <li>
-        <a href="#">
-            My Group 1
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            My Group 2
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            My Group 3
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            My Group 4
-        </a>
-    </li>
+        <hr />
 
-    <hr />
+        <li>
+            <a href="#">
+                My Group 1
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                My Group 2
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                My Group 3
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                My Group 4
+            </a>
+        </li>
 
-    <li>
-        <a href="#">
-            Favorites
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            Setting
-        </a>
-    </li>
+        <hr />
 
-</ul>
+        <li>
+            <a href="#">
+                Favorites
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Setting
+            </a>
+        </li>
+
+    </ul>
+}

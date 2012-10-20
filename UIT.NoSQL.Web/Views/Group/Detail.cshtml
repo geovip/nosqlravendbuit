@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Detail";
+}
+
+<p>@Html.ActionLink("Create New Topic", "Create", "Topic")</p>
+
+<h2>List of Topic</h2>
+<table>
+    <tr>
+        <th>
+            TopicName
+        </th>
+        <th>
+            LastModified
+        </th>
+        <th>
+            NumberOfView
+        </th>
+        <th>
+            NumberOfComment
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in ViewBag.ListTopic) {
+    <tr>
+        <td>
+            @item.Id
+        </td>
+        <td>
+            @item.LastModified
+        </td>
+        <td>
+            @item.NumberOfView
+        </td>
+        <td>
+            @item.NumberOfComment
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>*@
+    </tr>
+}
+
+</table>
