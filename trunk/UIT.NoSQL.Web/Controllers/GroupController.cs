@@ -67,5 +67,13 @@ namespace UIT.NoSQL.Web.Controllers
             return RedirectToAction("Index", "UserGroup");
         }
 
+        public ActionResult Detail(string id)
+        {
+            //string groupId = Request.QueryString[0];
+            var group = groupService.Load(id);
+            ViewBag.ListTopic = group.ListTopic;
+            Session["GroupId"] = id;
+            return View();
+        }
     }
 }

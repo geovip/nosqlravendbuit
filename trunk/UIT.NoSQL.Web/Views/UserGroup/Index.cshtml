@@ -16,15 +16,6 @@
         <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GroupId)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.GroupName)
         </th>
         <th>
@@ -37,16 +28,7 @@
 {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GroupId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GroupName)
+            @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.GroupId }, null)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)

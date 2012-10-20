@@ -13,5 +13,6 @@ namespace UIT.NoSQL.Core.IService
         List<GroupObject> GetAll();
         List<GroupObject> GetByUser(string userId);
         void Save(GroupObject group);
+        GroupObject Load(string id);
     }
 }
