@@ -2,7 +2,34 @@
     ViewBag.Title = "Detail";
 }
 
-<p>@Html.ActionLink("Create New Topic", "Create", "Topic")</p>
+
+@section menu {
+    <ul id="menu">
+    
+        @if(ViewBag.IsMember == true)
+        {
+            <li>@Html.ActionLink("Create New Topic", "Create", "Topic")</li>   
+            <li>@Html.ActionLink("Manage", "Member", "Group", new { id = ViewBag.GroupID }, null)</li>
+        }
+        else
+        {
+            <li>
+                @using(Html.BeginForm("Join","Group",FormMethod.Post)){
+                    <input type="hidden" id="id" name="id" value="@ViewBag.GroupID" />
+                    <button type="submit">
+                        Join Group
+                    </button>
+                }
+
+                @*@Html.ActionLink("Join Group", "Join", "Group", new { id = ViewBag.GroupID }, null)*@
+
+            </li>
+        }       
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+}
 
 <h2>List of Topic</h2>
 <table>
@@ -22,7 +49,8 @@
         <th></th>
     </tr>
 
-@foreach (var item in ViewBag.ListTopic) {
+@foreach (var item in ViewBag.ListTopic)
+{
     <tr>
         <td>
             @item.Id

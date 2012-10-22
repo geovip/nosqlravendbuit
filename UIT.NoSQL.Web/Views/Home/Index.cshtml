@@ -1,4 +1,4 @@
-@model IEnumerable<UIT.NoSQL.Core.Domain.TopicObject>
+@model IEnumerable<UIT.NoSQL.Core.Domain.UserGroupObject>
 
 @{
     ViewBag.Title = "Home Page";
@@ -21,6 +21,17 @@
 </section>
 }
 
+@section menu {
+    <ul id="menu">
+        <li>@Html.ActionLink("New Group", "Create", "Group")</li>
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+}
+
+@if (Session["user"] == null)
+{
 <h3>We suggest the following:</h3>
 
 <ol class="round">
@@ -43,13 +54,6 @@
         and choose one of the many options to get your code deployed and running on the web.
     </li>
 
-    @*@foreach (var item in Model)
-    {
-        <li>
-            <h5>@item.Title</h 5>
-            @item.Content
-        </li>
-    }*@
 </ol>
 
 <section class="features">
@@ -81,3 +85,36 @@
         </p>
     </section>
 </section>
+}
+else
+{
+    <table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.GroupId }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>*@
+        </tr>
+    }
+
+    </table>
+}
