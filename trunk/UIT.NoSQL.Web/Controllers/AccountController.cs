@@ -35,7 +35,7 @@ namespace UIT.NoSQL.Web.Controllers
                 if (userService.CheckLoginSuccess(model.UserName, model.Password))
                 {
                     Session["user"] = userService.LoadByUserName(model.UserName);
-                    return Json(new { success = true, redirect = "/UserGroup/Index" });
+                    return Json(new { success = true, redirect = "/Home" });
                 }
                 else
                 {

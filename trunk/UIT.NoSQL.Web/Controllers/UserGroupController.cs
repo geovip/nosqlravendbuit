@@ -31,8 +31,8 @@ namespace UIT.NoSQL.Web.Controllers
             else
             {
                 ViewBag.IsLogined = true;
-                var userGroups = userGroupService.GetByUser(user.Id);
-                return View(userGroups);
+                //var userGroups = userGroupService.GetByUser(user.Id);
+                return View(user.ListUserGroup);
             }         
         }
 
