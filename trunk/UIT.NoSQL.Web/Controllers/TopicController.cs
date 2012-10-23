@@ -54,6 +54,7 @@ namespace UIT.NoSQL.Web.Controllers
         // POST: /Topic/Create
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Create(TopicObject topic)
         {
             try
