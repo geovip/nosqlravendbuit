@@ -80,6 +80,8 @@ namespace UIT.NoSQL.Web
             documentStore.Initialize();
 
             ConfigureUnity();
+
+            new Utility(documentStore.OpenSession(databaseName)).Initialized();
         }
 
         //Getting the current DocumentSession
@@ -96,7 +98,8 @@ namespace UIT.NoSQL.Web
             .RegisterType<IUserService, UserService>()
             .RegisterType<IGroupService, GroupService>()
             .RegisterType<IUserGroupService, UserGroupService>()
-            .RegisterType<ITopicService, TopicService>();
+            .RegisterType<ITopicService, TopicService>()
+            .RegisterType<IGroupRoleService, GroupRoleService>();
 
             //Set container for Controller Factory
             Factory.MvcUnityContainer.Container = container;

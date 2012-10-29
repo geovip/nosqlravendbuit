@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IService\IGroupRoleService.cs" />
     <Compile Include="IService\IGroupService.cs" />
     <Compile Include="IService\ITopicService.cs" />
     <Compile Include="IService\IUserGroupService.cs" />

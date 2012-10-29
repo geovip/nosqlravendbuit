@@ -28,5 +28,23 @@ namespace UIT.NoSQL.Service
             var userGroups = session.Query<UserGroupObject>().Where(u => u.UserId == userId);
             return userGroups.ToList();
         }
+        
+        public UserGroupObject Load(string id)
+        {
+            var userGroup = session.Load<UserGroupObject>(id);
+            return userGroup;
+        }
+
+        public List<UserGroupObject> GetUnapprove(string groupId)
+        {
+            var userGroups = session.Query<UserGroupObject>().Where(u => u.GroupId == groupId && u.IsApprove == false);
+
+            foreach (var userGroup in userGroups)
+            {
+                userGroup.User = session.Load<UserObject>(userGroup.UserId);
+            }
+
+            return userGroups.ToList();
+        }
     }
 }

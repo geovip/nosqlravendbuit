@@ -201,6 +201,10 @@ ul#menu {
     background-color:#fff;
     padding:0px 0 0 20px;
 }
+.clear
+{
+    clear:both;
+}
 #leftmenu ul
 {
     padding: 0;
