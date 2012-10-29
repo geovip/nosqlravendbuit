@@ -13,6 +13,10 @@ namespace UIT.NoSQL.Core.Domain
         public DateTime CreateDate { get; set; }
         public string CreateBy { get; set; }
 
+        //setting
+        public bool IsPublic { get; set; }
+        //public int HowToJoin { get; set; }
+
         public List<DenormalizedTopic<TopicObject>> ListTopic { get; set; }
         public List<UserGroupObject> ListUserGroup { get; set; }
 
@@ -29,4 +33,5 @@ namespace UIT.NoSQL.Core.Domain
         public string GroupName { get; set; }
         public string Description { get; set; }
     }
+
 }

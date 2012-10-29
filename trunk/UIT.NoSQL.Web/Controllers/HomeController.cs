@@ -82,5 +82,12 @@ namespace UIT.NoSQL.Web.Controllers
 
             return View();
         }
+
+        public string Initialized()
+        {
+            new Utility(MvcApplication.CurrentSession).Initialized();
+
+            return "Initialized data success!!!";
+        }
     }
 }

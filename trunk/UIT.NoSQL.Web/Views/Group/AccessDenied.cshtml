@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "AccessDenied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section menu {
+    <ul id="menu">
+    
+        <li style="float: left;">
+            @using (Html.BeginForm("Join", "Group", FormMethod.Post, new { id = "FormJoin" }))
+            {
+                <input type="hidden" id="id" name="id" value="@ViewBag.GroupID" />
+                
+                <a href="javascript:{}" onclick="document.getElementById('FormJoin').submit();">Join Group</a>
+            }
+        </li>
+              
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+}
+
+<h2>Access Denied</h2>
+You must be member of this group to view page.

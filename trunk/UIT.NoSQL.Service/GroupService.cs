@@ -22,6 +22,19 @@ namespace UIT.NoSQL.Service
             return session.Load<GroupObject>(id);
         }
 
+        public GroupObject LoadWithUser(string id)
+        {
+            var groupObject = session.Include<GroupObject>(u => u.Id).Load(id);
+
+            foreach (var userGroup in groupObject.ListUserGroup)
+            {
+                var user = session.Load<UserObject>(userGroup.UserId);
+                userGroup.User = user;
+            }
+
+            return groupObject;
+        }
+
         public GroupObject LoadByUser(string userId)
         {
             //var userGroup = session.Include<UserGroupObject>(u => u.GroupId).Where(u => u.UserId == userId);
@@ -46,6 +59,27 @@ namespace UIT.NoSQL.Service
             //var groups = session.Query<GroupObject>().Where;
             //return groups.ToList();
             return null;
+        }
+
+
+        public GroupObject LoadWithUser(string groupID, out List<UserObject> listUser, out List<UserGroupObject> listUserGroup)
+        {
+            listUser = new List<UserObject>();
+            listUserGroup = new List<UserGroupObject>();
+            var group = session.Include<GroupObject>(u => u.Id).Load(groupID);
+            if (group == null)
+            {
+                return null;
+            }
+
+            listUserGroup = group.ListUserGroup;
+            foreach (var userGroup in group.ListUserGroup)
+	        {
+                var user = session.Load<UserObject>(userGroup.UserId);
+                listUser.Add(user);
+	        }            
+
+            return group;
         }
     }
 }

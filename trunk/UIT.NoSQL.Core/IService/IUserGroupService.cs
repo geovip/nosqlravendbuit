@@ -10,5 +10,7 @@ namespace UIT.NoSQL.Core.IService
     {
         void Save(UserGroupObject userGroup);
         List<UserGroupObject> GetByUser(string userId);
+        UserGroupObject Load(string id);
+        List<UserGroupObject> GetUnapprove(string groupId);
     }
 }

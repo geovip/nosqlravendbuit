@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using UIT.NoSQL.Core.Domain;
+using Raven.Client;
+
+namespace UIT.NoSQL.Web
+{
+    public class Utility
+    {
+        private IDocumentSession session;
+
+        public Utility(IDocumentSession session)
+        {
+            this.session = session;
+        }
+
+        public void Initialized()
+        {
+            //role
+            GroupRoleObject groupRole = null;
+
+            groupRole = new GroupRoleObject();
+            groupRole.Id = "7E946ED1-69E6-4B45-8273-FB7AC7367F50";
+            groupRole.GroupName = "Manager";
+            session.Store(groupRole);
+
+            groupRole = new GroupRoleObject();
+            groupRole.Id = "79C6B725-F787-4FDF-B820-42A21174449D";
+            groupRole.GroupName = "Owner";
+            session.Store(groupRole);
+
+            groupRole = new GroupRoleObject();
+            groupRole.Id = "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
+            groupRole.GroupName = "Member";
+            session.Store(groupRole);
+
+            //user
+            UserObject userObject = null;
+
+            userObject = new UserObject();
+            userObject.Id = "D035A3B8-961D-4DA0-827A-D58E8FCE3832";
+            userObject.FullName = "Duong Than Dan";
+            userObject.UserName = "sa";
+            userObject.Password = "123";
+            userObject.Email = "duongthandan@gmail.com";
+            session.Store(userObject);
+
+            userObject = new UserObject();
+            userObject.Id = "F4D45AD1-D581-425C-A058-799AFA51FE01";
+            userObject.FullName = "Bui Ngoc Huy";
+            userObject.UserName = "aa";
+            userObject.Password = "123";
+            userObject.Email = "huyuit@gmail.com";
+            session.Store(userObject);
+
+            ////group
+            //GroupObject groupObject = null;
+
+            //groupObject = new GroupObject();
+            //groupObject.Id = "";
+            //groupObject.GroupName = "group 1";
+            //groupObject.Description = "this is group 1";
+            //groupObject.IsPublic = true;
+            //groupObject.CreateDate = DateTime.Now;
+            //session.Store(groupObject);
+
+            session.SaveChanges();
+        }
+    }
+}
