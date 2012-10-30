@@ -728,6 +728,7 @@
     <None Include="Plugin\ckeditor\_samples\php\standalone.php" />
     <None Include="Plugin\ckeditor\_samples\sample_posteddata.php" />
     <Content Include="Views\Group\JoinRequest.cshtml" />
+    <Content Include="Views\Group\LeftManager.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

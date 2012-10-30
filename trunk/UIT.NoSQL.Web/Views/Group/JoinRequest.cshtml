@@ -4,6 +4,12 @@
     ViewBag.Title = "JoinRequest";
 }
 
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftManager", "Group", new { id = ViewBag.GroupID })
+    </section>
+}
+
 <h2>JoinRequest</h2>
 
 @if (Model == null || Model.Count() == 0)

@@ -3,6 +3,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home")
+    </section>
+}
+
 @section menu {
     <ul id="menu">
     

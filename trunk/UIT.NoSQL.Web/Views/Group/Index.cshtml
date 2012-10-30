@@ -3,6 +3,13 @@
 @{
     ViewBag.Title = "Index";
 }
+
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home")
+    </section>
+}
+
 <h2>Index</h2>
 
 <p>

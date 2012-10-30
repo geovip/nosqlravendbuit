@@ -2,6 +2,12 @@
     ViewBag.Title = "About";
 }
 
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home")
+    </section>
+}
+
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
     <h2>@ViewBag.Message</h2>

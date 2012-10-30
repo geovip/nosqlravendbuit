@@ -4,6 +4,12 @@
     ViewBag.Title = "Home Page";
 }
 
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home")
+    </section>
+}
+
 @section featured {
 <section class="featured">
     <div class="content-wrapper">

@@ -48,10 +48,8 @@
             </div>
         </header>
         <div id="body">
-
-            <section id="leftmenu">
-                @Html.Action("LeftMenu", "Home")
-            </section>
+        
+            @RenderSection("LeftMenu", required: false)
 
             <div id="main">
                 @RenderSection("featured", required: false)
