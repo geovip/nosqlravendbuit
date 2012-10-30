@@ -4,6 +4,12 @@
     ViewBag.Title = "Member";
 }
 
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftManager", "Group", new { id = ViewBag.GroupID })
+    </section>
+}
+
 <h2>Member</h2>
 
 <p>

@@ -80,8 +80,6 @@ namespace UIT.NoSQL.Web
             documentStore.Initialize();
 
             ConfigureUnity();
-
-            new Utility(documentStore.OpenSession(databaseName)).Initialized();
         }
 
         //Getting the current DocumentSession

@@ -144,8 +144,10 @@ namespace UIT.NoSQL.Web.Controllers
                 if (!userGroup.IsApprove)
                 {
                     listUserGroup.Add(userGroup);
+                    ViewBag.GroupID = id;
                 }
             }
+            ViewBag.GroupID = id;
             
             return View(listUserGroup);
         }
@@ -193,6 +195,7 @@ namespace UIT.NoSQL.Web.Controllers
             groupService.Save(groupObject);
             userService.Save(user);
             userGroupService.Save(userGroup);
+            
             return RedirectToAction("JoinRequest", new { id = userGroup.GroupId });
         }
 
@@ -209,6 +212,10 @@ namespace UIT.NoSQL.Web.Controllers
                     ListUserModels userModels = null;
                     for (int i = 0; i < listUser.Count; i++)
                     {
+                        if (listUserGroup[i].ListGroupRole.Count == 0)
+                        {
+                            continue;
+                        }
                         userModels = new ListUserModels();
                         userModels.UserGroupID = listUserGroup[i].Id;
                         userModels.FullName = listUser[i].FullName;
@@ -218,13 +225,19 @@ namespace UIT.NoSQL.Web.Controllers
 
                         listUserModel.Add(userModels);
                     }
-                    ViewBag.IsMember = true;
+                    ViewBag.GroupID = id;
 
                     return View(listUserModel);
                 }
             }
             
             return RedirectToAction("AccessDenied", new { id });
+        }
+
+        public ActionResult LeftManager(string id)
+        {
+            ViewBag.GroupID = id;
+            return View();
         }
     }
 }

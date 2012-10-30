@@ -1,6 +1,4 @@
-﻿@model IEnumerable<UIT.NoSQL.Core.Domain.UserGroupObject>
-
-@{
+﻿@{
     Layout = null;
 }
 
@@ -26,17 +24,12 @@
 
         <hr />
 
-
-        @foreach (var item in Model) 
-        {
         
-                <li>
-                    <a href="/Group/Detail/@Html.DisplayFor(modelItem => item.GroupId)">
-                    @Html.DisplayFor(modelItem => item.GroupName)
-                </a>
-                </li>
+        <li>
+            @Html.ActionLink("JoinRequest", "JoinRequest", new { id = ViewBag.GroupID })
+        </li>
         
-        }
+        
         <hr />
 
         <li>
