@@ -17,10 +17,10 @@
 
                 var main = document.getElementById("main");
                 main.style.width = (windowWidth - 240) + "px";
-                main.style.height = (windowHeight - 120) + "px";
+                main.style.height = (windowHeight - 130) + "px";
 
                 var leftmenu = document.getElementById("leftmenu");
-                leftmenu.style.height = (windowHeight - 120) + "px";
+                leftmenu.style.height = (windowHeight - 130) + "px";
             }
             window.onresize = AutoResize;
         </script>
@@ -29,7 +29,13 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here.", "Index", "Home")</p>
+                    <p class="float-left site-title">@Html.ActionLink("your logo here.", "Index", "Home")</p>
+                    <div class="float-right search">
+                        <input type="text" class="text"/>
+                        <a href="#">
+                            <img src="/Images/system-search-hi.png" />
+                        </a>
+                    </div>
                 </div>
                 <div class="float-right">
                     <section id="login">
