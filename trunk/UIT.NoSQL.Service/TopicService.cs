@@ -17,6 +17,16 @@ namespace UIT.NoSQL.Service
             this.session = session;
         }
 
+        public TopicObject Load(string id)
+        {
+            return session.Load<TopicObject>(id);
+        }
+
+        public List<TopicObject> GetAll()
+        {
+            return session.Query<TopicObject>().ToList();
+        }
+
         public List<TopicObject> GetByGroup()
         {
             return null;

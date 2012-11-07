@@ -77,6 +77,7 @@ namespace UIT.NoSQL.Core.Domain
     {
         public string Id { get; set; }
         public string Content { get; set; }
+        public string ParentConten { get; set; }
         public DenormalizedUser<UserObject> CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
         public bool isDeleted { get; set; }

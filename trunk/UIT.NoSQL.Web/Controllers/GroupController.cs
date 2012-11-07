@@ -96,6 +96,8 @@ namespace UIT.NoSQL.Web.Controllers
                     ViewBag.ListTopic = group.ListTopic;
                     ViewBag.GroupID = id;
 
+                    TempData["GroupId"] = id;
+
                     return View();
                 }
             }

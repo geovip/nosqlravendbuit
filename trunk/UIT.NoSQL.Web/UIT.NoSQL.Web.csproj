@@ -204,6 +204,7 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="HTMLPage1.htm" />
     <Content Include="Plugin\ckeditor\adapters\jquery.js" />
     <Content Include="Plugin\ckeditor\CHANGES.html" />
     <Content Include="Plugin\ckeditor\ckeditor.asp" />
@@ -604,6 +605,7 @@
     <Content Include="Scripts\jquery-1.6.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.11.js" />
     <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
+    <Content Include="Scripts\jquery.tmpl.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
@@ -729,6 +731,7 @@
     <None Include="Plugin\ckeditor\_samples\sample_posteddata.php" />
     <Content Include="Views\Group\JoinRequest.cshtml" />
     <Content Include="Views\Group\LeftManager.cshtml" />
+    <Content Include="Views\Topic\Detail.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

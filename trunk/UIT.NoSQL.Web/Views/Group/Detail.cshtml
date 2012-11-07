@@ -59,7 +59,7 @@
 {
     <tr>
         <td>
-            @item.Id
+            @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)
         </td>
         <td>
             @item.LastModified
