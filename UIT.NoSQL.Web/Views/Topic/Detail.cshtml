@@ -1,0 +1,177 @@
+﻿@model UIT.NoSQL.Core.Domain.TopicObject
+
+@{
+    ViewBag.Title = "Detail";
+}
+        <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
+        <script type="text/javascript" src="../../Scripts/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
+        <script type="text/javascript" src="../../Plugin/ckeditor/ckeditor.js"></script>
+        <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.11.js"></script>
+        @*<link rel="Stylesheet" href="../../Content/themes/base/jquery.ui.base.css" />*@
+        <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
+        <script type="text/javascript">
+            var editor, html = '';
+            var id = 1;
+            function createEditor() {
+                if (editor)
+                    return;
+
+                // Create a new editor inside the <div id="editor">, setting its value to html
+                var dateAndUser = $('#dateAndUser').html();
+                html = '<p></p>' +
+                    dateAndUser + 
+                    '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' + 
+                    $('#content').html() +
+                    '</blockquote>';
+                var config = {startupFocus:true};
+                editor = CKEDITOR.appendTo('editor', config, html);
+                document.getElementById('fullEditor').style.display = '';
+
+
+            }
+            function removeEditor() {
+                if (!editor)
+                    return;
+
+                // Retrieve the editor contents. In an Ajax application, this data would be
+                // sent to the server or used in any other way.
+                //document.getElementById('editorcontents').innerHTML = html = editor.getData();
+                //document.getElementById('contents').style.display = '';
+
+                // Destroy the editor.
+                editor.destroy();
+                editor = null;
+                document.getElementById('fullEditor').style.display = 'none';
+            }
+
+            function addComment() {
+                url = "/Topic/AddComment";
+                var topicId = document.getElementById('topicId').value;
+                var content = editor.getData();
+                $.post(url, { topicId: topicId, content: content }, function (data) {
+                    //$('#listComment').append('<div style="border-top: 1px solid #000000"><span style="color: rgb(0, 104, 28); font-weight: bold">' + data.CreateBy.FullName + '</span><br/><span>' + content + '</span></div>');
+                    //var value = data.ListComment[data.ListComment.length - 1];
+                    $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
+                });
+                removeEditor();
+            }
+            function getTopicById() {
+                url = "/Topic/GetById";
+                var topicId = $('#topicId').val();
+                $.getJSON(url, { id: topicId }, function (data) {
+                    $('#topicName').html(data.TopicName);
+                    $('#content').html(data.Content);
+                    $('#createBy').html(data.CreateBy.FullName);
+                    $('#createDate').html(parseMicrosoftJsonDateTime(data.CreateDate));
+                    if (data.ListComment != 0) {
+                        $.each(data.ListComment, function (key, value) {
+                            //$('#listComment').append('<div style="border-top: 1px solid #000000"><span style="color: rgb(0, 104, 28); font-weight: bold">' + value.CreateBy.FullName + '</span><br/><span>' + value.Content + '</span></div>');
+                            $("#commentTemplate").tmpl(value, { getCreateDate: parseMicrosoftJsonDateTime(value.CreateDate) }).appendTo("#listComment");
+                        });
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                getTopicById();
+                $('.createSubEditor').live('click', function () {
+                    if (editor)
+                        return;
+                    var divComment = $(this).parent();
+                    var html = '<p></p>' +
+                        divComment.find('.dateAndUser').html() +
+                        '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
+                        divComment.find('.comment').html() +
+                        '</blockquote>';
+                    var config = { startupFocus: true };
+                    var divFullSubEditor = divComment.find('.fullSubEditor')
+                    var divSubEditor = divFullSubEditor.find('.subEditor');
+//                    editor = CKEDITOR.appendTo($(this).parent().find('.subEditor'), config, html);
+//                    $(this).parent().find('.fullSubEditor').show();
+                    divFullSubEditor.attr("id", "fullSubEditor" + id);
+                    divSubEditor.attr("id", "subEditor" + id);
+
+                    editor = CKEDITOR.appendTo('subEditor' + id, config, html);
+
+                    document.getElementById('fullSubEditor' + id).style.display = '';
+
+                    id += 1;
+                });
+                $('.addComment').live('click', function () {
+                    url = "/Topic/AddComment";
+                    var topicId = document.getElementById('topicId').value;
+                    var content = editor.getData();
+                    $.post(url, { topicId: topicId, content: content }, function (data) {
+                        $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
+                    });
+                    if (!editor)
+                        return;
+                    editor.destroy();
+                    editor = null;
+                    $(this).parent().hide();
+                });
+                $('.hideSubEditor').live('click', function () {
+                    if (!editor)
+                        return;
+                    editor.destroy();
+                    editor = null;
+                    $(this).parent().hide();
+                });
+            });
+
+            function parseMicrosoftJsonDateTime(content) {
+                try {
+                    content = content.replace(/\//g, '');
+                    var contentDate = eval('new ' + content);
+                    return contentDate.toDateString() + ' ' + contentDate.toTimeString();
+                } catch (ex) {
+                    return content;
+                }
+            }
+
+
+	</script>
+    <script id="commentTemplate" type="text/x-jquery-tmpl"> 
+        <div class = "divComment" style="border-top: 1px solid #000000">
+            <span class="dateAndUser" style="display:none">Vào <span>${$item.getCreateDate}</span><span style="color: rgb(0, 104, 28); font-weight: bold">${CreateBy.FullName}</span> đã viết:<br/></span>
+            <span class="comment">{{html Content}}</span>
+            <a href="#" class="createSubEditor"><span style="font-weight:bold;font-size:small; color:White; background-color:Black">ĐĂNG TRẢ LỜI</span></a>
+            <!-- This div will hold the editor. -->
+            <div class = "fullSubEditor" style="display: none">
+                <a href="#" class="addComment">Đăng</a>
+                <a href="#" class="hideSubEditor">Hủy</a>
+                <div class="subEditor">
+	            </div>
+                <a href="#" class="addComment">Đăng</a>
+                <a href="#" class="hideSubEditor"">Hủy</a>
+            </div>
+        </div>
+    </script>
+
+
+        <a href="#" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>
+        <br /><br />
+        <input id="topicId" type="hidden" value="@Model.Id" />
+
+        <div id="topic">
+            <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/>
+            <span id="dateAndUser">Vào <span id="createDate"></span><span id="createBy" style="color: rgb(0, 104, 28); font-weight: bold"></span> đã viết:<br /></span>
+            <span id="content"></span><br />
+        </div>
+
+        <!-- This div will hold the editor. -->
+        <div id = "fullEditor" style="display: none">
+            <a href="#" onclick="addComment()">Đăng</a>
+            <a href="#" onclick="removeEditor()">Hủy</a>
+            <div id="editor">
+	        </div>
+            <a href="#" onclick="addComment()">Đăng</a>
+            <a href="#" onclick="removeEditor()">Hủy</a>
+        </div>
+        <div id = "listComment">
+        </div>
+
+
+
+

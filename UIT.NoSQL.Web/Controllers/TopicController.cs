@@ -25,17 +25,16 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult Index()
         {
-            //var topics = topicService.GetAll();
-            //return View(topics);
             return View();
         }
 
         //
         // GET: /Topic/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult Detail(string id)
         {
-            return View();
+            var topic = topicService.Load(id);
+            return View(topic);
         }
 
         //
@@ -71,7 +70,9 @@ namespace UIT.NoSQL.Web.Controllers
 
                 topicService.Save(topic);
 
-                string groupId = Session["GroupId"].ToString();
+                //string groupId = Session["GroupId"].ToString();
+                string groupId = TempData["GroupId"].ToString();
+
                 var group = groupService.Load(groupId);
                 group.ListTopic.Add(topic);
                 groupService.Save(group);
@@ -134,6 +135,37 @@ namespace UIT.NoSQL.Web.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult GetAll()
+        {
+            return Json(topicService.GetAll(),JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult GetById(string id)
+        {
+            return Json(topicService.Load(id),JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult AddComment(string topicId, string content)
+        {
+            var topic = topicService.Load(topicId);
+            if (topic.ListComment == null)
+            {
+                topic.ListComment = new List<CommentObject>();
+            }
+            CommentObject comment = new CommentObject();
+            comment.Content = content;
+            comment.ParentConten = "parentContent";
+            comment.Id = Guid.NewGuid().ToString();
+            comment.CreateBy = (UserObject)Session["user"];
+            comment.CreateDate = DateTime.Now;
+            comment.isDeleted = false;
+            topic.ListComment.Add(comment);
+            topicService.Save(topic);
+            return Json(comment, JsonRequestBehavior.AllowGet);
         }
     }
 }
