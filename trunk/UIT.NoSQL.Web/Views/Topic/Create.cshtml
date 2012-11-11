@@ -4,6 +4,18 @@
     ViewBag.Title = "Create";
 }
 
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home")
+    </section>
+}
+
+@section menu {
+    <section id="topmenu">
+        @Html.Action("TopMenuUser", "Group")
+    </section>
+}
+
 <h2>Create</h2>
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
@@ -14,6 +26,7 @@
 
     <fieldset>
         <legend>TopicObject</legend>
+        @Html.Hidden("GroupId", TempData["GroupId"])
 
         <div class="editor-label">
             @Html.LabelFor(model => model.TopicName)

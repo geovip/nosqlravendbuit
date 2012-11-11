@@ -6,7 +6,13 @@
 
 @section LeftMenu {
     <section id="leftmenu">
-        @Html.Action("LeftManager", "Group", new { id = ViewBag.GroupID })
+        @Html.Action("LeftManager", "Group")
+    </section>
+}
+
+@section menu {
+    <section id="topmenu">
+        @Html.Action("TopMenuUser", "Group")
     </section>
 }
 
@@ -18,9 +24,6 @@
 }
 else
 {
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table>
     <tr>
         <th>

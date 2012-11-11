@@ -37,7 +37,7 @@ namespace UIT.NoSQL.Service
 
         public List<UserGroupObject> GetUnapprove(string groupId)
         {
-            var userGroups = session.Query<UserGroupObject>().Where(u => u.GroupId == groupId && u.IsApprove == false);
+            var userGroups = session.Query<UserGroupObject>().Where(u => u.GroupId == groupId && u.IsApprove == UserGroupStatus.JoinRequest);
 
             foreach (var userGroup in userGroups)
             {

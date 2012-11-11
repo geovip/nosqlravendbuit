@@ -21,7 +21,7 @@ namespace UIT.NoSQL.Service
         {
             return session.Load<GroupObject>(id);
         }
-
+        
         public GroupObject LoadWithUser(string id)
         {
             var groupObject = session.Include<GroupObject>(u => u.Id).Load(id);

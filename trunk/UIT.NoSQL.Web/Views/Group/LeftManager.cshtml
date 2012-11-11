@@ -26,7 +26,14 @@
 
         
         <li>
-            @Html.ActionLink("JoinRequest", "JoinRequest", new { id = ViewBag.GroupID })
+            @Html.ActionLink("Member", "Member", new { id = TempData["IsMember"] })
+        </li>
+        <li>
+            @Html.ActionLink("Join Request", "JoinRequest", new { id = TempData["IsMember"] })
+        </li>
+        
+        <li>
+            @Html.ActionLink("Setting", "Setting", new { id = TempData["IsMember"] })
         </li>
         
         
@@ -35,11 +42,6 @@
         <li>
             <a href="#">
                 Favorites
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                Setting
             </a>
         </li>
 

@@ -62,6 +62,7 @@ namespace UIT.NoSQL.Web.Controllers
             group.Id = Guid.NewGuid().ToString();
             group.CreateDate = DateTime.Now;
             group.CreateBy = userId;
+            group.IsPublic = false;
 
             var userGroup = new UserGroupObject();
             userGroup.Id = Guid.NewGuid().ToString();
@@ -69,7 +70,7 @@ namespace UIT.NoSQL.Web.Controllers
             userGroup.GroupId = group.Id;
             userGroup.GroupName = group.GroupName;
             userGroup.Description = group.Description;
-            userGroup.IsApprove = true;
+            userGroup.IsApprove = UserGroupStatus.Approve;
             userGroup.JoinDate = DateTime.Now;
             userGroup.ListGroupRole.Add(groupRole);
             group.ListUserGroup.Add(userGroup);
@@ -89,16 +90,12 @@ namespace UIT.NoSQL.Web.Controllers
             var group = groupService.Load(id);
             if (group != null)
             {
-                if (SecurityCheck(group, id))
+                if (CheckViewGroup(group))
                 {
                     ViewBag.IsMember = true;
+                    //TempData["GroupId"] = id;
 
-                    ViewBag.ListTopic = group.ListTopic;
-                    ViewBag.GroupID = id;
-
-                    TempData["GroupId"] = id;
-
-                    return View();
+                    return View(group.ListTopic);
                 }
             }
             
@@ -107,7 +104,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult AccessDenied(string id)
         {
-            ViewBag.GroupID = id;
+            //ViewBag.GroupID = id;
 
             return View();
         }
@@ -123,7 +120,7 @@ namespace UIT.NoSQL.Web.Controllers
             userGroup.GroupId = group.Id;
             userGroup.GroupName = group.GroupName;
             userGroup.Description = group.Description;
-            userGroup.IsApprove = false;
+            userGroup.IsApprove = UserGroupStatus.JoinRequest;
             group.ListUserGroup.Add(userGroup);
 
             user.ListUserGroup.Add(userGroup);
@@ -143,13 +140,11 @@ namespace UIT.NoSQL.Web.Controllers
             
             foreach (var userGroup in groupObject.ListUserGroup)
             {
-                if (!userGroup.IsApprove)
+                if (userGroup.IsApprove == UserGroupStatus.JoinRequest)
                 {
                     listUserGroup.Add(userGroup);
-                    ViewBag.GroupID = id;
                 }
             }
-            ViewBag.GroupID = id;
             
             return View(listUserGroup);
         }
@@ -166,7 +161,7 @@ namespace UIT.NoSQL.Web.Controllers
             var groupRole = groupRoleService.LoadByName(GroupRoleType.Member);
             var user = userService.Load(userGroup.UserId);
 
-            userGroup.IsApprove = true;
+            userGroup.IsApprove = UserGroupStatus.Approve;
             userGroup.JoinDate = DateTime.Now;
             userGroup.ListGroupRole.Add(groupRole);
 
@@ -174,7 +169,7 @@ namespace UIT.NoSQL.Web.Controllers
             {
                 if (item.Id.Equals(userGroup.Id))
                 {
-                    item.IsApprove = true;
+                    item.IsApprove = UserGroupStatus.Approve;
                     item.JoinDate = userGroup.JoinDate;
                     item.ListGroupRole.Add(groupRole);
                     //userGroup.ListGroupRole.Add(groupRole);
@@ -186,7 +181,7 @@ namespace UIT.NoSQL.Web.Controllers
             {
                 if (item.Id.Equals(userGroup.Id))
                 {
-                    item.IsApprove = true;
+                    item.IsApprove = UserGroupStatus.Approve;
                     item.JoinDate = userGroup.JoinDate;
                     item.ListGroupRole.Add(groupRole);
                     //userGroup.ListGroupRole.Add(groupRole);
@@ -208,7 +203,7 @@ namespace UIT.NoSQL.Web.Controllers
             var group = groupService.LoadWithUser(id, out listUser, out listUserGroup);
             if (group != null)
             {
-                if (SecurityCheck(group, id))
+                if (CheckViewGroup(group))
                 {
                     List<ListUserModels> listUserModel = new List<ListUserModels>();
                     ListUserModels userModels = null;
@@ -227,7 +222,6 @@ namespace UIT.NoSQL.Web.Controllers
 
                         listUserModel.Add(userModels);
                     }
-                    ViewBag.GroupID = id;
 
                     return View(listUserModel);
                 }
@@ -238,7 +232,32 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult LeftManager(string id)
         {
-            ViewBag.GroupID = id;
+            TempData["IsMember"] = id;
+            return View();
+        }
+
+        public ActionResult Setting(string id)
+        {
+            var group = groupService.Load(id);
+            return View(group);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateSetting(GroupObject group)
+        {
+            var groupOld = groupService.Load(group.Id);
+            groupOld.IsPublic = group.IsPublic;
+            groupOld.GroupName = group.GroupName;
+            groupOld.Description = group.Description;
+
+            groupService.Save(groupOld);
+            return RedirectToAction("Setting", "Group", new { id = group.Id });
+        }
+
+        public ActionResult TopMenuUser(string id)
+        {
+            TempData["IsMember"] = CheckViewGroup(groupService.Load(id)).ToString();
+            TempData["GroupId"] = id;
             return View();
         }
     }

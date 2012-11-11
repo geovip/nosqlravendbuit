@@ -5,6 +5,13 @@ using System.Text;
 
 namespace UIT.NoSQL.Core.Domain
 {
+    public enum UserGroupStatus
+    {
+        JoinRequest = 0,
+        Approve = 1,
+        Reject = 2
+    }
+
     public class UserGroupObject
     {
         public string Id { get; set; }
@@ -14,7 +21,7 @@ namespace UIT.NoSQL.Core.Domain
         public string GroupName { get; set; }
         public string Description { get; set; }
         public DateTime JoinDate { get; set; }
-        public bool IsApprove { get; set; }
+        public UserGroupStatus IsApprove { get; set; }
 
         public List<GroupRoleObject> ListGroupRole { get; set; }
 
