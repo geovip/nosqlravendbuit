@@ -21,6 +21,7 @@ namespace UIT.NoSQL.Core.Domain
         public string TopicName { get; set; }
         public string Content { get; set; }
         public DenormalizedUser<UserObject> CreateBy { get; set; }
+        public string GroupId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastModified { get; set; }
         public UInt32 NumberOfView { get; set; }

@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+}
+
+<ul id="menu">
+    
+    @if(TempData["IsMember"].Equals("True"))
+    {
+        <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
+        <li>@Html.ActionLink("Manage", "Member", "Group", new { id = TempData["GroupId"] }, null)</li>
+    }
+    else
+    {
+        <li style="float: left;">
+            @using (Html.BeginForm("Join", "Group", FormMethod.Post, new { id = "FormJoin" }))
+            {
+                <input type="hidden" id="id" name="id" value="@TempData["GroupId"]" />
+            
+                <a href="javascript:{}" onclick="document.getElementById('FormJoin').submit();">Join Group</a>
+            }
+                
+        </li>
+    }       
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("About", "About", "Home")</li>
+    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+</ul>

@@ -11,7 +11,7 @@ namespace UIT.NoSQL.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected bool SecurityCheck(GroupObject groupObject, string groupID)
+        protected bool CheckViewGroup(GroupObject groupObject)
         {
             bool isAllow = false;
             if (groupObject.IsPublic)
@@ -28,7 +28,7 @@ namespace UIT.NoSQL.Web.Controllers
 
                     foreach (var userGroup in user.ListUserGroup)
                     {
-                        if (userGroup.GroupId.Equals(groupID) && userGroup.IsApprove == true)
+                        if (userGroup.GroupId.Equals(groupObject.Id) && userGroup.IsApprove == UserGroupStatus.Approve)
                         {
                             isAllow = true;
                         }
@@ -37,6 +37,14 @@ namespace UIT.NoSQL.Web.Controllers
             }
 
             return isAllow;
+        }
+
+        protected bool CheckViewTopic(TopicObject topicObject)
+        {
+            IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+            var groupObject = groupService.Load(topicObject.GroupId);
+
+            return CheckViewGroup(groupObject);
         }
     }
 }

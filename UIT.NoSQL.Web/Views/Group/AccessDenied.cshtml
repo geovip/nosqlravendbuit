@@ -15,7 +15,7 @@
         <li style="float: left;">
             @using (Html.BeginForm("Join", "Group", FormMethod.Post, new { id = "FormJoin" }))
             {
-                <input type="hidden" id="id" name="id" value="@ViewBag.GroupID" />
+                <input type="hidden" id="id" name="id" value="@TempData["GroupId"]" />
                 
                 <a href="javascript:{}" onclick="document.getElementById('FormJoin').submit();">Join Group</a>
             }

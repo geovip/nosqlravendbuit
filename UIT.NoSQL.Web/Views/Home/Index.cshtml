@@ -40,6 +40,37 @@
 {
 <h3>We suggest the following:</h3>
 
+    <script type="text/javascript" language="javascript">
+        function CallAjax() {
+            var xmlhttp;
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open("GET", "/Group/ActionDemo", true);
+            xmlhttp.send();
+            $.getJSON(url, function(data))
+            {
+
+            }
+        }
+    </script>
+    
+    <input type="button" value="Click me" onclick="CallAjax()" id="btn1" />
+    
+    <a onclick="CallAjax(this)">1</a>
+    <a onclick="CallAjax">2</a>
+    <a onclick="CallAjax">3</a>
+    
+    <div id="myDiv"></div>
+    
 <ol class="round">
     <li class="one">
         <h5>Configure ASP.NET Membership</h5>

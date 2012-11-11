@@ -9,7 +9,7 @@ using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Web.Controllers
 {
-    public class TopicController : Controller
+    public class TopicController : BaseController
     {
         private ITopicService topicService;
         private IGroupService groupService;
@@ -34,18 +34,24 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Detail(string id)
         {
             var topic = topicService.Load(id);
-            return View(topic);
+            if (CheckViewTopic(topic))
+            {
+                return View(topic);
+            }
+
+            return RedirectToAction("AccessDenied", "Group", new { id = topic.GroupId });
         }
 
         //
         // GET: /Topic/Create
 
-        public ActionResult Create()
+        public ActionResult Create(string id)
         {
             if (Session["user"] == null)
             {
                 return RedirectToAction("Index", "Login");
             }
+            TempData["GroupId"] = id;
             return View();
         }
 
@@ -60,6 +66,7 @@ namespace UIT.NoSQL.Web.Controllers
             {
                 // TODO: Add insert logic here
                 var user = (UserObject)Session["user"];
+                //string groupId = TempData["GroupId"].ToString();
 
                 topic.Id = Guid.NewGuid().ToString();
                 topic.CreateDate = DateTime.Now;
@@ -67,17 +74,16 @@ namespace UIT.NoSQL.Web.Controllers
                 topic.NumberOfView = 0;
                 topic.NumberOfComment = 0;
                 topic.CreateBy = user;
+                //topic.GroupId = groupId;
 
                 topicService.Save(topic);
 
-                //string groupId = Session["GroupId"].ToString();
-                string groupId = TempData["GroupId"].ToString();
 
-                var group = groupService.Load(groupId);
+                var group = groupService.Load(topic.GroupId);
                 group.ListTopic.Add(topic);
                 groupService.Save(group);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
             }
             catch
             {

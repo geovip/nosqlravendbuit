@@ -87,7 +87,7 @@ namespace UIT.NoSQL.Web.Controllers
         {
             new Utility(MvcApplication.CurrentSession).Initialized();
 
-            return "Initialized data success!!!";
+            return "Initialized data success!!!<br/><a href='/Home'>Go Home</a>";
         }
     }
 }

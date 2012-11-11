@@ -1,5 +1,8 @@
-﻿@{
+﻿@model IEnumerable < UIT.NoSQL.Core.Domain.DenormalizedTopic < UIT.NoSQL.Core.Domain.TopicObject> >
+
+@{
     ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section LeftMenu {
@@ -8,37 +11,19 @@
     </section>
 }
 
-
 @section menu {
-    <ul id="menu">
-    
-        @if(ViewBag.IsMember == true)
-        {
-            <li>@Html.ActionLink("Create New Topic", "Create", "Topic")</li>   
-            <li>@Html.ActionLink("Manage", "Member", "Group", new { id = ViewBag.GroupID }, null)</li>
-        }
-        else
-        {
-            <li>
-                @using(Html.BeginForm("Join","Group",FormMethod.Post)){
-                    <input type="hidden" id="id" name="id" value="@ViewBag.GroupID" />
-                    <button type="submit">
-                        Join Group
-                    </button>
-                }
-
-                @*@Html.ActionLink("Join Group", "Join", "Group", new { id = ViewBag.GroupID }, null)*@
-
-            </li>
-        }       
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
-        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>
+    <section id="topmenu">
+        @Html.Action("TopMenuUser", "Group")
+    </section>
 }
 
-<h2>List of Topic</h2>
+<h2>Detail</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table>
+
     <tr>
         <th>
             TopicName
@@ -52,29 +37,22 @@
         <th>
             NumberOfComment
         </th>
-        <th></th>
     </tr>
 
-@foreach (var item in ViewBag.ListTopic)
-{
+@foreach (var item in Model) {
     <tr>
         <td>
             @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)
         </td>
         <td>
-            @item.LastModified
+            @Html.DisplayFor(modelItem => item.LastModified)
         </td>
         <td>
-            @item.NumberOfView
+            @Html.DisplayFor(modelItem => item.NumberOfView)
         </td>
         <td>
-            @item.NumberOfComment
+            @Html.DisplayFor(modelItem => item.NumberOfComment)
         </td>
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>*@
     </tr>
 }
 
