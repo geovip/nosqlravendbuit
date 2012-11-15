@@ -155,7 +155,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddComment(string topicId, string content)
+        public ActionResult AddComment(string topicId, string content, string parentContent)
         {
             var topic = topicService.Load(topicId);
             if (topic.ListComment == null)
@@ -164,7 +164,7 @@ namespace UIT.NoSQL.Web.Controllers
             }
             CommentObject comment = new CommentObject();
             comment.Content = content;
-            comment.ParentConten = "parentContent";
+            comment.ParentContent = parentContent;
             comment.Id = Guid.NewGuid().ToString();
             comment.CreateBy = (UserObject)Session["user"];
             comment.CreateDate = DateTime.Now;
