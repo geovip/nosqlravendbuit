@@ -22,9 +22,143 @@
         <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
         <script type="text/javascript" src="../../Plugin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.11.js"></script>
-        @*<link rel="Stylesheet" href="../../Content/themes/base/jquery.ui.base.css" />*@
         <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
+        <style>
+            .GI2MSK2DJO {
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            margin-right: 16px;
+            white-space: nowrap;
+            height: 27px;
+            line-height: 27px;
+            min-width: 54px;
+            outline: 0;
+            padding: 0 8px;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            border-radius: 2px;
+            display: inline-block;
+            }
+            .GI2MSK2DAU {
+            border: 1px solid transparent;
+            color: white;
+            background-color: #D14836;
+            background-image: -webkit-linear-gradient(top, #DD4B39, #D14836);
+            background-image: -moz-linear-gradient(top, #DD4B39, #D14836);
+            background-image: -ms-linear-gradient(top, #DD4B39, #D14836);
+            background-image: -o-linear-gradient(top, #DD4B39, #D14836);
+            background-image: linear-gradient(top, #DD4B39, #D14836);
+            text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+            }
+            .REPLYBUTTON
+            {
+            	cursor: pointer;
+                font-size: 11px;
+                font-weight: bold;
+                text-align: center;
+                margin-right: 16px;
+                white-space: nowrap;
+                height: 27px;
+                line-height: 27px;
+                min-width: 54px;
+                outline: 0;
+                padding: 0 8px;
+                -moz-border-radius: 2px;
+                -webkit-border-radius: 2px;
+                border-radius: 2px;
+                display: inline-block;
+                border: 1px solid transparent;
+                color: white;
+                background-color: #A8ACA9;
+@*                background-image: -webkit-linear-gradient(top, #DD4B39, #D14836);*@
+                background-image: -moz-linear-gradient(top, #DD4B39, #D14836);
+                background-image: -ms-linear-gradient(top, #DD4B39, #D14836);
+                background-image: -o-linear-gradient(top, #DD4B39, #D14836);
+                background-image: linear-gradient(top, #DD4B39, #D14836);
+                text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+                text-transform: uppercase;
+            }
+            
+
+
+            .GI2MSK2DPP {
+            color: 
+            white;
+            text-shadow: 0 1px 
+            rgba(0, 0, 0, 0.1);
+            border: 1px solid 
+            #29691D;
+            background-color: 
+            #3D9400;
+            background-image: -webkit-linear-gradient(top, 
+            #3D9400, 
+            #398A00);
+            background-image: -moz-linear-gradient(top, 
+            #3D9400, 
+            #398A00);
+            background-image: -ms-linear-gradient(top, 
+            #3D9400, 
+            #398A00);
+            background-image: -o-linear-gradient(top, 
+            #3D9400, 
+            #398A00);
+            background-image: linear-gradient(top, 
+            #3D9400, 
+            #398A00);
+            }
+        .GI2MSK2DJO {
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: bold;
+        text-align: center;
+        margin-right: 16px;
+        white-space: nowrap;
+        height: 27px;
+        line-height: 27px;
+        min-width: 54px;
+        outline: 0;
+        padding: 0 8px;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        display: inline-block;
+        }
+        .GI2MSK2DDCB, .GI2MSK2DICB {
+        font-weight: bold;
+        }
+
+        .GI2MSK2DNU {
+        color: 
+        #666;
+        border: 1px solid 
+        gainsboro;
+        border: 1px solid 
+        rgba(0, 0, 0, 0.1);
+        background-color: 
+        whiteSmoke;
+        background-image: -webkit-linear-gradient(top, 
+        whiteSmoke, 
+        #F1F1F1);
+        background-image: -moz-linear-gradient(top, 
+        whiteSmoke, 
+        #F1F1F1);
+        background-image: -ms-linear-gradient(top, 
+        whiteSmoke, 
+        #F1F1F1);
+        background-image: -o-linear-gradient(top, 
+        whiteSmoke, 
+        #F1F1F1);
+        background-image: linear-gradient(top, 
+        whiteSmoke, 
+        #F1F1F1);
+        }
+
+        </style>
         <script type="text/javascript">
+
             var editor, html = '';
             var id = 1;
             function createEditor() {
@@ -34,11 +168,13 @@
                 // Create a new editor inside the <div id="editor">, setting its value to html
                 var dateAndUser = $('#dateAndUser').html();
                 html = '<p></p>' +
+                    '<div style="display:none"></div>'+ // cái này làm cờ tách phần content và parentcontent
                     dateAndUser + 
                     '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' + 
                     $('#content').html() +
                     '</blockquote>';
-                var config = {startupFocus:true};
+                //var config = {startupFocus: true };
+                var config = { toolbar: 'Basic', startupFocus: true };
                 editor = CKEDITOR.appendTo('editor', config, html);
                 document.getElementById('fullEditor').style.display = '';
 
@@ -59,13 +195,16 @@
                 document.getElementById('fullEditor').style.display = 'none';
             }
 
+            var flag1 = '<div', flag2='</div>';
+            var content='', parentContent='';
             function addComment() {
                 url = "/Topic/AddComment";
                 var topicId = document.getElementById('topicId').value;
-                var content = editor.getData();
-                $.post(url, { topicId: topicId, content: content }, function (data) {
-                    //$('#listComment').append('<div style="border-top: 1px solid #000000"><span style="color: rgb(0, 104, 28); font-weight: bold">' + data.CreateBy.FullName + '</span><br/><span>' + content + '</span></div>');
-                    //var value = data.ListComment[data.ListComment.length - 1];
+                var fullContent = editor.getData(); // fullContent = content + parentContent
+                content = fullContent.slice(0, fullContent.search(flag1));
+                parentContent = fullContent.slice((fullContent.search(flag2) + 6),fullContent.length-1);
+                //alert(content + parentContent);
+                $.post(url, { topicId: topicId, content: content, parentContent:parentContent }, function (data) {
                     $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
                 });
                 removeEditor();
@@ -89,34 +228,61 @@
 
             $(document).ready(function () {
                 getTopicById();
-                $('.createSubEditor').live('click', function () {
+//                $('.createSubEditor').live('click', function () {
+//                    if (editor)
+//                        return;
+//                    var divComment = $(this).parent();
+//                    var html = '<p></p>' +
+//                        '<div style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
+//                        divComment.find('.dateAndUser').html() +
+//                        '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
+//                        divComment.find('.comment').html() +
+//                        divComment.find('.parentComment').html() +
+//                        '</blockquote>';
+//                    var config = { startupFocus: true };
+//                    var divFullSubEditor = divComment.find('.fullSubEditor')
+//                    var divSubEditor = divFullSubEditor.find('.subEditor');
+//                    //                    editor = CKEDITOR.appendTo($(this).parent().find('.subEditor'), config, html);
+//                    //                    $(this).parent().find('.fullSubEditor').show();
+//                    divFullSubEditor.attr("id", "fullSubEditor" + id);
+//                    divSubEditor.attr("id", "subEditor" + id);
+
+//                    editor = CKEDITOR.appendTo('subEditor' + id, config, html);
+
+//                    document.getElementById('fullSubEditor' + id).style.display = '';
+
+//                    id += 1;
+//                });
+
+                $('.REPLYBUTTON').live('click', function () {
                     if (editor)
                         return;
-                    var divComment = $(this).parent();
+                    var divMainComment = $(this).parents('.mainComment');
+                    var divFullSubEditor = divMainComment.children('.footerComment').children('.fullSubEditor');
+                    var divSubEditor = divFullSubEditor.find('.subEditor');
+                    divSubEditor.attr("id", "subEditor" + id);
+                    var divComment = divMainComment.children('.bodyComment').children('.divComment');
+
                     var html = '<p></p>' +
+                        '<div style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
                         divComment.find('.dateAndUser').html() +
                         '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
                         divComment.find('.comment').html() +
+                        divComment.find('.parentComment').html() +
                         '</blockquote>';
                     var config = { startupFocus: true };
-                    var divFullSubEditor = divComment.find('.fullSubEditor')
-                    var divSubEditor = divFullSubEditor.find('.subEditor');
-//                    editor = CKEDITOR.appendTo($(this).parent().find('.subEditor'), config, html);
-//                    $(this).parent().find('.fullSubEditor').show();
-                    divFullSubEditor.attr("id", "fullSubEditor" + id);
-                    divSubEditor.attr("id", "subEditor" + id);
-
                     editor = CKEDITOR.appendTo('subEditor' + id, config, html);
-
-                    document.getElementById('fullSubEditor' + id).style.display = '';
-
+                    divFullSubEditor.attr('style', 'display:""');
                     id += 1;
                 });
+
                 $('.addComment').live('click', function () {
                     url = "/Topic/AddComment";
                     var topicId = document.getElementById('topicId').value;
-                    var content = editor.getData();
-                    $.post(url, { topicId: topicId, content: content }, function (data) {
+                    var fullContent = editor.getData(); // fullContent = content + parentContent
+                    content = fullContent.slice(0, fullContent.search(flag1));
+                    parentContent = fullContent.slice((fullContent.search(flag2) + 6), fullContent.length - 1);
+                    $.post(url, { topicId: topicId, content: content, parentContent: parentContent }, function (data) {
                         $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
                     });
                     if (!editor)
@@ -132,7 +298,23 @@
                     editor = null;
                     $(this).parent().hide();
                 });
+
+                // hien thi noi dung trich dan
+                $('.aShowHideParentComment').live('click', function () {
+                    var divTemp = $(this).parent().find('.divShowHideParentComment');
+                    if ($(this).text() == "-hiển thị nội dung trích dẫn-") {
+                        divTemp.attr('style', 'display:""');
+                        $(this).text('-ẩn nội dung trích dẫn-');
+                    }
+                    else {
+                        divTemp.attr('style', 'display:none');
+                        $(this).text('-hiển thị nội dung trích dẫn-');
+                    }
+
+                });
             });
+
+
 
             function parseMicrosoftJsonDateTime(content) {
                 try {
@@ -147,41 +329,81 @@
 
 	</script>
     <script id="commentTemplate" type="text/x-jquery-tmpl"> 
-        <div class = "divComment" style="border-top: 1px solid #000000">
-            <span class="dateAndUser" style="display:none">Vào <span>${$item.getCreateDate}</span><span style="color: rgb(0, 104, 28); font-weight: bold">${CreateBy.FullName}</span> đã viết:<br/></span>
-            <span class="comment">{{html Content}}</span>
-            <a href="#" class="createSubEditor"><span style="font-weight:bold;font-size:small; color:White; background-color:Black">ĐĂNG TRẢ LỜI</span></a>
-            <!-- This div will hold the editor. -->
-            <div class = "fullSubEditor" style="display: none">
-                <a href="#" class="addComment">Đăng</a>
-                <a href="#" class="hideSubEditor">Hủy</a>
-                <div class="subEditor">
-	            </div>
-                <a href="#" class="addComment">Đăng</a>
-                <a href="#" class="hideSubEditor"">Hủy</a>
+        <!--style="color: rgb(0, 104, 28); font-weight: bold"-->
+        <div tabindex="0" class="mainComment" style="border-top: 1px solid #DDD">
+            <div tabindex="0" class="titleComment" style="margin-top: 10px">
+                <table cellpadding="0" cellspacing="0" width="80%">
+                    <tbody>
+                        <tr>
+                            <td valign="top" width="5%">
+                                <img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(https://groups.google.com/forum/96297F8C983EF6F2BE03872CBF36B4D2.cache.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
+                            </td>
+                            <td align="left" class="GI2MSK2DP1" valign="top">
+                                <span style="color: rgb(0, 104, 28);font-weight:bold">${CreateBy.FullName}</span>
+                             </td>
+                             <td align="right" valign="top"> 
+                                <span class="REPLYBUTTON">Đăng trả lời</span>
+                             </td>
+                        </tr>
+                    </tbody>                 
+                </table>
             </div>
-        </div>
+            <div tabindex="0" class="bodyComment" style="margin-left: 40px">
+                <div class = "divComment">
+                    <span class="dateAndUser" style="display:none">Vào <span>${$item.getCreateDate}</span>, <span>${CreateBy.FullName}</span> đã viết:<br/></span>
+                    <span class="comment">{{html Content}}</span>
+                    <a class="aShowHideParentComment" href="#" style="text-decoration:none;cursor: pointer;color: #500050;font-size: 10px;">-hiển thị nội dung trích dẫn-</a>
+                    <div class="divShowHideParentComment" style="display:none">
+                        <span class="parentComment" style="color: #500050;">{{html ParentContent}}</span>
+                    </div>
+                    <!--<a href="#" class="createSubEditor"><span style="font-weight:bold;font-size:small; color:White; background-color:Black">ĐĂNG TRẢ LỜI</span></a>-->
+                    <!-- This div will hold the editor. -->
+                    <!--
+                    <div class = "fullSubEditor" style="display: none">
+                        <a href="#" class="addComment">Đăng</a>
+                        <a href="#" class="hideSubEditor">Hủy</a>
+                        <div class="subEditor">
+	                    </div>
+                        <a href="#" class="addComment">Đăng</a>
+                        <a href="#" class="hideSubEditor"">Hủy</a>
+                    </div>               
+                    -->
+                </div>
+            </div>
+            <div tabindex="0" class="footerComment" style="margin-left: 40px">
+                <div class = "fullSubEditor" style="display: none">
+                    <!--<a href="#" class="addComment">Đăng</a>
+                    <a href="#" class="hideSubEditor">Hủy</a>-->
+                    <span class="addComment"><span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB">Đăng</span></span>
+                    <span class="hideSubEditor"><span  class="GI2MSK2DJO GI2MSK2DNU">Hủy</span></span>
+                    <div class="subEditor">                    
+	                </div>
+                    <span class="addComment"><span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB">Đăng</span></span>
+                    <span class="hideSubEditor"><span  class="GI2MSK2DJO GI2MSK2DNU">Hủy</span></span>
+                </div>  
+            </div>
+        </div>     
     </script>
-
-
-        <a href="#" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>
+        <div tabindex="0" class="GI2MSK2DJO GI2MSK2DAU" onclick = "createEditor()">Đăng trả lời</div>
+        
+        @*<a href="#" style="text-decoration:none" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>*@
         <br /><br />
         <input id="topicId" type="hidden" value="@Model.Id" />
 
         <div id="topic">
             <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/>
-            <span id="dateAndUser">Vào <span id="createDate"></span><span id="createBy" style="color: rgb(0, 104, 28); font-weight: bold"></span> đã viết:<br /></span>
+            <span id="dateAndUser" style="display:none">Vào <span id="createDate"></span>, <span id="createBy"></span> đã viết:<br /></span>
             <span id="content"></span><br />
         </div>
 
         <!-- This div will hold the editor. -->
         <div id = "fullEditor" style="display: none">
-            <a href="#" onclick="addComment()">Đăng</a>
-            <a href="#" onclick="removeEditor()">Hủy</a>
+            <span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB"  onclick="addComment()">Đăng</span>
+            <span class="GI2MSK2DJO GI2MSK2DNU" onclick="removeEditor()">Hủy</span>
             <div id="editor">
 	        </div>
-            <a href="#" onclick="addComment()">Đăng</a>
-            <a href="#" onclick="removeEditor()">Hủy</a>
+            <span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB"  onclick="addComment()">Đăng</span>
+            <span class="GI2MSK2DJO GI2MSK2DNU" onclick="removeEditor()">Hủy</span>
         </div>
         <div id = "listComment">
         </div>
