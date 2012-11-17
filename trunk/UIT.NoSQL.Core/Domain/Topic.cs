@@ -64,16 +64,6 @@ namespace UIT.NoSQL.Core.Domain
         }
     }
 
-    //public class DenormalizedTopic
-    //{
-    //    public string Id { get; set; }
-    //    public string TopicName { get; set; }
-    //    public DenormalizedUser<UserObject> CreateBy { get; set; }
-    //    public DateTime LastModified { get; set; }
-    //    public UInt32 NumberOfView { get; set; }
-    //    public UInt32 NumberOfComment { get; set; }
-    //}
-
     public class CommentObject
     {
         public string Id { get; set; }

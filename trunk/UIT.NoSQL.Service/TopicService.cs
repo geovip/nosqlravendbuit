@@ -11,7 +11,7 @@ namespace UIT.NoSQL.Service
     public class TopicService : ITopicService
     {
         private IDocumentSession session;
-
+        
         public TopicService(IDocumentSession session)
         {
             this.session = session;

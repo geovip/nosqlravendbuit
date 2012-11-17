@@ -21,7 +21,7 @@ namespace UIT.NoSQL.Web
     {
         private const string RavenSessionKey = "RavenMVC.Session";
         private static string databaseName;
-        private static IDocumentStore documentStore;
+        public static IDocumentStore documentStore;
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
