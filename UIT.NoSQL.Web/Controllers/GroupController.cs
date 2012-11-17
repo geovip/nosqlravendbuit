@@ -9,6 +9,7 @@ using UIT.NoSQL.Core.Domain;
 using UIT.NoSQL.Web.Factory;
 using UIT.NoSQL.Web.Filters;
 using UIT.NoSQL.Web.Models;
+using Raven.Abstractions.Data;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -93,6 +94,7 @@ namespace UIT.NoSQL.Web.Controllers
                 if (CheckViewGroup(group))
                 {
                     ViewBag.IsMember = true;
+                    ViewBag.GroupName = group.GroupName;
                     //TempData["GroupId"] = id;
 
                     return View(group.ListTopic);
@@ -105,7 +107,7 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult AccessDenied(string id)
         {
             //ViewBag.GroupID = id;
-
+            TempData["GroupId"] = id;
             return View();
         }
 

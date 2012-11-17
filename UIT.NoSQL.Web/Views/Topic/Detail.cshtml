@@ -23,140 +23,6 @@
         <script type="text/javascript" src="../../Plugin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.11.js"></script>
         <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
-        <style>
-            .GI2MSK2DJO {
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: bold;
-            text-align: center;
-            margin-right: 16px;
-            white-space: nowrap;
-            height: 27px;
-            line-height: 27px;
-            min-width: 54px;
-            outline: 0;
-            padding: 0 8px;
-            -moz-border-radius: 2px;
-            -webkit-border-radius: 2px;
-            border-radius: 2px;
-            display: inline-block;
-            }
-            .GI2MSK2DAU {
-            border: 1px solid transparent;
-            color: white;
-            background-color: #D14836;
-            background-image: -webkit-linear-gradient(top, #DD4B39, #D14836);
-            background-image: -moz-linear-gradient(top, #DD4B39, #D14836);
-            background-image: -ms-linear-gradient(top, #DD4B39, #D14836);
-            background-image: -o-linear-gradient(top, #DD4B39, #D14836);
-            background-image: linear-gradient(top, #DD4B39, #D14836);
-            text-shadow: 0 1px rgba(0, 0, 0, 0.1);
-            text-transform: uppercase;
-            }
-            .REPLYBUTTON
-            {
-            	cursor: pointer;
-                font-size: 11px;
-                font-weight: bold;
-                text-align: center;
-                margin-right: 16px;
-                white-space: nowrap;
-                height: 27px;
-                line-height: 27px;
-                min-width: 54px;
-                outline: 0;
-                padding: 0 8px;
-                -moz-border-radius: 2px;
-                -webkit-border-radius: 2px;
-                border-radius: 2px;
-                display: inline-block;
-                border: 1px solid transparent;
-                color: white;
-                background-color: #A8ACA9;
-@*                background-image: -webkit-linear-gradient(top, #DD4B39, #D14836);*@
-                background-image: -moz-linear-gradient(top, #DD4B39, #D14836);
-                background-image: -ms-linear-gradient(top, #DD4B39, #D14836);
-                background-image: -o-linear-gradient(top, #DD4B39, #D14836);
-                background-image: linear-gradient(top, #DD4B39, #D14836);
-                text-shadow: 0 1px rgba(0, 0, 0, 0.1);
-                text-transform: uppercase;
-            }
-            
-
-
-            .GI2MSK2DPP {
-            color: 
-            white;
-            text-shadow: 0 1px 
-            rgba(0, 0, 0, 0.1);
-            border: 1px solid 
-            #29691D;
-            background-color: 
-            #3D9400;
-            background-image: -webkit-linear-gradient(top, 
-            #3D9400, 
-            #398A00);
-            background-image: -moz-linear-gradient(top, 
-            #3D9400, 
-            #398A00);
-            background-image: -ms-linear-gradient(top, 
-            #3D9400, 
-            #398A00);
-            background-image: -o-linear-gradient(top, 
-            #3D9400, 
-            #398A00);
-            background-image: linear-gradient(top, 
-            #3D9400, 
-            #398A00);
-            }
-        .GI2MSK2DJO {
-        cursor: pointer;
-        font-size: 11px;
-        font-weight: bold;
-        text-align: center;
-        margin-right: 16px;
-        white-space: nowrap;
-        height: 27px;
-        line-height: 27px;
-        min-width: 54px;
-        outline: 0;
-        padding: 0 8px;
-        -moz-border-radius: 2px;
-        -webkit-border-radius: 2px;
-        border-radius: 2px;
-        display: inline-block;
-        }
-        .GI2MSK2DDCB, .GI2MSK2DICB {
-        font-weight: bold;
-        }
-
-        .GI2MSK2DNU {
-        color: 
-        #666;
-        border: 1px solid 
-        gainsboro;
-        border: 1px solid 
-        rgba(0, 0, 0, 0.1);
-        background-color: 
-        whiteSmoke;
-        background-image: -webkit-linear-gradient(top, 
-        whiteSmoke, 
-        #F1F1F1);
-        background-image: -moz-linear-gradient(top, 
-        whiteSmoke, 
-        #F1F1F1);
-        background-image: -ms-linear-gradient(top, 
-        whiteSmoke, 
-        #F1F1F1);
-        background-image: -o-linear-gradient(top, 
-        whiteSmoke, 
-        #F1F1F1);
-        background-image: linear-gradient(top, 
-        whiteSmoke, 
-        #F1F1F1);
-        }
-
-        </style>
         <script type="text/javascript">
 
             var editor, html = '';
@@ -219,8 +85,10 @@
                     $('#createDate').html(parseMicrosoftJsonDateTime(data.CreateDate));
                     if (data.ListComment != 0) {
                         $.each(data.ListComment, function (key, value) {
-                            //$('#listComment').append('<div style="border-top: 1px solid #000000"><span style="color: rgb(0, 104, 28); font-weight: bold">' + value.CreateBy.FullName + '</span><br/><span>' + value.Content + '</span></div>');
-                            $("#commentTemplate").tmpl(value, { getCreateDate: parseMicrosoftJsonDateTime(value.CreateDate) }).appendTo("#listComment");
+                            if (value.isDeleted==false)
+                                $("#commentTemplate").tmpl(value, { getCreateDate: parseMicrosoftJsonDateTime(value.CreateDate) }).appendTo("#listComment");
+                            else
+                                $("#listComment").append('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ');
                         });
                     }
                 });
@@ -228,31 +96,6 @@
 
             $(document).ready(function () {
                 getTopicById();
-//                $('.createSubEditor').live('click', function () {
-//                    if (editor)
-//                        return;
-//                    var divComment = $(this).parent();
-//                    var html = '<p></p>' +
-//                        '<div style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
-//                        divComment.find('.dateAndUser').html() +
-//                        '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
-//                        divComment.find('.comment').html() +
-//                        divComment.find('.parentComment').html() +
-//                        '</blockquote>';
-//                    var config = { startupFocus: true };
-//                    var divFullSubEditor = divComment.find('.fullSubEditor')
-//                    var divSubEditor = divFullSubEditor.find('.subEditor');
-//                    //                    editor = CKEDITOR.appendTo($(this).parent().find('.subEditor'), config, html);
-//                    //                    $(this).parent().find('.fullSubEditor').show();
-//                    divFullSubEditor.attr("id", "fullSubEditor" + id);
-//                    divSubEditor.attr("id", "subEditor" + id);
-
-//                    editor = CKEDITOR.appendTo('subEditor' + id, config, html);
-
-//                    document.getElementById('fullSubEditor' + id).style.display = '';
-
-//                    id += 1;
-//                });
 
                 $('.REPLYBUTTON').live('click', function () {
                     if (editor)
@@ -314,8 +157,6 @@
                 });
             });
 
-
-
             function parseMicrosoftJsonDateTime(content) {
                 try {
                     content = content.replace(/\//g, '');
@@ -341,8 +182,9 @@
                             <td align="left" class="GI2MSK2DP1" valign="top">
                                 <span style="color: rgb(0, 104, 28);font-weight:bold">${CreateBy.FullName}</span>
                              </td>
-                             <td align="right" valign="top"> 
-                                <span class="REPLYBUTTON">Đăng trả lời</span>
+                             <td align="right" valign="top">
+                                <span>${$item.getCreateDate}</span> 
+                                <span class="BUTTONSTYLE REPLYBUTTON">Đăng trả lời</span>
                              </td>
                         </tr>
                     </tbody>                 
@@ -356,35 +198,24 @@
                     <div class="divShowHideParentComment" style="display:none">
                         <span class="parentComment" style="color: #500050;">{{html ParentContent}}</span>
                     </div>
-                    <!--<a href="#" class="createSubEditor"><span style="font-weight:bold;font-size:small; color:White; background-color:Black">ĐĂNG TRẢ LỜI</span></a>-->
-                    <!-- This div will hold the editor. -->
-                    <!--
-                    <div class = "fullSubEditor" style="display: none">
-                        <a href="#" class="addComment">Đăng</a>
-                        <a href="#" class="hideSubEditor">Hủy</a>
-                        <div class="subEditor">
-	                    </div>
-                        <a href="#" class="addComment">Đăng</a>
-                        <a href="#" class="hideSubEditor"">Hủy</a>
-                    </div>               
-                    -->
                 </div>
             </div>
             <div tabindex="0" class="footerComment" style="margin-left: 40px">
                 <div class = "fullSubEditor" style="display: none">
                     <!--<a href="#" class="addComment">Đăng</a>
                     <a href="#" class="hideSubEditor">Hủy</a>-->
-                    <span class="addComment"><span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB">Đăng</span></span>
-                    <span class="hideSubEditor"><span  class="GI2MSK2DJO GI2MSK2DNU">Hủy</span></span>
+                    <span class="addComment"><span class="BUTTONSTYLE SUBMITEDITOR">Đăng</span></span>
+                    <span class="hideSubEditor"><span  class="BUTTONSTYLE CANCELEDITOR">Hủy</span></span>
                     <div class="subEditor">                    
 	                </div>
-                    <span class="addComment"><span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB">Đăng</span></span>
-                    <span class="hideSubEditor"><span  class="GI2MSK2DJO GI2MSK2DNU">Hủy</span></span>
+                    <span class="addComment"><span class="BUTTONSTYLE SUBMITEDITOR">Đăng</span></span>
+                    <span class="hideSubEditor"><span  class="BUTTONSTYLE CANCELEDITOR">Hủy</span></span>
                 </div>  
             </div>
         </div>     
     </script>
-        <div tabindex="0" class="GI2MSK2DJO GI2MSK2DAU" onclick = "createEditor()">Đăng trả lời</div>
+
+        <div tabindex="0" class="BUTTONSTYLE POSTBUTTON" onclick = "createEditor()">Đăng trả lời</div>
         
         @*<a href="#" style="text-decoration:none" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>*@
         <br /><br />
@@ -398,12 +229,12 @@
 
         <!-- This div will hold the editor. -->
         <div id = "fullEditor" style="display: none">
-            <span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB"  onclick="addComment()">Đăng</span>
-            <span class="GI2MSK2DJO GI2MSK2DNU" onclick="removeEditor()">Hủy</span>
+            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Đăng</span>
+            <span class="BUTTONSTYLE CANCELEDITOR" onclick="removeEditor()">Hủy</span>
             <div id="editor">
 	        </div>
-            <span class="GI2MSK2DJO GI2MSK2DPP GI2MSK2DDCB"  onclick="addComment()">Đăng</span>
-            <span class="GI2MSK2DJO GI2MSK2DNU" onclick="removeEditor()">Hủy</span>
+            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Đăng</span>
+            <span class="BUTTONSTYLE CANCELEDITOR" onclick="removeEditor()">Hủy</span>
         </div>
         <div id = "listComment">
         </div>

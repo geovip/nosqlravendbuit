@@ -1,5 +1,80 @@
 ﻿@model IEnumerable < UIT.NoSQL.Core.Domain.DenormalizedTopic < UIT.NoSQL.Core.Domain.TopicObject> >
 
+<Style>
+    .GI2MSK2DGQB .GI2MSK2DGL {
+padding: 4px;
+}
+.GI2MSK2DGL {
+padding: 10px;
+position: relative;
+height: 34px;
+}
+.GI2MSK2DGQB .GI2MSK2DGK {
+left: 4px;
+}
+.GI2MSK2DGK {
+position: absolute;
+left: 10px;
+}
+.GI2MSK2DGQB .GI2MSK2DJK {
+top: 4px;
+bottom: 4px;
+left: 70px;
+}
+.GI2MSK2DJK {
+position: absolute;
+top: 10px;
+bottom: 10px;
+left: 86px;
+right: 114px;
+}
+.GI2MSK2DEL {
+position: absolute;
+overflow: hidden;
+left: 0;
+right: 0;
+top: -2px;
+}
+.GI2MSK2DDL {
+display: block;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+@*a.GI2MSK2DNH, a.GI2MSK2DNH:visited {
+color: 
+#222;
+text-decoration: none;
+}
+a.GI2MSK2DNH, a.GI2MSK2DNH:visited {
+color: 
+#222;
+text-decoration: none;
+}
+a:visited {
+color: 
+#61C;
+}
+a {
+text-decoration: none;
+color: 
+#15C;
+cursor: pointer;
+}*@
+.GI2MSK2DEK {
+color: 
+#666;
+white-space: nowrap;
+}
+.GI2MSK2DEK {
+position: absolute;
+overflow: hidden;
+left: 0;
+right: 0;
+top: 17px;
+}
+</Style>
+
 @{
     ViewBag.Title = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,43 +92,63 @@
     </section>
 }
 
-<h2>Detail</h2>
+<h2>@ViewBag.GroupName</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table>
-
-    <tr>
-        <th>
-            TopicName
-        </th>
-        <th>
-            LastModified
-        </th>
-        <th>
-            NumberOfView
-        </th>
-        <th>
-            NumberOfComment
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastModified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfView)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfComment)
-        </td>
-    </tr>
+<table cellspacing="0" cellpadding="0">
+@foreach (var item in Model)
+{
+        <tr style="background-color:White">
+            
+            <td style="padding-top:4px;border-top: 1px solid #AFABAB"">
+                <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
+            </td>
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+                @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
+            </td>
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+                @Html.DisplayFor(modelItem => item.NumberOfView) lượt xem
+            </td>
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+                @Html.DisplayFor(modelItem => item.NumberOfComment) bình luận 
+            </td>
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+                cập nhật @Html.DisplayFor(modelItem => item.LastModified)
+            </td>
+             
+        </tr>
 }
-
 </table>
+
+@*<div>
+    <table cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td>
+                <div tabindex="0">
+                    <div class="GI2MSK2DGL">
+                        <div><img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(https://groups.google.com/forum/96297F8C983EF6F2BE03872CBF36B4D2.cache.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0"></div>
+                    <div class="GI2MSK2DEL">
+                        <div class="GI2MSK2DDL">
+                            <a class="GI2MSK2DNH" href="#!topic/nosqldemo/FyUK9XUdTNM">chu de moi</a>
+                        </div>
+                    </div>
+                    <div class="GI2MSK2DEK">
+                        <div class="GI2MSK2DFK">
+                            <span class="GI2MSK2DDK">Tác giả Bùi Ngọc Huy</span>
+                            <span class="GI2MSK2DBL">7 bài đăng</span>
+                            <span class="GI2MSK2DBL" style="" aria-hidden="false">15 lượt xem</span>
+                            <span class="GI2MSK2DBL" style="" aria-hidden="false"> cập nhật <span>15 thg 11</span> </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>*@
+
+

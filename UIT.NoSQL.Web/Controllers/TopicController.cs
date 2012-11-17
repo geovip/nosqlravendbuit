@@ -38,7 +38,7 @@ namespace UIT.NoSQL.Web.Controllers
             {
                 return View(topic);
             }
-
+            
             return RedirectToAction("AccessDenied", "Group", new { id = topic.GroupId });
         }
 
@@ -75,7 +75,7 @@ namespace UIT.NoSQL.Web.Controllers
                 topic.NumberOfComment = 0;
                 topic.CreateBy = user;
                 //topic.GroupId = groupId;
-
+                
                 topicService.Save(topic);
 
 
@@ -143,19 +143,19 @@ namespace UIT.NoSQL.Web.Controllers
             }
         }
 
-        public ActionResult GetAll()
+        public JsonResult GetAll()
         {
             return Json(topicService.GetAll(),JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
-        public ActionResult GetById(string id)
+        public JsonResult GetById(string id)
         {
             return Json(topicService.Load(id),JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddComment(string topicId, string content, string parentContent)
+        public JsonResult AddComment(string topicId, string content, string parentContent)
         {
             var topic = topicService.Load(topicId);
             if (topic.ListComment == null)
@@ -170,6 +170,7 @@ namespace UIT.NoSQL.Web.Controllers
             comment.CreateDate = DateTime.Now;
             comment.isDeleted = false;
             topic.ListComment.Add(comment);
+            topic.NumberOfComment += 1;
             topicService.Save(topic);
             return Json(comment, JsonRequestBehavior.AllowGet);
         }
