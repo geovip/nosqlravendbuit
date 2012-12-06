@@ -1,0 +1,6 @@
+E:\University curriculum\HK IX\project\sqldbuit\sqldbuit\sqldbuit\bin\Debug\sqldbuit.exe.config
+E:\University curriculum\HK IX\project\sqldbuit\sqldbuit\sqldbuit\bin\Debug\sqldbuit.exe
+E:\University curriculum\HK IX\project\sqldbuit\sqldbuit\sqldbuit\bin\Debug\sqldbuit.pdb
+E:\University curriculum\HK IX\project\sqldbuit\sqldbuit\sqldbuit\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\University curriculum\HK IX\project\sqldbuit\sqldbuit\sqldbuit\obj\x86\Debug\sqldbuit.exe
+E:\University curriculum\HK IX\project\sqldbuit\sqldbuit\sqldbuit\obj\x86\Debug\sqldbuit.pdb

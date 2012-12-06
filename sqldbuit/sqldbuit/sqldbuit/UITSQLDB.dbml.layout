@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11.25, 8.5" name="UITSQLDB">
+  <DataContextMoniker Name="/UITSQLDBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="731f62f0-63ba-45e1-a95d-3d4292212273" absoluteBounds="9, 3, 2, 1.9178898111979161">
+      <DataClassMoniker Name="/UITSQLDBDataContext/Comment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="38670b82-79dd-4c54-b774-d49db6fda9e6" absoluteBounds="9.015, 3.46, 1.9700000000000002, 1.3578898111979165" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3faf474e-519b-4047-b773-fe307ae38356" absoluteBounds="6.25, 5.25, 2, 1.7535424804687505">
+      <DataClassMoniker Name="/UITSQLDBDataContext/UserGroup" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7342816c-fe37-43c6-ad88-e1f4487aa0cb" absoluteBounds="6.265, 5.71, 1.9700000000000002, 1.19354248046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7491120a-6cb8-4e40-b076-1efd51d731bd" absoluteBounds="3.5, 6.5, 2, 1.7535424804687505">
+      <DataClassMoniker Name="/UITSQLDBDataContext/Group" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a1db6b5e-3c44-4d10-84a1-50c58e366173" absoluteBounds="3.515, 6.96, 1.9700000000000002, 1.19354248046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2e38a9fd-2adf-4e60-b336-89e07f21d00f" absoluteBounds="3.5, 4.625, 2, 1.0961531575520844">
+      <DataClassMoniker Name="/UITSQLDBDataContext/Role" />
+      <nestedChildShapes>
+        <elementListCompartment Id="206b9f49-141d-46a0-9356-20fd4047a9d5" absoluteBounds="3.515, 5.085, 1.9700000000000002, 0.53615315755208326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1fb957d1-3df1-4b0b-9e1f-a07b32849b66" absoluteBounds="6.25, 2, 2, 2.2465844726562505">
+      <DataClassMoniker Name="/UITSQLDBDataContext/Topic" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8d289aa9-3c49-4054-a4d9-3b0da6a6a6f8" absoluteBounds="6.265, 2.46, 1.9700000000000002, 1.68658447265625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6f991c60-5070-4065-8f44-ca513d7f20ba" absoluteBounds="0.75, 4, 2, 1.7535424804687505">
+      <DataClassMoniker Name="/UITSQLDBDataContext/User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="75be3e7c-1a19-4bc8-8d5a-b07166f07a7f" absoluteBounds="0.765, 4.46, 1.9700000000000002, 1.19354248046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 6.75177124023438); (6.25 : 6.75177124023438)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/Group/Group_UserGroup" />
+      <nodes>
+        <classShapeMoniker Id="7491120a-6cb8-4e40-b076-1efd51d731bd" />
+        <classShapeMoniker Id="3faf474e-519b-4047-b773-fe307ae38356" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 5.48557657877604); (5.79166666666667 : 5.48557657877604 : JumpStart); (5.95833333333333 : 5.48557657877604 : JumpEnd); (6.25 : 5.48557657877604)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/Role/Role_UserGroup" />
+      <nodes>
+        <classShapeMoniker Id="2e38a9fd-2adf-4e60-b336-89e07f21d00f" />
+        <classShapeMoniker Id="3faf474e-519b-4047-b773-fe307ae38356" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 3.62329223632813); (9 : 3.62329223632813)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/Topic/Topic_Comment" />
+      <nodes>
+        <classShapeMoniker Id="1fb957d1-3df1-4b0b-9e1f-a07b32849b66" />
+        <classShapeMoniker Id="731f62f0-63ba-45e1-a95d-3d4292212273" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 6.5); (5.875 : 6.125); (5.875 : 3.12329223632813); (6.25 : 3.12329223632813)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/Group/Group_Topic" />
+      <nodes>
+        <classShapeMoniker Id="7491120a-6cb8-4e40-b076-1efd51d731bd" />
+        <classShapeMoniker Id="1fb957d1-3df1-4b0b-9e1f-a07b32849b66" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.43579223632813); (5.79166666666667 : 4.43579223632812 : JumpStart); (5.95833333333333 : 4.43579223632813 : JumpEnd); (9 : 4.43579223632813)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/User/User_Comment" />
+      <nodes>
+        <classShapeMoniker Id="6f991c60-5070-4065-8f44-ca513d7f20ba" />
+        <classShapeMoniker Id="731f62f0-63ba-45e1-a95d-3d4292212273" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.75 : 5.75354248046875); (1.75 : 6.09552174023437); (2.19791916666667 : 6.09552174023437 : JumpStart); (2.36458583333333 : 6.09552174023437 : JumpEnd); (6.25 : 6.09552174023437)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/User/User_UserGroup" />
+      <nodes>
+        <classShapeMoniker Id="6f991c60-5070-4065-8f44-ca513d7f20ba" />
+        <classShapeMoniker Id="3faf474e-519b-4047-b773-fe307ae38356" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.2812525 : 5.75354248046875); (2.2812525 : 7.37677124023438); (3.5 : 7.37677124023438)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/User/User_Group" />
+      <nodes>
+        <classShapeMoniker Id="6f991c60-5070-4065-8f44-ca513d7f20ba" />
+        <classShapeMoniker Id="7491120a-6cb8-4e40-b076-1efd51d731bd" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.75 : 4); (1.75 : 2.53039361816406); (6.25 : 2.53039361816406)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UITSQLDBDataContext/User/User_Topic" />
+      <nodes>
+        <classShapeMoniker Id="6f991c60-5070-4065-8f44-ca513d7f20ba" />
+        <classShapeMoniker Id="1fb957d1-3df1-4b0b-9e1f-a07b32849b66" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
