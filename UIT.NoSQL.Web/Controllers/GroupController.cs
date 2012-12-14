@@ -101,12 +101,12 @@ namespace UIT.NoSQL.Web.Controllers
                 }
             }
             
-            return RedirectToAction("AccessDenied", new { id });
+            return RedirectToAction("AccessDenied", new { id }); //group id
         }
 
         public ActionResult AccessDenied(string id)
         {
-            //ViewBag.GroupID = id;
+            TempData["GroupId"] = id;
             TempData["GroupId"] = id;
             return View();
         }

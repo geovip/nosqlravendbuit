@@ -6,7 +6,7 @@
 
 @section LeftMenu {
     <section id="leftmenu">
-        @Html.Action("LeftMenu", "Home")
+        @Html.Action("LeftMenu", "Home", new{id = @Model.GroupId})
     </section>
 }
 

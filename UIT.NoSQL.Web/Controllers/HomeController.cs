@@ -46,7 +46,7 @@ namespace UIT.NoSQL.Web.Controllers
             return View();
         }
 
-        public ActionResult LeftMenu()
+        public ActionResult LeftMenu(string id)
         {
             IUserGroupService userGroupService = MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
             var user = (UserObject)Session["user"];
@@ -57,6 +57,11 @@ namespace UIT.NoSQL.Web.Controllers
             else
             {
                 //var userGroups = userGroupService.GetByUser(user.Id);
+                if (id == null)
+                {
+                    id = string.Empty;
+                }
+                TempData["GroupId"] = id;
                 return View(user.ListUserGroup);
             } 
         }
