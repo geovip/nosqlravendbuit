@@ -29,13 +29,20 @@
 
         @foreach (var item in Model) 
         {
-        
-                <li>
-                    <a href="/Group/Detail/@Html.DisplayFor(modelItem => item.GroupId)">
+            <li>
+            @if (TempData["GroupId"].Equals(item.GroupId))
+            {
+                <a href="/Group/Detail/@Html.DisplayFor(modelItem => item.GroupId)" style="color:#D14836">
                     @Html.DisplayFor(modelItem => item.GroupName)
                 </a>
-                </li>
-        
+            }
+            else
+            {
+                <a href="/Group/Detail/@Html.DisplayFor(modelItem => item.GroupId)">
+                    @Html.DisplayFor(modelItem => item.GroupName)
+                </a>
+            }
+            </li>        
         }
         <hr />
 
