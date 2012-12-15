@@ -152,7 +152,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ActiveRequest(string id)
+        public String ActiveRequest(string id)
         {            
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             IUserGroupService userGroupService = MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
@@ -195,7 +195,8 @@ namespace UIT.NoSQL.Web.Controllers
             userService.Save(user);
             userGroupService.Save(userGroup);
             
-            return RedirectToAction("JoinRequest", new { id = userGroup.GroupId });
+            //return RedirectToAction("JoinRequest", new { id = userGroup.GroupId });
+            return "Success";
         }
 
         public ActionResult Member(string id)
@@ -238,6 +239,11 @@ namespace UIT.NoSQL.Web.Controllers
             return View();
         }
 
+        public ActionResult Manager(string id)
+        {
+            return View();
+        }
+
         public ActionResult Setting(string id)
         {
             var group = groupService.Load(id);
@@ -245,7 +251,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateSetting(GroupObject group)
+        public String UpdateSetting(GroupObject group)
         {
             var groupOld = groupService.Load(group.Id);
             groupOld.IsPublic = group.IsPublic;
@@ -253,7 +259,7 @@ namespace UIT.NoSQL.Web.Controllers
             groupOld.Description = group.Description;
 
             groupService.Save(groupOld);
-            return RedirectToAction("Setting", "Group", new { id = group.Id });
+            return "Success";
         }
 
         public ActionResult TopMenuUser(string id)

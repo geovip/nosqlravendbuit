@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftManager", "Group")
+    </section>
+}
+
+@section menu {
+    <section id="topmenu">
+        @Html.Action("TopMenuUser", "Group")
+    </section>
+}
+
+<div id="MyContent"></div>

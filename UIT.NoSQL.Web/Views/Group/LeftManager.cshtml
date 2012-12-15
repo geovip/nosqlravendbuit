@@ -3,8 +3,25 @@
 }
 
 
-@if (Session["user"] != null) 
+@if (Session["user"] != null)
 {
+    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
+    
+    <script type="text/javascript">
+
+        function GetManager(action, id) {
+            url = "/Group/" + action;
+            $.post(url, { id: id }, function (data) {
+                $("#MyContent").html(data);
+            });
+        }
+        
+        $(document).ready(function () {
+            GetManager('Member','@TempData["IsMember"]');
+        });
+    </script>
+    
     <ul>
         <li>
             <a href="#">
@@ -26,14 +43,14 @@
 
         
         <li>
-            @Html.ActionLink("Member", "Member", new { id = TempData["IsMember"] })
+            <a href="#" onclick="GetManager('Member','@TempData["IsMember"]')">Member</a>
         </li>
         <li>
-            @Html.ActionLink("Join Request", "JoinRequest", new { id = TempData["IsMember"] })
+            <a href="#" onclick="GetManager('JoinRequest','@TempData["IsMember"]')">Join Request</a>            
         </li>
         
         <li>
-            @Html.ActionLink("Setting", "Setting", new { id = TempData["IsMember"] })
+            <a href="#" onclick="GetManager('Setting','@TempData["IsMember"]')">Setting</a>
         </li>
         
         

@@ -1,25 +1,42 @@
 ﻿@model UIT.NoSQL.Core.Domain.GroupObject
+@{
+    Layout = null;
+}
 
 @{
     ViewBag.Title = "Setting";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@section LeftMenu {
-    <section id="leftmenu">
-        @Html.Action("LeftManager", "Group")
-    </section>
-}
-
-@section menu {
-    <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group")
-    </section>
 }
 
 <h2>Setting</h2>
+<script type="text/javascript">
+    function xmlhttpPost(strURL, formname, responsediv, responsemsg) {
 
-@using (Html.BeginForm("UpdateSetting", "Group", FormMethod.Post)) {
+        $.post(strURL, getquerystring(), function (data) {
+            alert(data);
+        });
+
+    }
+    function getquerystring() {
+        var id = document.getElementById("Id").value;
+        var groupName = document.getElementById("GroupName").value;
+        var description = document.getElementById("Description").value;
+        var isPublic = document.getElementById("IsPublic").checked;
+        
+        var qstr =
+            {
+                Id: id,
+                GroupName: groupName,
+                Description: description,
+                IsPublic: isPublic
+            };
+
+        return qstr;
+    }
+</script>
+
+
+<form name="SettingForm" method="post" action="Group/UpdateSetting" 
+    onsubmit="xmlhttpPost('/Group/UpdateSetting', 'SettingForm', 'MyResult', 'Saving scuccess'); return false;">
     @Html.ValidationSummary(true)
 
     <fieldset>
@@ -52,11 +69,7 @@
         </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <input name="save_button" type="submit" value="Save" />
         </p>
     </fieldset>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+</form>
