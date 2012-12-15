@@ -7,7 +7,7 @@
     @if(TempData["IsMember"].Equals("True"))
     {
         <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
-        <li>@Html.ActionLink("Manage", "Member", "Group", new { id = TempData["GroupId"] }, null)</li>
+        <li>@Html.ActionLink("Manager", "Manager", "Group", new { id = TempData["GroupId"] }, null)</li>
     }
     else
     {

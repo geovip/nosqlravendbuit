@@ -1,19 +1,9 @@
 ﻿@model IEnumerable<UIT.NoSQL.Web.Models.ListUserModels>
-
+@{
+    Layout = null;
+}
 @{
     ViewBag.Title = "Member";
-}
-
-@section LeftMenu {
-    <section id="leftmenu">
-        @Html.Action("LeftManager", "Group")
-    </section>
-}
-
-@section menu {
-    <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group")
-    </section>
 }
 
 
@@ -57,5 +47,4 @@
         </td>
     </tr>
 }
-
 </table>

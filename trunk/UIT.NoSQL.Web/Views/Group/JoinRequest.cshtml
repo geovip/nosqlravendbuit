@@ -1,21 +1,24 @@
 ﻿@model IEnumerable<UIT.NoSQL.Core.Domain.UserGroupObject>
+@{
+    Layout = null;
+}
 
 @{
     ViewBag.Title = "JoinRequest";
 }
+    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
+<script type="text/javascript">
+    function xmlhttpPost(_id) {
 
-@section LeftMenu {
-    <section id="leftmenu">
-        @Html.Action("LeftManager", "Group")
-    </section>
-}
+        $.post("/Group/ActiveRequest", {id : _id}, function (data) {
+            alert(data);
+            var tr = "#tr/" + _id;
+            $("#" + _id).remove();
+        });
 
-@section menu {
-    <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group")
-    </section>
-}
+    }
 
+</script>
 <h2>JoinRequest</h2>
 
 @if (Model == null || Model.Count() == 0)
@@ -34,18 +37,13 @@ else
 
 @foreach (var item in Model)
 {
-    <tr>
-        @using (Html.BeginForm("ActiveRequest", "Group", FormMethod.Post, new { id = "ActiveRequestForm" + @item.Id }))
-        {    
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-                <input type="hidden" value="@item.Id" name="id" />
-            </td>
-            <td>
-                @*@Html.ActionLink("Accept", "ActiveRequest", new { id = item.Id })*@
-                <a href="javascript:{}" onclick=@("document.getElementById('ActiveRequestForm" + @item.Id + "').submit();")>Accept Member</a>
-            </td>
-        }
+    <tr id="@item.Id">
+        <td>
+            @Html.DisplayFor(modelItem => item.User.UserName)
+        </td>
+        <td>
+            <a href="javascript:{}" onclick="xmlhttpPost('@item.Id')">Accept Member</a>
+        </td>
     </tr>
 }
 
