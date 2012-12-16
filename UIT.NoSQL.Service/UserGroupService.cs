@@ -46,5 +46,12 @@ namespace UIT.NoSQL.Service
 
             return userGroups.ToList();
         }
+
+        public void Delete(string id)
+        {
+            var userGroup = Load(id);
+            session.Delete<UserGroupObject>(userGroup);
+            session.SaveChanges();
+        }
     }
 }

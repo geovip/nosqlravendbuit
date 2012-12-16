@@ -55,6 +55,30 @@ namespace UIT.NoSQL.Web
             userObject.Email = "huyuit@gmail.com";
             session.Store(userObject);
 
+            userObject = new UserObject();
+            userObject.Id = "{3FDA3031-C5D0-4A7C-87EE-F0AF91EAC76E}";
+            userObject.FullName = "qq";
+            userObject.UserName = "qq";
+            userObject.Password = "123";
+            userObject.Email = "qq@gmail.com";
+            session.Store(userObject);
+
+            userObject = new UserObject();
+            userObject.Id = "{592D9EDD-A3C9-4ACC-A3EF-5C88823A2474}";
+            userObject.FullName = "ww";
+            userObject.UserName = "ww";
+            userObject.Password = "123";
+            userObject.Email = "ww@gmail.com";
+            session.Store(userObject);
+
+            userObject = new UserObject();
+            userObject.Id = "{E0548546-17A0-418D-9832-4D5887536268}";
+            userObject.FullName = "ww";
+            userObject.UserName = "ww";
+            userObject.Password = "123";
+            userObject.Email = "ee@gmail.com";
+            session.Store(userObject);
+
             ////group
             //GroupObject groupObject = null;
 

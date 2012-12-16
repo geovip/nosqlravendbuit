@@ -47,7 +47,6 @@
     <Compile Include="IService\IUserService.cs" />
     <Compile Include="Domain\Group.cs" />
     <Compile Include="Domain\GroupRole.cs" />
-    <Compile Include="Domain\Role.cs" />
     <Compile Include="Domain\Topic.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\UserGroup.cs" />

@@ -5,12 +5,11 @@
 
 @if (Session["user"] != null)
 {
-    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
-    <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
     
     <script type="text/javascript">
 
         function GetManager(action, id) {
+            //$("#MyContent").html("<p>Loading...</p>");
             url = "/Group/" + action;
             $.post(url, { id: id }, function (data) {
                 $("#MyContent").html(data);

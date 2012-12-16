@@ -10,10 +10,9 @@
 <script type="text/javascript">
     function xmlhttpPost(_id) {
 
-        $.post("/Group/ActiveRequest", {id : _id}, function (data) {
-            alert(data);
-            var tr = "#tr/" + _id;
+        $.post("/Group/ActiveRequest", { id: _id }, function (data) {
             $("#" + _id).remove();
+            alert(data);
         });
 
     }

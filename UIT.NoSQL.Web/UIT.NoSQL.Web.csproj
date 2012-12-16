@@ -15,7 +15,7 @@
     <AssemblyName>UIT.NoSQL.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -173,7 +173,9 @@
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserGroupController.cs" />
     <Compile Include="Factory\UnityControllerFactory .cs" />
-    <Compile Include="Filters\SecurityFilter.cs" />
+    <Compile Include="Filters\MemberFilter.cs" />
+    <Compile Include="Filters\ManagerFilter.cs" />
+    <Compile Include="Filters\MyAuthorize.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -715,21 +717,6 @@
     <Content Include="Views\Group\Member.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Plugin\ckeditor\.htaccess" />
-    <None Include="Plugin\ckeditor\ckeditor.pack" />
-    <None Include="Plugin\ckeditor\ckeditor.php" />
-    <None Include="Plugin\ckeditor\ckeditor_php4.php" />
-    <None Include="Plugin\ckeditor\ckeditor_php5.php" />
-    <None Include="Plugin\ckeditor\_samples\adobeair\run.bat" />
-    <None Include="Plugin\ckeditor\_samples\adobeair\run.sh" />
-    <None Include="Plugin\ckeditor\_samples\assets\output_for_flash.fla" />
-    <None Include="Plugin\ckeditor\_samples\assets\_posteddata.php" />
-    <None Include="Plugin\ckeditor\_samples\php\advanced.php" />
-    <None Include="Plugin\ckeditor\_samples\php\events.php" />
-    <None Include="Plugin\ckeditor\_samples\php\replace.php" />
-    <None Include="Plugin\ckeditor\_samples\php\replaceall.php" />
-    <None Include="Plugin\ckeditor\_samples\php\standalone.php" />
-    <None Include="Plugin\ckeditor\_samples\sample_posteddata.php" />
     <Content Include="Views\Group\JoinRequest.cshtml" />
     <Content Include="Views\Group\LeftManager.cshtml" />
     <Content Include="Views\Group\ActionDemo.cshtml" />
@@ -738,6 +725,21 @@
     <Content Include="Views\Group\Detail.cshtml" />
     <Content Include="Views\Group\TopMenuUser.cshtml" />
     <Content Include="Views\Group\Manager.cshtml" />
+    <Content Include="Plugin\ckeditor\.htaccess" />
+    <Content Include="Plugin\ckeditor\ckeditor.pack" />
+    <Content Include="Plugin\ckeditor\ckeditor.php" />
+    <Content Include="Plugin\ckeditor\ckeditor_php4.php" />
+    <Content Include="Plugin\ckeditor\ckeditor_php5.php" />
+    <Content Include="Plugin\ckeditor\_samples\adobeair\run.bat" />
+    <Content Include="Plugin\ckeditor\_samples\adobeair\run.sh" />
+    <Content Include="Plugin\ckeditor\_samples\assets\output_for_flash.fla" />
+    <Content Include="Plugin\ckeditor\_samples\assets\_posteddata.php" />
+    <Content Include="Plugin\ckeditor\_samples\php\advanced.php" />
+    <Content Include="Plugin\ckeditor\_samples\php\events.php" />
+    <Content Include="Plugin\ckeditor\_samples\php\replace.php" />
+    <Content Include="Plugin\ckeditor\_samples\php\replaceall.php" />
+    <Content Include="Plugin\ckeditor\_samples\php\standalone.php" />
+    <Content Include="Plugin\ckeditor\_samples\sample_posteddata.php" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -763,8 +765,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50441</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:50441/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
