@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Service;
 using UIT.NoSQL.Core.Domain;
+using UIT.NoSQL.Web.Filters;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -30,7 +31,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         //
         // GET: /Topic/Details/5
-
+        [MemberFilter(TypeID = TypeIDEnum.TopicID)]
         public ActionResult Detail(string id)
         {
             var topic = topicService.Load(id);

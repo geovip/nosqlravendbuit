@@ -12,5 +12,6 @@ namespace UIT.NoSQL.Core.IService
         List<UserGroupObject> GetByUser(string userId);
         UserGroupObject Load(string id);
         List<UserGroupObject> GetUnapprove(string groupId);
+        void Delete(string id);
     }
 }

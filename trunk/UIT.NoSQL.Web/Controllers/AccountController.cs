@@ -13,7 +13,7 @@ namespace UIT.NoSQL.Web.Controllers
     public class AccountController : Controller
     {
         private IUserService userService;
-
+        
         public AccountController(IUserService userService)
         {
             this.userService = userService;

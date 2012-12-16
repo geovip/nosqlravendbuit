@@ -23,11 +23,10 @@ namespace UIT.NoSQL.Core.Domain
         public DateTime JoinDate { get; set; }
         public UserGroupStatus IsApprove { get; set; }
 
-        public List<GroupRoleObject> ListGroupRole { get; set; }
+        public GroupRoleObject GroupRole { get; set; }
 
         public UserGroupObject()
         {
-            ListGroupRole = new List<GroupRoleObject>();
         }
     }
 }
