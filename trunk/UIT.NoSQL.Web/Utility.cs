@@ -7,6 +7,8 @@ using Raven.Client;
 using System.Security.Cryptography;
 using System.Text;
 using Raven.Client.Indexes;
+using Raven.Abstractions.Indexing;
+using System.IO;
 
 namespace UIT.NoSQL.Web
 {
@@ -48,13 +50,14 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "sa";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "duongthandan@gmail.com";
-            
+
             //group
             GroupObject groupObject = null;
             groupObject = new GroupObject();
             groupObject.Id = "2B857081-5D44-4CDB-A5DD-D34D753D0A7A";
             groupObject.GroupName = "ASP.NET MVC 4";
             groupObject.Description = "ASP.NET MVC 4";
+            groupObject.Tags = new[] { groupObject.GroupName, groupObject.Description };
             groupObject.IsPublic = false;
             groupObject.CreateDate = DateTime.Now;
             groupObject.CreateBy = userObject.Id;
@@ -75,6 +78,41 @@ namespace UIT.NoSQL.Web
             session.Store(userObject);
             session.Store(userGroup);
             session.Store(groupObject);
+
+
+
+
+            RandomData randomData = new RandomData();
+            for (int i = 0; i < 10000; i++)
+            {
+                groupObject = new GroupObject();
+                groupObject.Id = Guid.NewGuid().ToString();
+                groupObject.GroupName = randomData.RandomString();
+                groupObject.Description = randomData.RandomString();
+                groupObject.Tags = new[] { groupObject.GroupName, groupObject.Description };
+                groupObject.IsPublic = false;
+                groupObject.CreateDate = DateTime.Now;
+                groupObject.CreateBy = userObject.Id;
+
+                var userGroupRandom = new UserGroupObject();
+                userGroupRandom.Id = Guid.NewGuid().ToString();
+                userGroupRandom.UserId = userObject.Id;
+                userGroupRandom.GroupId = groupObject.Id;
+                userGroupRandom.GroupName = groupObject.GroupName;
+                userGroupRandom.Description = groupObject.Description;
+                userGroupRandom.IsApprove = UserGroupStatus.Approve;
+                userGroupRandom.JoinDate = DateTime.Now;
+                userGroupRandom.GroupRole = groupRole;
+
+                groupObject.ListUserGroup.Add(userGroupRandom);
+                userObject.ListUserGroup.Add(userGroupRandom);
+
+                session.Store(userGroupRandom);
+                session.Store(groupObject);
+            }
+
+            session.Store(userObject);
+
 
 
             //user
@@ -110,14 +148,27 @@ namespace UIT.NoSQL.Web
             userObject.Email = "ee@gmail.com";
             session.Store(userObject);
 
-
             session.SaveChanges();
-            //session.Advanced.DatabaseCommands.PutIndex("Group/ByTopicId",
-            //                            new IndexDefinitionBuilder<GroupObject>
-            //                            {
-            //                                Map = groupObjects => from grObject in groupObjects
-            //                                               select new { grObject.GroupName }
-            //                            });
+
+            //create index
+            session.Advanced.DatabaseCommands.DeleteIndex("GroupName");
+            session.Advanced.DatabaseCommands.DeleteIndex("Group/ByTopicId");
+
+            session.Advanced.DatabaseCommands.PutIndex("GroupName", new IndexDefinitionBuilder<GroupObject>
+            {
+                Map = gr => from g in gr
+                               select new { g.GroupName, g.Description },
+                Indexes =
+                {
+                    { x => x.GroupName, FieldIndexing.Analyzed}
+                }
+            });
+            session.Advanced.DatabaseCommands.PutIndex("Group/ByTopicId",
+                                        new IndexDefinitionBuilder<GroupObject>
+                                        {
+                                            Map = groupObjects => from grObject in groupObjects
+                                                                  select new { grObject.GroupName }
+                                        });
         }
 
         public static string GetMd5Hash(string input)
@@ -133,6 +184,23 @@ namespace UIT.NoSQL.Web
             }
 
             return sBuilder.ToString();
+        }
+    }
+
+    public class RandomData
+    {
+        private Random random;
+
+        public RandomData()
+        {
+            random = new Random((int)DateTime.Now.Ticks);
+        }
+
+        public string RandomString()
+        {
+            string path = Path.GetRandomFileName() + " " + Path.GetRandomFileName();
+            path = path.Replace(".", "");
+            return path;
         }
     }
 }
