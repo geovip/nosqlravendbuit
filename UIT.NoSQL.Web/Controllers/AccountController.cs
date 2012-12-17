@@ -32,7 +32,7 @@ namespace UIT.NoSQL.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (userService.CheckLoginSuccess(model.UserName, model.Password))
+                if (userService.CheckLoginSuccess(model.UserName, Utility.GetMd5Hash(model.Password)))
                 {
                     Session["user"] = userService.LoadByUserName(model.UserName);
                     return Json(new { success = true, redirect = "/Home" });
@@ -82,7 +82,7 @@ namespace UIT.NoSQL.Web.Controllers
                 user.FullName = model.FullName;
                 user.UserName = model.UserName;
                 user.Email = model.Email;
-                user.Password = model.Password;
+                user.Password = Utility.GetMd5Hash(model.Password);
                 user.CreateDate = DateTime.Now;
                 userService.Save(user);
 
