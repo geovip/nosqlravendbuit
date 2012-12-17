@@ -70,7 +70,7 @@
                 content = fullContent.slice(0, fullContent.search(flag1));
                 parentContent = fullContent.slice((fullContent.search(flag2) + 6),fullContent.length-1);
                 //alert(content + parentContent);
-                $.post(url, { topicId: topicId, content: content, parentContent:parentContent }, function (data) {
+                $.post(url, { Id: topicId, content: content, parentContent:parentContent }, function (data) {
                     $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
                 });
                 removeEditor();
@@ -125,7 +125,7 @@
                     var fullContent = editor.getData(); // fullContent = content + parentContent
                     content = fullContent.slice(0, fullContent.search(flag1));
                     parentContent = fullContent.slice((fullContent.search(flag2) + 6), fullContent.length - 1);
-                    $.post(url, { topicId: topicId, content: content, parentContent: parentContent }, function (data) {
+                    $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
                         $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
                     });
                     if (!editor)
