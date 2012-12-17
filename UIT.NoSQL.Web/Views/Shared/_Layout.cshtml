@@ -24,6 +24,24 @@
                 leftmenu.style.height = (windowHeight - 130) + "px";
             }
             window.onresize = AutoResize;
+
+            function xmlhttpPost() {
+
+                $.post("/Search/Index", getquerystring(), function (data) {
+                    $("#SectionMain").html(data);
+                });
+
+            }
+            function getquerystring() {
+                var _searchStr = document.getElementById("searchStr").value;
+                
+                var qstr =
+                    {
+                        searchStr: _searchStr,
+                    };
+
+                return qstr;
+            }
         </script>
     </head>
     <body>
@@ -32,10 +50,17 @@
                 <div class="float-left">
                     <p class="float-left site-title">@Html.ActionLink("your logo here.", "Index", "Home")</p>
                     <div class="float-right search">
-                        <input type="text" class="text"/>
-                        <a href="#">
-                            <img src="/Images/system-search-hi.png" />
-                        </a>
+
+                        <form action="/Search/Index" method="post" id="SearchForm"
+                            onsubmit="xmlhttpPost(); return false;">
+
+                            <input type="text" class="text" id="searchStr" />
+                            <a href="javascript:{}" onclick="xmlhttpPost();">
+                                <img src="/Images/system-search-hi.png" />
+                            </a>
+                            @*document.getElementById('SearchForm').submit();*@
+                        </form>
+
                     </div>
                 </div>
                 <div class="float-right">
@@ -60,8 +85,10 @@
 
             <div id="main">
                 @RenderSection("featured", required: false)
-                <section class="content-wrapper main-content clear-fix">
-                    @RenderBody()
+                <section id="SectionMain" class="content-wrapper main-content clear-fix">
+                    
+                        @RenderBody()
+                    
                 </section>
             </div>
             <div class="clear-fix"></div>

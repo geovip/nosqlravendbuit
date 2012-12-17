@@ -52,6 +52,8 @@ namespace UIT.NoSQL.Web.Controllers
         [LoginFilter]
         public ActionResult Create(GroupObject group)
         {
+            group.Tags = new[]{group.GroupName, group.Description};
+
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
 

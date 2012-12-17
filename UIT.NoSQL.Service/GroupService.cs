@@ -81,5 +81,15 @@ namespace UIT.NoSQL.Service
 
             return group;
         }
+
+        public List<GroupObject> Search(string searchStr)
+        {
+            //string str = string.Format("GroupName: *\"{0}\"* OR Description: *\"{0}\"*", searchStr);
+            //str = str.Replace("\\","");// OR Description: \"{0}\"
+            //"GroupName"
+            var listGroup = session.Advanced.LuceneQuery<GroupObject>("GroupName").Where(string.Format("GroupName:*{0}* OR Description:*{0}*", searchStr)).ToList();
+
+            return listGroup;
+        }
     }
 }
