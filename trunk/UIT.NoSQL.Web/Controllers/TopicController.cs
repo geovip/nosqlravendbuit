@@ -37,6 +37,13 @@ namespace UIT.NoSQL.Web.Controllers
             var topic = topicService.Load(id);
             if (topic != null)
             {
+                topic.NumberOfView += 1;
+                topicService.Save(topic);
+
+                var group = groupService.Load(topic.GroupId);
+                group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfView += 1;
+                groupService.Save(group);
+
                 return View(topic);
             }
             else
@@ -171,7 +178,15 @@ namespace UIT.NoSQL.Web.Controllers
             comment.isDeleted = false;
             topic.ListComment.Add(comment);
             topic.NumberOfComment += 1;
+            topic.LastModified = DateTime.Now;
             topicService.Save(topic);
+
+            var group = groupService.Load(topic.GroupId);
+            group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfComment += 1;
+            group.ListTopic.Find(t => t.Id.Equals(topic.Id)).LastModified = DateTime.Now;
+
+            groupService.Save(group);
+
             return Json(comment, JsonRequestBehavior.AllowGet);
         }
     }

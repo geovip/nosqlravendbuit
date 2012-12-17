@@ -94,24 +94,24 @@ top: 17px;
 
 <h2>@ViewBag.GroupName</h2>
 
-<table cellspacing="0" cellpadding="0">
+<table cellspacing="0" cellpadding="0" width="100%">
 @foreach (var item in Model)
 {
         <tr style="background-color:White">
             
-            <td style="padding-top:4px;border-top: 1px solid #AFABAB"">
+            <td style="padding-top:4px;border-top: 1px solid #AFABAB" width="5%">
                 <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat;" border="0">
             </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="50%">
                 @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
             </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
                 @Html.DisplayFor(modelItem => item.NumberOfView) lượt xem
             </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
                 @Html.DisplayFor(modelItem => item.NumberOfComment) bình luận 
             </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB">
+            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="25%">
                 cập nhật @Html.DisplayFor(modelItem => item.LastModified)
             </td>
              

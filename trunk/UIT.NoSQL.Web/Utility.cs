@@ -6,6 +6,7 @@ using UIT.NoSQL.Core.Domain;
 using Raven.Client;
 using System.Security.Cryptography;
 using System.Text;
+using Raven.Client.Indexes;
 
 namespace UIT.NoSQL.Web
 {
@@ -111,6 +112,12 @@ namespace UIT.NoSQL.Web
 
 
             session.SaveChanges();
+            //session.Advanced.DatabaseCommands.PutIndex("Group/ByTopicId",
+            //                            new IndexDefinitionBuilder<GroupObject>
+            //                            {
+            //                                Map = groupObjects => from grObject in groupObjects
+            //                                               select new { grObject.GroupName }
+            //                            });
         }
 
         public static string GetMd5Hash(string input)
