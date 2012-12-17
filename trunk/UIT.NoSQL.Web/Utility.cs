@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using UIT.NoSQL.Core.Domain;
 using Raven.Client;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace UIT.NoSQL.Web
 {
@@ -43,7 +45,7 @@ namespace UIT.NoSQL.Web
             userObject.Id = "D035A3B8-961D-4DA0-827A-D58E8FCE3832";
             userObject.FullName = "Duong Than Dan";
             userObject.UserName = "sa";
-            userObject.Password = "123";
+            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "duongthandan@gmail.com";
             session.Store(userObject);
 
@@ -51,7 +53,7 @@ namespace UIT.NoSQL.Web
             userObject.Id = "F4D45AD1-D581-425C-A058-799AFA51FE01";
             userObject.FullName = "Bui Ngoc Huy";
             userObject.UserName = "aa";
-            userObject.Password = "123";
+            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "huyuit@gmail.com";
             session.Store(userObject);
 
@@ -59,7 +61,7 @@ namespace UIT.NoSQL.Web
             userObject.Id = "{3FDA3031-C5D0-4A7C-87EE-F0AF91EAC76E}";
             userObject.FullName = "qq";
             userObject.UserName = "qq";
-            userObject.Password = "123";
+            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "qq@gmail.com";
             session.Store(userObject);
 
@@ -67,7 +69,7 @@ namespace UIT.NoSQL.Web
             userObject.Id = "{592D9EDD-A3C9-4ACC-A3EF-5C88823A2474}";
             userObject.FullName = "ww";
             userObject.UserName = "ww";
-            userObject.Password = "123";
+            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "ww@gmail.com";
             session.Store(userObject);
 
@@ -75,7 +77,7 @@ namespace UIT.NoSQL.Web
             userObject.Id = "{E0548546-17A0-418D-9832-4D5887536268}";
             userObject.FullName = "ww";
             userObject.UserName = "ww";
-            userObject.Password = "123";
+            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "ee@gmail.com";
             session.Store(userObject);
 
@@ -91,6 +93,21 @@ namespace UIT.NoSQL.Web
             //session.Store(groupObject);
 
             session.SaveChanges();
+        }
+
+        public static string GetMd5Hash(string input)
+        {
+            MD5 md5Hash = MD5.Create();
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            StringBuilder sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
         }
     }
 }
