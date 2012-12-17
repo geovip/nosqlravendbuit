@@ -113,7 +113,7 @@
                         divComment.find('.comment').html() +
                         divComment.find('.parentComment').html() +
                         '</blockquote>';
-                    var config = { startupFocus: true };
+                    var config = { toolbar: 'Basic', startupFocus: true };
                     editor = CKEDITOR.appendTo('subEditor' + id, config, html);
                     divFullSubEditor.attr('style', 'display:""');
                     id += 1;
@@ -161,7 +161,8 @@
                 try {
                     content = content.replace(/\//g, '');
                     var contentDate = eval('new ' + content);
-                    return contentDate.toDateString() + ' ' + contentDate.toTimeString();
+                    return contentDate.toDateString()  + ' ' + contentDate.toTimeString();
+                    //return contentDate.toLocaleString();
                 } catch (ex) {
                     return content;
                 }
@@ -177,7 +178,7 @@
                     <tbody>
                         <tr>
                             <td valign="top" width="5%">
-                                <img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(https://groups.google.com/forum/96297F8C983EF6F2BE03872CBF36B4D2.cache.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
+                                <img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(/Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
                             </td>
                             <td align="left" class="GI2MSK2DP1" valign="top">
                                 <span style="color: rgb(0, 104, 28);font-weight:bold">${CreateBy.FullName}</span>

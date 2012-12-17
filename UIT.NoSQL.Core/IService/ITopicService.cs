@@ -11,5 +11,6 @@ namespace UIT.NoSQL.Core.IService
         TopicObject Load(string id);
         List<TopicObject> GetAll();
         void Save(TopicObject topic);
+        void UpdateNumberOfCommentInDenormalizedTopic(string groupId, string topicId);
     }
 }
