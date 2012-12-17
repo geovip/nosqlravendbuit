@@ -173,9 +173,9 @@
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserGroupController.cs" />
     <Compile Include="Factory\UnityControllerFactory .cs" />
+    <Compile Include="Filters\LoginFilter.cs" />
     <Compile Include="Filters\MemberFilter.cs" />
     <Compile Include="Filters\ManagerFilter.cs" />
-    <Compile Include="Filters\MyAuthorize.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

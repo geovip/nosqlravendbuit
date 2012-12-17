@@ -13,7 +13,7 @@ using Raven.Abstractions.Data;
 
 namespace UIT.NoSQL.Web.Controllers
 {
-    public class GroupController : BaseController
+    public class GroupController : Controller
     {     
         private IGroupService groupService;
         private IUserGroupService userGroupService;
@@ -42,16 +42,14 @@ namespace UIT.NoSQL.Web.Controllers
             }         
         }
 
+        [LoginFilter]
         public ActionResult Create()
         {
-            if (Session["user"] == null)
-            {
-                return RedirectToAction("Index","Login");
-            }
             return View();
         }
 
         [HttpPost]
+        [LoginFilter]
         public ActionResult Create(GroupObject group)
         {
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
@@ -104,6 +102,7 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         [HttpPost]
+        [LoginFilter]
         public ActionResult Join(string id)
         {
             IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
@@ -132,6 +131,7 @@ namespace UIT.NoSQL.Web.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
+        [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult JoinRequest(string id)
         {
             List<UserGroupObject> listUserGroup = new List<UserGroupObject>();
@@ -199,28 +199,25 @@ namespace UIT.NoSQL.Web.Controllers
             var group = groupService.LoadWithUser(id, out listUser, out listUserGroup);
             if (group != null)
             {
-                if (CheckViewGroup(group))
+                List<ListUserModels> listUserModel = new List<ListUserModels>();
+                ListUserModels userModels = null;
+                for (int i = 0; i < listUser.Count; i++)
                 {
-                    List<ListUserModels> listUserModel = new List<ListUserModels>();
-                    ListUserModels userModels = null;
-                    for (int i = 0; i < listUser.Count; i++)
+                    if (listUserGroup[i].IsApprove != UserGroupStatus.Approve)
                     {
-                        if (listUserGroup[i].IsApprove != UserGroupStatus.Approve)
-                        {
-                            continue;
-                        }
-                        userModels = new ListUserModels();
-                        userModels.UserGroupID = listUserGroup[i].Id;
-                        userModels.FullName = listUser[i].FullName;
-                        userModels.UserName = listUser[i].UserName;
-                        userModels.Email = listUser[i].Email;
-                        userModels.Role = listUserGroup[i].GroupRole.GroupName;
-
-                        listUserModel.Add(userModels);
+                        continue;
                     }
+                    userModels = new ListUserModels();
+                    userModels.UserGroupID = listUserGroup[i].Id;
+                    userModels.FullName = listUser[i].FullName;
+                    userModels.UserName = listUser[i].UserName;
+                    userModels.Email = listUser[i].Email;
+                    userModels.Role = listUserGroup[i].GroupRole.GroupName;
 
-                    return View(listUserModel);
+                    listUserModel.Add(userModels);
                 }
+
+                return View(listUserModel);
             }
 
             return RedirectToAction("AccessDenied", new { id });
@@ -296,6 +293,36 @@ namespace UIT.NoSQL.Web.Controllers
             TempData["IsMember"] = CheckViewGroup(groupService.Load(id)).ToString();
             TempData["GroupId"] = id;
             return View();
+        }
+
+        [NonAction]
+        private bool CheckViewGroup(GroupObject groupObject)
+        {
+            bool isAllow = false;
+            if (groupObject.IsPublic)
+            {
+                isAllow = true;
+            }
+            else
+            {
+                if (Session["user"] != null)
+                {
+                    var userID = ((UserObject)Session["user"]).Id;
+                    IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+                    var user = userService.Load(userID);
+
+                    foreach (var userGroup in user.ListUserGroup)
+                    {
+                        if (userGroup.GroupId.Equals(groupObject.Id) && userGroup.IsApprove == UserGroupStatus.Approve)
+                        {
+                            isAllow = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return isAllow;
         }
     }
 }

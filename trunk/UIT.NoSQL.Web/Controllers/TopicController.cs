@@ -10,7 +10,7 @@ using UIT.NoSQL.Web.Filters;
 
 namespace UIT.NoSQL.Web.Controllers
 {
-    public class TopicController : BaseController
+    public class TopicController : Controller
     {
         private ITopicService topicService;
         private IGroupService groupService;
@@ -35,23 +35,21 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Detail(string id)
         {
             var topic = topicService.Load(id);
-            if (CheckViewTopic(topic))
+            if (topic != null)
             {
                 return View(topic);
             }
-            
-            return RedirectToAction("AccessDenied", "Group", new { id = topic.GroupId });
+            else
+            {
+                return RedirectToAction("AccessDenied", "Group", new { id = topic.GroupId });
+            }
         }
 
         //
         // GET: /Topic/Create
-
+        [MemberFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Create(string id)
         {
-            if (Session["user"] == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
             TempData["GroupId"] = id;
             return View();
         }
@@ -156,9 +154,10 @@ namespace UIT.NoSQL.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult AddComment(string topicId, string content, string parentContent)
+        [MemberFilter(TypeID = TypeIDEnum.TopicID)]
+        public JsonResult AddComment(string Id, string content, string parentContent)
         {
-            var topic = topicService.Load(topicId);
+            var topic = topicService.Load(Id);
             if (topic.ListComment == null)
             {
                 topic.ListComment = new List<CommentObject>();

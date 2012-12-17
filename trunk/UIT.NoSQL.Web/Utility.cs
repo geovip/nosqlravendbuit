@@ -29,13 +29,13 @@ namespace UIT.NoSQL.Web
             session.Store(groupRole);
 
             groupRole = new GroupRoleObject();
-            groupRole.Id = "79C6B725-F787-4FDF-B820-42A21174449D";
-            groupRole.GroupName = "Owner";
+            groupRole.Id = "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
+            groupRole.GroupName = "Member";
             session.Store(groupRole);
 
             groupRole = new GroupRoleObject();
-            groupRole.Id = "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
-            groupRole.GroupName = "Member";
+            groupRole.Id = "79C6B725-F787-4FDF-B820-42A21174449D";
+            groupRole.GroupName = "Owner";
             session.Store(groupRole);
 
             //user
@@ -47,8 +47,36 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "sa";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "duongthandan@gmail.com";
-            session.Store(userObject);
+            
+            //group
+            GroupObject groupObject = null;
+            groupObject = new GroupObject();
+            groupObject.Id = "2B857081-5D44-4CDB-A5DD-D34D753D0A7A";
+            groupObject.GroupName = "ASP.NET MVC 4";
+            groupObject.Description = "ASP.NET MVC 4";
+            groupObject.IsPublic = false;
+            groupObject.CreateDate = DateTime.Now;
+            groupObject.CreateBy = userObject.Id;
 
+            var userGroup = new UserGroupObject();
+            userGroup.Id = "565C2563-0CA2-4993-B322-1D05C885A996";
+            userGroup.UserId = userObject.Id;
+            userGroup.GroupId = groupObject.Id;
+            userGroup.GroupName = groupObject.GroupName;
+            userGroup.Description = groupObject.Description;
+            userGroup.IsApprove = UserGroupStatus.Approve;
+            userGroup.JoinDate = DateTime.Now;
+            userGroup.GroupRole = groupRole;
+
+            groupObject.ListUserGroup.Add(userGroup);
+            userObject.ListUserGroup.Add(userGroup);
+
+            session.Store(userObject);
+            session.Store(userGroup);
+            session.Store(groupObject);
+
+
+            //user
             userObject = new UserObject();
             userObject.Id = "F4D45AD1-D581-425C-A058-799AFA51FE01";
             userObject.FullName = "Bui Ngoc Huy";
@@ -58,7 +86,7 @@ namespace UIT.NoSQL.Web
             session.Store(userObject);
 
             userObject = new UserObject();
-            userObject.Id = "{3FDA3031-C5D0-4A7C-87EE-F0AF91EAC76E}";
+            userObject.Id = "3FDA3031-C5D0-4A7C-87EE-F0AF91EAC76E";
             userObject.FullName = "qq";
             userObject.UserName = "qq";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
@@ -66,7 +94,7 @@ namespace UIT.NoSQL.Web
             session.Store(userObject);
 
             userObject = new UserObject();
-            userObject.Id = "{592D9EDD-A3C9-4ACC-A3EF-5C88823A2474}";
+            userObject.Id = "592D9EDD-A3C9-4ACC-A3EF-5C88823A2474";
             userObject.FullName = "ww";
             userObject.UserName = "ww";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
@@ -74,23 +102,13 @@ namespace UIT.NoSQL.Web
             session.Store(userObject);
 
             userObject = new UserObject();
-            userObject.Id = "{E0548546-17A0-418D-9832-4D5887536268}";
+            userObject.Id = "E0548546-17A0-418D-9832-4D5887536268";
             userObject.FullName = "ww";
             userObject.UserName = "ww";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "ee@gmail.com";
             session.Store(userObject);
 
-            ////group
-            //GroupObject groupObject = null;
-
-            //groupObject = new GroupObject();
-            //groupObject.Id = "";
-            //groupObject.GroupName = "group 1";
-            //groupObject.Description = "this is group 1";
-            //groupObject.IsPublic = true;
-            //groupObject.CreateDate = DateTime.Now;
-            //session.Store(groupObject);
 
             session.SaveChanges();
         }
