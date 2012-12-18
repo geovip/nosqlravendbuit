@@ -37,6 +37,29 @@
 		background-image: -o-linear-gradient(top, #DD4B39, #C53727);
 		background-image: linear-gradient(top, #DD4B39, #C53727);
     }
+
+    .GLTURNLHW{
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		color: white;
+		background-color: whiteSmoke;
+		background-image: -webkit-linear-gradient(top, whiteSmoke, #F1F1F1);
+		background-image: -moz-linear-gradient(top, whiteSmoke, #F1F1F1);
+		background-image: -ms-linear-gradient(top, whiteSmoke, #F1F1F1);
+		background-image: -o-linear-gradient(top, whiteSmoke, #F1F1F1);
+		background-image: linear-gradient(top, whiteSmoke, #F1F1F1);
+		text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+		text-transform: uppercase;
+    }
+    .GLTURNLHW:hover {
+		border: 1px solid #c6c6c6;
+		border-bottom-color: #AF301F;
+		background-color: #f8f8f8;
+		background-image: -webkit-linear-gradient(top, #f8f8f8, #F1F1F1);
+		background-image: -moz-linear-gradient(top, #f8f8f8, #F1F1F1);
+		background-image: -ms-linear-gradient(top, #f8f8f8, #F1F1F1);
+		background-image: -o-linear-gradient(top, #f8f8f8, #F1F1F1);
+		background-image: linear-gradient(top, #f8f8f8, #F1F1F1);
+    }
             
 
     .REPLYBUTTON

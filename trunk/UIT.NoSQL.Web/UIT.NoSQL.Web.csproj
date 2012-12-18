@@ -721,7 +721,6 @@
   <ItemGroup>
     <Content Include="Views\Group\JoinRequest.cshtml" />
     <Content Include="Views\Group\LeftManager.cshtml" />
-    <Content Include="Views\Group\ActionDemo.cshtml" />
     <Content Include="Views\Topic\Detail.cshtml" />
     <Content Include="Views\Group\Setting.cshtml" />
     <Content Include="Views\Group\Detail.cshtml" />

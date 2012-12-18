@@ -355,14 +355,21 @@ namespace UIT.NoSQL.Web.Controllers
             return "Success";
         }
 
-        public ActionResult TopMenuUser(string id)
+        public ActionResult TopMenuUser(string id, string action)
         {
             TempData["GroupId"] = id;
+            TempData["account"] = action;
             return View();
         }
 
         public ActionResult AccessDenied(string id)
         {
+            if (id == null)
+            {
+                TempData["GroupId"] = "null";
+                return View();
+            }
+
             bool isAllow = CheckViewGroup(groupService.Load(id));
             if (isAllow)
             {
