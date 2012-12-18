@@ -1,0 +1,33 @@
+﻿@model IEnumerable<UIT.NoSQL.Core.Domain.GroupObject>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<h2>Search Result</h2>
+
+
+<table style="width:100%;">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr tabindex="0">
+        <td style="width:40%;">
+            @Html.ActionLink(@item.GroupName, "Detail", "Group", new { id=item.Id }, null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+    </tr>
+}
+
+</table>

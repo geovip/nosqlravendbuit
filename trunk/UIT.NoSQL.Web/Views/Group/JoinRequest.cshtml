@@ -8,9 +8,9 @@
 }
     <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
 <script type="text/javascript">
-    function xmlhttpPost(_id) {
+    function xmlhttpPost(url, _id) {
 
-        $.post("/Group/ActiveRequest", { id: _id }, function (data) {
+        $.post(url, { id: _id }, function (data) {
             $("#" + _id).remove();
             alert(data);
         });
@@ -41,7 +41,10 @@ else
             @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
         <td>
-            <a href="javascript:{}" onclick="xmlhttpPost('@item.Id')">Accept Member</a>
+            <a href="javascript:{}" onclick="xmlhttpPost('/Group/ActiveRequest','@item.Id')">Accept Member</a>
+        </td>
+        <td>
+            <a href="javascript:{}" onclick="xmlhttpPost('/Group/RejectRequest/','@item.Id')">Reject</a>
         </td>
     </tr>
 }

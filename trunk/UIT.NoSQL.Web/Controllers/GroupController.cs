@@ -100,28 +100,65 @@ namespace UIT.NoSQL.Web.Controllers
         [LoginFilter]
         public String Join(string id)
         {
-            IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
-            var groupRole = groupRoleService.LoadByName(GroupRoleType.Member);
-            var user = (UserObject)Session["user"];
-            var group = groupService.Load(id);
-            var userGroup = new UserGroupObject();
-
-            userGroup.Id = Guid.NewGuid().ToString();
-            userGroup.UserId = user.Id;;
-            userGroup.GroupId = group.Id;
-            userGroup.GroupName = group.GroupName;
-            userGroup.Description = group.Description;
-            userGroup.IsApprove = UserGroupStatus.JoinRequest;
-            userGroup.GroupRole = groupRole;
-
-            group.ListUserGroup.Add(userGroup);
-
-            user.ListUserGroup.Add(userGroup);
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+            IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
+            var userId = ((UserObject)Session["user"]).Id;
+            var user = userService.Load(userId);
+            bool reSend = false;
 
-            userService.Save(user);
+            foreach (var usergroup in user.ListUserGroup)
+            {
+                if (usergroup.GroupId.Equals(id))
+                {
+                    if (usergroup.IsApprove == UserGroupStatus.JoinRequest)
+                    {
+                        return "Please wait for approval";
+                    }
+                    else if (usergroup.IsApprove == UserGroupStatus.Reject)
+                    {
+                        reSend = true;
+                    }
+                    else
+                    {
+                        Redirect("/Group/Detail/" + id);
+                        return string.Empty;
+                    }
+                }
+            }
+
+            var group = groupService.Load(id);
+
+            if (reSend)
+            {
+                foreach (var usergroup in group.ListUserGroup)
+                {
+                    if (usergroup.UserId.Equals(userId))
+                    {
+                        usergroup.IsApprove = UserGroupStatus.JoinRequest;
+                    }
+                }
+            }
+            else
+            {
+                var groupRole = groupRoleService.LoadByName(GroupRoleType.Member);
+                var userGroup = new UserGroupObject();
+
+                userGroup.Id = Guid.NewGuid().ToString();
+                userGroup.UserId = user.Id; ;
+                userGroup.GroupId = group.Id;
+                userGroup.GroupName = group.GroupName;
+                userGroup.Description = group.Description;
+                userGroup.IsApprove = UserGroupStatus.JoinRequest;
+                userGroup.GroupRole = groupRole;
+
+                group.ListUserGroup.Add(userGroup);
+                user.ListUserGroup.Add(userGroup);
+
+                Session["user"] = user;
+                userService.Save(user);
+                userGroupService.Save(userGroup);
+            }
             groupService.Save(group);
-            userGroupService.Save(userGroup);
 
             return "Request success";
         }
@@ -144,6 +181,43 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         [HttpPost]
+        public String RejectRequest(string id)
+        {
+            IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+            IUserGroupService userGroupService = MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
+
+            var userGroup = userGroupService.Load(id);
+            var groupObject = groupService.Load(userGroup.GroupId);
+            var user = userService.Load(userGroup.UserId);
+
+            userGroup.IsApprove = UserGroupStatus.Reject;
+
+            foreach (var item in groupObject.ListUserGroup)
+            {
+                if (item.Id.Equals(userGroup.Id))
+                {
+                    item.IsApprove = UserGroupStatus.Reject;
+                    break;
+                }
+            }
+
+            foreach (var item in user.ListUserGroup)
+            {
+                if (item.Id.Equals(userGroup.Id))
+                {
+                    item.IsApprove = UserGroupStatus.Reject;
+                    break;
+                }
+            }
+
+            groupService.Save(groupObject);
+            userService.Save(user);
+            userGroupService.Save(userGroup);
+
+            return "Success";
+        }
+
+        [HttpPost]
         public String ActiveRequest(string id)
         {            
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
@@ -162,7 +236,6 @@ namespace UIT.NoSQL.Web.Controllers
                 {
                     item.IsApprove = UserGroupStatus.Approve;
                     item.JoinDate = userGroup.JoinDate;
-                    //userGroup.ListGroupRole.Add(groupRole);
                     break;
                 }
             }
@@ -173,7 +246,6 @@ namespace UIT.NoSQL.Web.Controllers
                 {
                     item.IsApprove = UserGroupStatus.Approve;
                     item.JoinDate = userGroup.JoinDate;
-                    //userGroup.ListGroupRole.Add(groupRole);
                     break;
                 }
             }
@@ -285,7 +357,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult TopMenuUser(string id)
         {
-                TempData["GroupId"] = id;
+            TempData["GroupId"] = id;
             return View();
         }
 
