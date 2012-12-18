@@ -161,6 +161,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [LoginFilter]
         [MemberFilter(TypeID = TypeIDEnum.TopicID)]
         public JsonResult AddComment(string Id, string content, string parentContent)
         {

@@ -33,9 +33,19 @@ namespace UIT.NoSQL.Web.Filters
                 groupID = topicObject.GroupId;
             }
 
-            if (ctx.Session != null && ctx.Session["user"] != null)
+            IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+            var groupObject = groupService.Load(groupID);
+
+            if (groupObject.IsPublic)
             {
-                var user = (UserObject)ctx.Session["user"];
+                isAllow = true;
+            }
+            else if (ctx.Session != null && ctx.Session["user"] != null)
+            {
+                var userID = ((UserObject)ctx.Session["user"]).Id;
+                IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+                var user = userService.Load(userID);
+
                 foreach (var userGroup in user.ListUserGroup)
                 {
                     if (userGroup.GroupId.Equals(groupID) && userGroup.IsApprove == UserGroupStatus.Approve)

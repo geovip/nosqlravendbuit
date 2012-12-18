@@ -23,16 +23,16 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult Index()
         {
-            var user = (UserObject)Session["user"];
-            if (user == null)
-            {
-                ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-                return View();
-            }
-            else
-            {
-                return View(user.ListUserGroup);
-            }    
+            //var user = (UserObject)Session["user"];
+            //if (user == null)
+            //{
+            //    ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+            //    return View();
+            //}
+            //else
+            //{
+            //    return View(user.ListUserGroup);
+            //}    
             //IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             
             //TopicObject topic = new TopicObject();

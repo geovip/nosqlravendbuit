@@ -41,7 +41,10 @@ namespace UIT.NoSQL.Web.Filters
 
             if (ctx.Session != null && ctx.Session["user"] != null)
             {
-                var user = (UserObject)ctx.Session["user"];
+                var userID = ((UserObject)ctx.Session["user"]).Id;
+                IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+                var user = userService.Load(userID);
+
                 foreach (var userGroup in user.ListUserGroup)
                 {
                     if (userGroup.GroupId.Equals(groupID) && userGroup.IsApprove == UserGroupStatus.Approve && 

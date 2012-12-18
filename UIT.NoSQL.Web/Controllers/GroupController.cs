@@ -96,16 +96,9 @@ namespace UIT.NoSQL.Web.Controllers
             return View(group.ListTopic);
         }
 
-        public ActionResult AccessDenied(string id)
-        {
-            TempData["GroupId"] = id;
-            TempData["GroupId"] = id;
-            return View();
-        }
-
         [HttpPost]
         [LoginFilter]
-        public ActionResult Join(string id)
+        public String Join(string id)
         {
             IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
             var groupRole = groupRoleService.LoadByName(GroupRoleType.Member);
@@ -130,7 +123,7 @@ namespace UIT.NoSQL.Web.Controllers
             groupService.Save(group);
             userGroupService.Save(userGroup);
 
-            return RedirectToAction("Detail", new { id });
+            return "Request success";
         }
 
         [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
@@ -292,9 +285,22 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult TopMenuUser(string id)
         {
-            TempData["IsMember"] = CheckViewGroup(groupService.Load(id)).ToString();
-            TempData["GroupId"] = id;
+                TempData["GroupId"] = id;
             return View();
+        }
+
+        public ActionResult AccessDenied(string id)
+        {
+            bool isAllow = CheckViewGroup(groupService.Load(id));
+            if (isAllow)
+            {
+                return RedirectToAction("Detail", new  { id = id });
+            }
+            else
+            {
+                TempData["GroupId"] = id;
+                return View();
+            }
         }
 
         [NonAction]
