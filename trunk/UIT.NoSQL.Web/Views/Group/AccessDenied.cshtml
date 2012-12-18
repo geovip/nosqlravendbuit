@@ -9,22 +9,24 @@
     </section>
 }
 
+<script type="text/javascript">
+    function xmlhttpPost(_id) {
+
+        $.post("/Group/Join", {id: _id}, function (data) {
+            alert(data);
+        });
+
+    }
+</script>
 @section menu {
     <ul id="menu">
-    
         <li style="float: left;">
-            @using (Html.BeginForm("Join", "Group", FormMethod.Post, new { id = "FormJoin" }))
-            {
-                <input type="hidden" id="id" name="id" value="@TempData["GroupId"]" />
-                
-                <a href="javascript:{}" onclick="document.getElementById('FormJoin').submit();">Join Group</a>
-            }
-        </li>
-              
+            <a href="javascript:{}" onclick="xmlhttpPost('@TempData["GroupId"]')">Join Group</a>
+        </li>    
         <li>@Html.ActionLink("Home", "Index", "Home")</li>
         <li>@Html.ActionLink("About", "About", "Home")</li>
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>
+</ul>
 }
 
 <h2>Access Denied</h2>

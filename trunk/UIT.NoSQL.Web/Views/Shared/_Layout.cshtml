@@ -11,7 +11,7 @@
         <script src="../../Plugin/ckeditor/ckeditor.js"></script>
         <meta name="viewport" content="width=device-width" />
 
-        <script type="text/javascript" language="javascript">
+        <script type="text/javascript">
             function AutoResize() {
                 var windowWidth = window.innerWidth;
                 var windowHeight = window.innerHeight;
@@ -48,17 +48,16 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="float-left site-title">@Html.ActionLink("your logo here.", "Index", "Home")</p>
+                    <p class="float-left site-title">@Html.ActionLink("DaHu Group.", "Index", "Home")</p>
                     <div class="float-right search">
 
                         <form action="/Search/Index" method="post" id="SearchForm"
                             onsubmit="xmlhttpPost(); return false;">
 
-                            <input type="text" class="text" id="searchStr" />
+                            <input type="text" placeholder="Search here." class="text" id="searchStr" />
                             <a href="javascript:{}" onclick="xmlhttpPost();">
                                 <img src="/Images/system-search-hi.png" />
                             </a>
-                            @*document.getElementById('SearchForm').submit();*@
                         </form>
 
                     </div>
@@ -68,12 +67,6 @@
                         @Html.Partial("_LoginPartial")
                     </section>
                     <nav>
-                        @*<ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>*@
-
                         @RenderSection("menu", required: false)
                     </nav>
                 </div>
@@ -85,10 +78,8 @@
 
             <div id="main">
                 @RenderSection("featured", required: false)
-                <section id="SectionMain" class="content-wrapper main-content clear-fix">
-                    
-                        @RenderBody()
-                    
+                <section id="SectionMain" class="content-wrapper main-content clear-fix">                    
+                        @RenderBody()                    
                 </section>
             </div>
             <div class="clear-fix"></div>
