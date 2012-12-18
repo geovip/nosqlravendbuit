@@ -83,7 +83,7 @@ namespace UIT.NoSQL.Web
 
 
             RandomData randomData = new RandomData();
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 20; i++)
             {
                 groupObject = new GroupObject();
                 groupObject.Id = Guid.NewGuid().ToString();
