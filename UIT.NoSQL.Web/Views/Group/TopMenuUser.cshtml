@@ -1,11 +1,39 @@
 ﻿@{
     Layout = null;
 }
+    <script type="text/javascript">
+        function BackGroup(id) {
+            window.location = "/Group/Detail/" + id;
+        }
+    </script>
+<div>
     
-<ul id="menu">
-    <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
-    <li>@Html.ActionLink("Manager", "Manager", "Group", new { id = TempData["GroupId"] }, null)</li>     
-    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("About", "About", "Home")</li>
-    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-</ul>
+    @if( TempData["account"].Equals("topic"))
+    {
+        <div style="float:left;">
+            <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
+                <img src="/Images/back-icon.png" alt="Back" />
+            </div>
+
+            <div tabindex="0" class="BUTTONSTYLE POSTBUTTON" onclick = "createEditor()">Đăng trả lời</div>
+        </div>
+    }
+
+    @if( TempData["account"].Equals("orther"))
+    {
+        <div style="float:left;">
+            <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
+                <img src="/Images/back-icon.png" alt="Back" />
+            </div>
+        </div>
+    }
+    <div style="float:right;">
+        <ul id="menu">
+            <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
+            <li>@Html.ActionLink("Manager", "Manager", "Group", new { id = TempData["GroupId"] }, null)</li>     
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+        </ul>
+    </div>
+</div>

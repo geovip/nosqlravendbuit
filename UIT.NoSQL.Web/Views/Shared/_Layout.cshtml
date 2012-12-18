@@ -17,8 +17,10 @@
                 var windowHeight = window.innerHeight;
 
                 var main = document.getElementById("main");
+                var DivNav = document.getElementById("DivNav");
                 main.style.width = (windowWidth - 240) + "px";
                 main.style.height = (windowHeight - 130) + "px";
+                DivNav.style.width = (windowWidth - 240) + "px";
 
                 var leftmenu = document.getElementById("leftmenu");
                 leftmenu.style.height = (windowHeight - 130) + "px";
@@ -66,11 +68,15 @@
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
-                    <nav>
-                        @RenderSection("menu", required: false)
-                    </nav>
                 </div>
             </div>
+            <div id="DivNav" class="float-right">                
+                <nav>
+                    @RenderSection("menu", required: false)
+                </nav>
+            </div>
+
+            <div class="clear"></div>
         </header>
         <div id="body">
         

@@ -12,7 +12,7 @@
 
 @section menu {
     <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group", new{id = @Model.GroupId})
+        @Html.Action("TopMenuUser", "Group", new{id = @Model.GroupId, action = "topic"})
     </section>
 }
 
@@ -216,7 +216,6 @@
         </div>     
     </script>
 
-        <div tabindex="0" class="BUTTONSTYLE POSTBUTTON" onclick = "createEditor()">Đăng trả lời</div>
         
         @*<a href="#" style="text-decoration:none" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>*@
         <br /><br />

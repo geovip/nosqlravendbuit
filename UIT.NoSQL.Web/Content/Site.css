@@ -122,10 +122,12 @@ footer {
     font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
     font-size: 2.3em;
     margin: 20px 0;
+    margin-bottom:0px;
 }
 .search
 {
     margin: 24px 0;
+    margin-bottom:0px;
     padding-left:30px;
 }
 .search .text
@@ -245,6 +247,9 @@ ul#menu {
     background-color:#EEEEEE;
 }
 
+#DivNav {
+    padding-bottom:6px;
+}
 #main
 {
     width:1000px;
