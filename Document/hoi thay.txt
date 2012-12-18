@@ -1,1 +1,13 @@
 mot so tu dien tieng anh co nen dich ra khong. vi du: request data databace processing ...
+
+nhung viec can lam tiep:
+- giao dien: button giong google group
+- trang home: 
+	+ chua login: Gioi thieu nhung group khac khac
+	+ da login: 
+		* Welcome
+		*. Liet ke nhung event moi: new topic, new comment, new member
+- load dynamic data
+- file bao cao
+	+ chi muc, muc luc
+	+ format: line spacing, cac table code
