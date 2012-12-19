@@ -48,7 +48,6 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult LeftMenu(string id)
         {
-            IUserGroupService userGroupService = MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
             var user = (UserObject)Session["user"];
             if (user == null)
             {
