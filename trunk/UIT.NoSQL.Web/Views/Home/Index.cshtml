@@ -1,4 +1,4 @@
-@model IEnumerable<UIT.NoSQL.Core.Domain.UserGroupObject>
+@model IEnumerable<UIT.NoSQL.Core.Domain.GroupObject>
 
 @{
     ViewBag.Title = "Home Page";
@@ -96,28 +96,39 @@
 }
 else
 {
-    <table>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GroupName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
+    <script type="text/javascript">
+        function Resize() {
+            var windowWidth = window.innerWidth;
 
-    @*@foreach (var item in Model)
+            var main = document.getElementById("tbGroup");
+            tbGroup.style.width = (windowWidth - 240) + "px";
+        }
+    </script>
+    
+    <table id="tbGroup" style="width:100%;">
+
+    @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.GroupId }, null)
+            <td style="width:70%;">
+                <div class="GLTURNLNJ">
+                    <div class="GLTURNLCK">
+                        <div class="GLTURNLKW"></div>
+                      
+                        @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.Id }, null)
+                    </div>
+                    <div class="GLTURNLNK">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </div>
+                </div>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                <div>@item.NewEvent.Title</div>
+                <b>@item.NewEvent.CreateBy</b>
+                <div>@item.NewEvent.CreateDate</div>
             </td>
         </tr>
-    }*@
+    }
 
     </table>
 }

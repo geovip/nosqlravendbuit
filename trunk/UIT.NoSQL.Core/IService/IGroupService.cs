@@ -17,5 +17,6 @@ namespace UIT.NoSQL.Core.IService
         GroupObject LoadWithUser(string groupID, out List<UserObject> listUser, out List<UserGroupObject> listUserGroup);
         GroupObject LoadWithUser(string id);
         List<GroupObject> Search(string searchStr);
+        List<GroupObject> LoadList(string[] arrId);
     }
 }

@@ -87,6 +87,9 @@ namespace UIT.NoSQL.Web.Controllers
 
                 var group = groupService.Load(topic.GroupId);
                 group.ListTopic.Add(topic);
+                group.NewEvent.Title = topic.TopicName;
+                group.NewEvent.CreateDate = topic.CreateDate;
+                group.NewEvent.CreateBy = user.FullName; ;
                 groupService.Save(group);
 
                 return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
@@ -171,10 +174,11 @@ namespace UIT.NoSQL.Web.Controllers
                 topic.ListComment = new List<CommentObject>();
             }
             CommentObject comment = new CommentObject();
+            var user = (UserObject)Session["user"];
             comment.Content = content;
             comment.ParentContent = parentContent;
             comment.Id = Guid.NewGuid().ToString();
-            comment.CreateBy = (UserObject)Session["user"];
+            comment.CreateBy = user;
             comment.CreateDate = DateTime.Now;
             comment.isDeleted = false;
             topic.ListComment.Add(comment);
@@ -185,6 +189,10 @@ namespace UIT.NoSQL.Web.Controllers
             var group = groupService.Load(topic.GroupId);
             group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfComment += 1;
             group.ListTopic.Find(t => t.Id.Equals(topic.Id)).LastModified = DateTime.Now;
+
+            group.NewEvent.Title = "RE: " + topic.TopicName;
+            group.NewEvent.CreateDate = comment.CreateDate;
+            group.NewEvent.CreateBy = user.FullName;
 
             groupService.Save(group);
 

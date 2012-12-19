@@ -52,18 +52,21 @@ namespace UIT.NoSQL.Web.Controllers
         [LoginFilter]
         public ActionResult Create(GroupObject group)
         {
-            group.Tags = new[]{group.GroupName, group.Description};
-
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
 
             var groupRole = groupRoleService.LoadByName(GroupRoleType.Owner);
-
-            string userId = ((UserObject)Session["user"]).Id;
+            
+            UserObject user = ((UserObject)Session["user"]);
+            string userId = user.Id;
             group.Id = Guid.NewGuid().ToString();
             group.CreateDate = DateTime.Now;
             group.CreateBy = userId;
             group.IsPublic = false;
+            group.NewEvent = new GroupEvent();
+            group.NewEvent.Title = "New group";
+            group.NewEvent.CreateDate = group.CreateDate;
+            group.NewEvent.CreateBy = user.FullName;
 
             var userGroup = new UserGroupObject();
             userGroup.Id = Guid.NewGuid().ToString();
@@ -76,7 +79,7 @@ namespace UIT.NoSQL.Web.Controllers
             userGroup.GroupRole = groupRole;
             group.ListUserGroup.Add(userGroup);
             
-            var user = (UserObject)Session["user"];
+            //var user = (UserObject)Session["user"];
             user.ListUserGroup.Add(userGroup);
             
             userService.Save(user);

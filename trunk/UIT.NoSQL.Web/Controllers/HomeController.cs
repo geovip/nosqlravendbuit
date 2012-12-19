@@ -23,16 +23,25 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult Index()
         {
-            //var user = (UserObject)Session["user"];
-            //if (user == null)
-            //{
-            //    ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-            //    return View();
-            //}
-            //else
-            //{
-            //    return View(user.ListUserGroup);
-            //}    
+            var user = (UserObject)Session["user"];
+            if (user == null)
+            {
+                ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+                return View();
+            }
+            else
+            {
+                IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+                string[] arrId = new string[user.ListUserGroup.Count];
+                int i = 0;
+                foreach (var userGroup in user.ListUserGroup)
+                {
+                    arrId[i++] = userGroup.GroupId;
+                }
+
+                List<GroupObject> listGroup = groupService.LoadList(arrId);
+                return View(listGroup);
+            }    
             //IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             
             //TopicObject topic = new TopicObject();
@@ -43,7 +52,7 @@ namespace UIT.NoSQL.Web.Controllers
             
             //List<TopicObject> list = topicService.GetAll();
 
-            return View();
+            //return View();
         }
 
         public ActionResult LeftMenu(string id)

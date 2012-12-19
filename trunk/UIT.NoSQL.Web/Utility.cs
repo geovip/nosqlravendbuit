@@ -57,10 +57,13 @@ namespace UIT.NoSQL.Web
             groupObject.Id = "2B857081-5D44-4CDB-A5DD-D34D753D0A7A";
             groupObject.GroupName = "ASP.NET MVC 4";
             groupObject.Description = "ASP.NET MVC 4";
-            groupObject.Tags = new[] { groupObject.GroupName, groupObject.Description };
             groupObject.IsPublic = false;
             groupObject.CreateDate = DateTime.Now;
             groupObject.CreateBy = userObject.Id;
+            groupObject.NewEvent = new GroupEvent();
+            groupObject.NewEvent.Title = "New group";
+            groupObject.NewEvent.CreateDate = groupObject.CreateDate;
+            groupObject.NewEvent.CreateBy = userObject.FullName;
 
             var userGroup = new UserGroupObject();
             userGroup.Id = "565C2563-0CA2-4993-B322-1D05C885A996";
@@ -81,18 +84,20 @@ namespace UIT.NoSQL.Web
 
 
 
-
             RandomData randomData = new RandomData();
             for (int i = 0; i < 20; i++)
             {
                 groupObject = new GroupObject();
                 groupObject.Id = Guid.NewGuid().ToString();
                 groupObject.GroupName = randomData.RandomString();
-                groupObject.Description = randomData.RandomString();
-                groupObject.Tags = new[] { groupObject.GroupName, groupObject.Description };
+                groupObject.Description = randomData.RandomString() + " " + randomData.RandomString();
                 groupObject.IsPublic = false;
                 groupObject.CreateDate = DateTime.Now;
                 groupObject.CreateBy = userObject.Id;
+                groupObject.NewEvent = new GroupEvent();
+                groupObject.NewEvent.Title = "New group";
+                groupObject.NewEvent.CreateDate = groupObject.CreateDate;
+                groupObject.NewEvent.CreateBy = userObject.FullName;
 
                 var userGroupRandom = new UserGroupObject();
                 userGroupRandom.Id = Guid.NewGuid().ToString();

@@ -139,3 +139,33 @@
 		background-image: -o-linear-gradient(top, whiteSmoke, #F1F1F1);
 		background-image: linear-gradient(top, whiteSmoke, #F1F1F1);
 	}
+
+#tbGroup td{
+    border-bottom: 1px solid #ddd;
+    line-height: 17px;
+    vertical-align: top;
+    padding:5px 0 20px 0;
+}
+
+.GLTURNLCK .GLTURNLKW{
+    background: url(/Images/star2.png) no-repeat;
+    height: 13px;
+    width: 13px;
+    float:left;
+    margin-top: 4px;
+    padding: 5px;
+}
+
+.GLTURNLCK a {
+    font-size: 16px;
+    font-weight: normal;
+    color: #15C;
+    text-decoration: none;
+}
+.GLTURNLNK {
+    margin-top: 4px;
+    margin-left: 26px;
+    line-height: 17px;
+    max-height: 34px;
+    overflow: hidden;
+}
