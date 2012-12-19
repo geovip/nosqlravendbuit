@@ -91,5 +91,17 @@ namespace UIT.NoSQL.Service
 
             return listGroup;
         }
+
+        public List<GroupObject> LoadList(string[] arrId)
+        {
+            //var listGroup = session.Query<GroupObject>().Where(g => arrId.All(s => g.Id.Equals(s))).ToList();
+            string str = "Id:" + arrId[0];
+            for (int i = 1; i < arrId.Length; i++)
+			{
+                str += " OR Id:" + arrId[i];
+			}
+            var listGroup = session.Advanced.LuceneQuery<GroupObject>().Where(str).ToList();
+            return listGroup;
+        }
     }
 }

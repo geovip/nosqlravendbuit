@@ -12,7 +12,7 @@ namespace UIT.NoSQL.Core.Domain
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
         public string CreateBy { get; set; }
-        public IEnumerable<string> Tags { get; set; }
+        public GroupEvent NewEvent { get; set; }
 
         //setting
         public bool IsPublic { get; set; }
@@ -35,4 +35,10 @@ namespace UIT.NoSQL.Core.Domain
         public string Description { get; set; }
     }
 
+    public class GroupEvent
+    {
+        public string Title { get; set; }
+        public string CreateBy { get; set; }
+        public DateTime CreateDate { get; set; }
+    }
 }
