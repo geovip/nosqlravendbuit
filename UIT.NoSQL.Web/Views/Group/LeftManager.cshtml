@@ -10,6 +10,11 @@
 
         function GetManager(action, id) {
             //$("#MyContent").html("<p>Loading...</p>");
+            var node = document.getElementsByClassName("manager");
+            for (var i = 0; i < node.length; i++) {
+                node[i].style.color = "#333";
+            }
+            document.getElementById(action).style.color = "#D14836";
             url = "/Group/" + action;
             $.post(url, { id: id }, function (data) {
                 $("#MyContent").html(data);
@@ -17,24 +22,14 @@
         }
         
         $(document).ready(function () {
-            GetManager('Member','@TempData["IsMember"]');
+            GetManager('Member','@TempData["GroupId"]');
         });
     </script>
     
     <ul>
         <li>
-            <a href="#">
-                My Group
-            </a>
-        </li>
-        <li>
-            <a href="/">
-                Home
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                Share
+            <a href="/Group/Detail/@TempData["GroupId"]" class="GroupSelected">
+                @TempData["GroupName"]
             </a>
         </li>
 
@@ -42,14 +37,14 @@
 
         
         <li>
-            <a href="javascript:{}" onclick="GetManager('Member','@TempData["IsMember"]')">Member</a>
+            <a id="Member" class="manager" href="javascript:{}" onclick="GetManager('Member','@TempData["GroupId"]')">Member</a>
         </li>
         <li>
-            <a href="javascript:{}" onclick="GetManager('JoinRequest','@TempData["IsMember"]')">Join Request</a>            
+            <a id="JoinRequest" class="manager" href="javascript:{}" onclick="GetManager('JoinRequest','@TempData["GroupId"]')">Join Request</a>            
         </li>
         
         <li>
-            <a href="javascript:{}" onclick="GetManager('Setting','@TempData["IsMember"]')">Setting</a>
+            <a id="Setting" class="manager" href="javascript:{}" onclick="GetManager('Setting','@TempData["GroupId"]')">Setting</a>
         </li>
         
         

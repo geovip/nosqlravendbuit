@@ -21,12 +21,13 @@ namespace UIT.NoSQL.Core.Domain
         public DateTime CreateDate { get; set; }
 
         public List<UserGroupObject> ListUserGroup { get; set; }
+        //List<DenormalizedGroup<GroupObject>> ListGroupView { get; set; }
 
         public UserObject()
         {
             ListUserGroup = new List<UserGroupObject>();
+            //ListGroupView = new List<DenormalizedGroup<GroupObject>>();
         }
-
     }
 
     public class DenormalizedUser<T> where T : IUserObjectDocument

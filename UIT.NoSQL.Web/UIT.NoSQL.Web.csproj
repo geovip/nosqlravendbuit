@@ -78,10 +78,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Raven_Client\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight.FSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Raven_Client\Raven.Client.Lightweight.FSharp.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Client.MvcIntegration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Raven_Client\Raven.Client.MvcIntegration.dll</HintPath>
@@ -744,6 +740,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Search\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Search\More.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

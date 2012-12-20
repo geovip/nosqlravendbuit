@@ -5,29 +5,79 @@
     Layout = null;
 }
 
+<script type="text/javascript">
+    var page = 0;
+    var maxPage = @TempData["paging"] - 1;
+    
+    $(document).ready(function () {
+        $("#main").scroll(function () {
+            if (this.scrollHeight - $(this).scrollTop() == $(this).innerHeight()) {
+                LoadSearchPaging();
+            }
+        });
+    });
+
+    function LoadSearchPaging() {
+        page += 1;
+
+        if (page > maxPage) {
+            return;
+        }
+
+        $.post("/Search/More", getquerystr(page), function (data) {
+            
+            $("#tbGroup tr:last").after(data);
+        });
+    }
+
+    function getquerystr(_page) {
+        var _searchStr = document.getElementById("hdSearchStr").value;
+
+        var qstr =
+            {
+                searchStr: _searchStr,
+                page: _page
+            };
+
+        return qstr;
+    }
+</script>
+
 <h2>Search Result</h2>
+<p style="margin-top:0;">Tìm thấy @TempData["totalResult"] kết quả trong @TempData["time"]</p>
 
+<input type="hidden" id="hdSearchStr" value="@TempData["searchStr"]" />
+<div id="divSearchResult">
+    <table id="tbGroup" style="width:100%;">
+        <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="width:70%;">
+                <div class="GLTURNLNJ">
+                    <div class="GLTURNLCK">
+                        <div class="GLTURNLKW"></div>
+                      
+                        @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.Id }, null)
+                    </div>
+                    <div class="GLTURNLNK">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </div>
+                </div>
+            </td>
+            <td>
+                <b>@item.CreateBy.FullName</b>
+                <div>@item.CreateDate</div>
+            </td>
+        </tr>
+    }
+</tbody>
+    </table>
+</div>
 
-<table style="width:100%;">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.GroupName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+@*<a id="LoadMore" href="javascript:{}" onclick="LoadSearchPaging()">Load more item</a>*@
 
-@foreach (var item in Model) {
-    <tr tabindex="0">
-        <td style="width:40%;">
-            @Html.ActionLink(@item.GroupName, "Detail", "Group", new { id=item.Id }, null)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-    </tr>
-}
-
-</table>
+@*@for (int i = 0; i < (int)TempData["paging"]; i++)
+{
+    <a href="javascript:{}" onclick="PostSearchPaging(@i)">@(i+1)</a>
+}*@
