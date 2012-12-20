@@ -59,7 +59,7 @@ namespace UIT.NoSQL.Web
             groupObject.Description = "ASP.NET MVC 4";
             groupObject.IsPublic = false;
             groupObject.CreateDate = DateTime.Now;
-            groupObject.CreateBy = userObject.Id;
+            groupObject.CreateBy = userObject;
             groupObject.NewEvent = new GroupEvent();
             groupObject.NewEvent.Title = "New group";
             groupObject.NewEvent.CreateDate = groupObject.CreateDate;
@@ -85,7 +85,7 @@ namespace UIT.NoSQL.Web
 
 
             RandomData randomData = new RandomData();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 23; i++)
             {
                 groupObject = new GroupObject();
                 groupObject.Id = Guid.NewGuid().ToString();
@@ -93,7 +93,7 @@ namespace UIT.NoSQL.Web
                 groupObject.Description = randomData.RandomString() + " " + randomData.RandomString();
                 groupObject.IsPublic = false;
                 groupObject.CreateDate = DateTime.Now;
-                groupObject.CreateBy = userObject.Id;
+                groupObject.CreateBy = userObject;
                 groupObject.NewEvent = new GroupEvent();
                 groupObject.NewEvent.Title = "New group";
                 groupObject.NewEvent.CreateDate = groupObject.CreateDate;
@@ -117,6 +117,43 @@ namespace UIT.NoSQL.Web
             }
 
             session.Store(userObject);
+
+
+            //session.SaveChanges();
+
+            //for (int i = 0; i < 5000; i++)
+            //{
+            //    groupObject = new GroupObject();
+            //    groupObject.Id = Guid.NewGuid().ToString();
+            //    groupObject.GroupName = randomData.RandomString();
+            //    groupObject.Description = randomData.RandomString() + " " + randomData.RandomString();
+            //    groupObject.IsPublic = false;
+            //    groupObject.CreateDate = DateTime.Now;
+            //    groupObject.CreateBy = userObject;
+            //    groupObject.NewEvent = new GroupEvent();
+            //    groupObject.NewEvent.Title = "New group";
+            //    groupObject.NewEvent.CreateDate = groupObject.CreateDate;
+            //    groupObject.NewEvent.CreateBy = userObject.FullName;
+
+            //    var userGroupRandom = new UserGroupObject();
+            //    userGroupRandom.Id = Guid.NewGuid().ToString();
+            //    userGroupRandom.UserId = userObject.Id;
+            //    userGroupRandom.GroupId = groupObject.Id;
+            //    userGroupRandom.GroupName = groupObject.GroupName;
+            //    userGroupRandom.Description = groupObject.Description;
+            //    userGroupRandom.IsApprove = UserGroupStatus.Approve;
+            //    userGroupRandom.JoinDate = DateTime.Now;
+            //    userGroupRandom.GroupRole = groupRole;
+
+            //    groupObject.ListUserGroup.Add(userGroupRandom);
+            //    userObject.ListUserGroup.Add(userGroupRandom);
+
+            //    session.Store(userGroupRandom);
+            //    session.Store(groupObject);
+            //}
+
+            //session.Store(userObject);
+
 
 
 

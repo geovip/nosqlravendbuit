@@ -36,7 +36,7 @@
     </ul>
 }
 
-@if (Session["user"] == null)
+@if ( TempData["IsNew"].Equals("True"))
 {
 <h3>We suggest the following:</h3>
 

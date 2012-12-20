@@ -5,6 +5,7 @@ using System.Text;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Core.Domain;
 using Raven.Client;
+using Raven.Client.Linq;
 
 namespace UIT.NoSQL.Service
 {
@@ -82,12 +83,18 @@ namespace UIT.NoSQL.Service
             return group;
         }
 
-        public List<GroupObject> Search(string searchStr)
+        public List<GroupObject> Search(string searchStr, int skip, int take, out int totalResult)
         {
             //string str = string.Format("GroupName: *\"{0}\"* OR Description: *\"{0}\"*", searchStr);
             //str = str.Replace("\\","");// OR Description: \"{0}\"
             //"GroupName"
-            var listGroup = session.Advanced.LuceneQuery<GroupObject>("GroupName").Where(string.Format("GroupName:*{0}* OR Description:*{0}*", searchStr)).ToList();
+            RavenQueryStatistics stats;
+            var listGroup = session.Advanced.LuceneQuery<GroupObject>("GroupName")
+                .Statistics(out stats)
+                .Skip(skip)
+                .Take(take)
+                .Where(string.Format("GroupName:*{0}* OR Description:*{0}*", searchStr)).ToList();
+            totalResult = stats.TotalResults;
 
             return listGroup;
         }

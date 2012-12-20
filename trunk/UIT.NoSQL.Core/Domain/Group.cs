@@ -5,13 +5,20 @@ using System.Text;
 
 namespace UIT.NoSQL.Core.Domain
 {
-    public class GroupObject
+    public interface IGroupObjectDocument
+    {
+        string Id { get; set; }
+        string GroupName { get; set; }
+        string Description { get; set; }
+    }
+
+    public class GroupObject : IGroupObjectDocument
     {
         public string Id { get; set; }
         public string GroupName { get; set; }
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
-        public string CreateBy { get; set; }
+        public DenormalizedUser<UserObject> CreateBy { get; set; }
         public GroupEvent NewEvent { get; set; }
 
         //setting
@@ -28,7 +35,7 @@ namespace UIT.NoSQL.Core.Domain
         }
     }
 
-    public class DenormalizedGroup
+    public class DenormalizedGroup<T> where T : IGroupObjectDocument
     {
         public string Id { get; set; }
         public string GroupName { get; set; }

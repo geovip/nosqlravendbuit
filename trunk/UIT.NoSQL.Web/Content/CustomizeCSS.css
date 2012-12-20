@@ -169,3 +169,11 @@
     max-height: 34px;
     overflow: hidden;
 }
+.GroupSelected {
+    color: inherit;
+    font-weight: bold;
+    font-size: 16px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-bottom:50px;
+}

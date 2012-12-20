@@ -61,7 +61,7 @@ namespace UIT.NoSQL.Web.Controllers
             string userId = user.Id;
             group.Id = Guid.NewGuid().ToString();
             group.CreateDate = DateTime.Now;
-            group.CreateBy = userId;
+            group.CreateBy = user;
             group.IsPublic = false;
             group.NewEvent = new GroupEvent();
             group.NewEvent.Title = "New group";
@@ -300,6 +300,11 @@ namespace UIT.NoSQL.Web.Controllers
             IUserGroupService userGroupService = MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
 
             var userGroup = userGroupService.Load(id);
+            if (userGroup.GroupRole.GroupName.Equals(GroupRoleType.Owner.ToString()))
+            {
+                return "Can't remove owner group";
+            }
+
             var groupObject = groupService.Load(userGroup.GroupId);
             var user = userService.Load(userGroup.UserId);
 
@@ -330,7 +335,9 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult LeftManager(string id)
         {
-            TempData["IsMember"] = id;
+            var group = groupService.Load(id);
+            TempData["GroupId"] = id;
+            TempData["GroupName"] = group.GroupName;
             return View();
         }
 

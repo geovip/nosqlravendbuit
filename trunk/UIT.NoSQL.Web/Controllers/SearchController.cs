@@ -21,14 +21,49 @@ namespace UIT.NoSQL.Web.Controllers
         // GET: /Search/
 
         [HttpPost]
-        public ActionResult Index(string searchStr)
+        public ActionResult Index(string searchStr, int page)
         {
+            DateTime start;
+            DateTime end;
+            int totalResult;
+
+            start = DateTime.Now;
             searchStr = searchStr.Trim();
-            List<GroupObject> listGroup = groupService.Search(searchStr);
+
+            List<GroupObject> listGroup = groupService.Search(searchStr, page*10, 10, out totalResult);
+            end = DateTime.Now;
+
+            TempData["totalResult"] = totalResult;
+            TempData["paging"] = (totalResult/10) + ((totalResult%10) != 0?1:0);
+            TempData["searchStr"] = searchStr;
+            var sub = end - start;
+            if(sub.Milliseconds < 1000)
+            {
+                TempData["time"] = sub.Milliseconds + " milliseconds";
+            }
+            else
+            {
+                TempData["time"] = sub.Seconds + " seconds";
+            }
 
             return View(listGroup);
         }
 
+        [HttpPost]
+        public ActionResult More(string searchStr, int page)
+        {
+            DateTime start;
+            DateTime end;
+            int totalResult;
+
+            start = DateTime.Now;
+            searchStr = searchStr.Trim();
+
+            List<GroupObject> listGroup = groupService.Search(searchStr, page*10, 10, out totalResult);
+            end = DateTime.Now;
+            
+            return View(listGroup);
+        }
     }
     
     //var session = MvcApplication.CurrentSession;

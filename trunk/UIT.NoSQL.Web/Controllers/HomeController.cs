@@ -24,13 +24,15 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Index()
         {
             var user = (UserObject)Session["user"];
-            if (user == null)
+            if (user == null || user.ListUserGroup.Count <= 0)
             {
                 ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+                TempData["IsNew"] = "True";
                 return View();
             }
             else
             {
+                TempData["IsNew"] = "False";
                 IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
                 string[] arrId = new string[user.ListUserGroup.Count];
                 int i = 0;

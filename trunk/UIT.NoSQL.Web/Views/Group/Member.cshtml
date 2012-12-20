@@ -12,7 +12,9 @@
         if (confirm == true) {
             $.post("/Group/RemoveMember", { id: _id }, function (data)
             {
-                $("#" + _id).remove();
+                if (data == "success") {
+                    $("#" + _id).remove();
+                }
                 alert(data);
             });
         }
