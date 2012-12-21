@@ -106,8 +106,9 @@ namespace UIT.NoSQL.Service
             for (int i = 1; i < arrId.Length; i++)
 			{
                 str += " OR Id:" + arrId[i];
-			}
+            }
             var listGroup = session.Advanced.LuceneQuery<GroupObject>().Where(str).ToList();
+            
             return listGroup;
         }
     }

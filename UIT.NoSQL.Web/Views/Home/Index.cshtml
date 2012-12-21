@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Home Page";
 }
-
 @section LeftMenu {
     <section id="leftmenu">
         @Html.Action("LeftMenu", "Home", new {id = ""})
@@ -35,7 +34,6 @@
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
     </ul>
 }
-
 @if ( TempData["IsNew"].Equals("True"))
 {
 <h3>We suggest the following:</h3>
@@ -95,17 +93,43 @@
 </section>
 }
 else
-{
+{    
+    
     <script type="text/javascript">
-        function Resize() {
-            var windowWidth = window.innerWidth;
+        var pageHome = 0;
+        var maxPageHome = @TempData["paging"] -1;
 
-            var main = document.getElementById("tbGroup");
-            tbGroup.style.width = (windowWidth - 240) + "px";
+        $(document).ready(function () {
+            
+            $("#main").scroll(function () {
+                
+                if ((this.scrollHeight - $(this).scrollTop()) - $(this).innerHeight() < 10) {
+                    LoadHomePaging();
+                }
+            });
+        });
+
+        function LoadHomePaging() {
+            pageHome += 1;
+            if (pageHome > maxPageHome) {
+                return;
+            }
+            $.post("/Home/IndexMore", getpagestr(pageHome), function (data) {
+                $("#tbHomeGroup tr:last").after(data);
+            });
+        }
+
+        function getpagestr(_pageHome) {
+            var qstr =
+                {
+                    page: _pageHome
+                };
+
+            return qstr;
         }
     </script>
     
-    <table id="tbGroup" style="width:100%;">
+    <table id="tbHomeGroup" style="width:100%;">
 
     @foreach (var item in Model)
     {
@@ -131,4 +155,6 @@ else
     }
 
     </table>
+    
+    <a href="javascript:{}" onclick="LoadHomePaging()">Load more item</a>
 }
