@@ -85,7 +85,51 @@ namespace UIT.NoSQL.Web
 
 
             RandomData randomData = new RandomData();
-            for (int i = 0; i < 23; i++)
+            for (int i = 0; i < 10000; i++)
+            {
+                groupObject = new GroupObject();
+                groupObject.Id = Guid.NewGuid().ToString();
+                groupObject.GroupName = randomData.RandomString();
+                groupObject.Description = randomData.RandomString() + " " + randomData.RandomString();
+                groupObject.IsPublic = false;
+                groupObject.CreateDate = DateTime.Now;
+                groupObject.CreateBy = userObject;
+                groupObject.NewEvent = new GroupEvent();
+                groupObject.NewEvent.Title = "New group";
+                groupObject.NewEvent.CreateDate = groupObject.CreateDate;
+                groupObject.NewEvent.CreateBy = userObject.FullName;
+
+                var userGroupRandom = new UserGroupObject();
+                userGroupRandom.Id = Guid.NewGuid().ToString();
+                userGroupRandom.UserId = userObject.Id;
+                userGroupRandom.GroupId = groupObject.Id;
+                userGroupRandom.GroupName = groupObject.GroupName;
+                userGroupRandom.Description = groupObject.Description;
+                userGroupRandom.IsApprove = UserGroupStatus.Approve;
+                userGroupRandom.JoinDate = DateTime.Now;
+                userGroupRandom.GroupRole = groupRole;
+
+                groupObject.ListUserGroup.Add(userGroupRandom);
+                userObject.ListUserGroup.Add(userGroupRandom);
+
+                session.Store(userGroupRandom);
+                session.Store(groupObject);
+            }
+
+            session.Store(userObject);
+
+            //user
+            userObject = new UserObject();
+            userObject.Id = "F4D45AD1-D581-425C-A058-799AFA51FE01";
+            userObject.FullName = "Bui Ngoc Huy";
+            userObject.UserName = "aa";
+            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
+            userObject.Email = "huyuit@gmail.com";
+            session.Store(userObject);
+
+            session.SaveChanges();
+
+            for (int i = 0; i < 5000; i++)
             {
                 groupObject = new GroupObject();
                 groupObject.Id = Guid.NewGuid().ToString();
@@ -119,53 +163,9 @@ namespace UIT.NoSQL.Web
             session.Store(userObject);
 
 
-            //session.SaveChanges();
-
-            //for (int i = 0; i < 5000; i++)
-            //{
-            //    groupObject = new GroupObject();
-            //    groupObject.Id = Guid.NewGuid().ToString();
-            //    groupObject.GroupName = randomData.RandomString();
-            //    groupObject.Description = randomData.RandomString() + " " + randomData.RandomString();
-            //    groupObject.IsPublic = false;
-            //    groupObject.CreateDate = DateTime.Now;
-            //    groupObject.CreateBy = userObject;
-            //    groupObject.NewEvent = new GroupEvent();
-            //    groupObject.NewEvent.Title = "New group";
-            //    groupObject.NewEvent.CreateDate = groupObject.CreateDate;
-            //    groupObject.NewEvent.CreateBy = userObject.FullName;
-
-            //    var userGroupRandom = new UserGroupObject();
-            //    userGroupRandom.Id = Guid.NewGuid().ToString();
-            //    userGroupRandom.UserId = userObject.Id;
-            //    userGroupRandom.GroupId = groupObject.Id;
-            //    userGroupRandom.GroupName = groupObject.GroupName;
-            //    userGroupRandom.Description = groupObject.Description;
-            //    userGroupRandom.IsApprove = UserGroupStatus.Approve;
-            //    userGroupRandom.JoinDate = DateTime.Now;
-            //    userGroupRandom.GroupRole = groupRole;
-
-            //    groupObject.ListUserGroup.Add(userGroupRandom);
-            //    userObject.ListUserGroup.Add(userGroupRandom);
-
-            //    session.Store(userGroupRandom);
-            //    session.Store(groupObject);
-            //}
-
-            //session.Store(userObject);
-
-
 
 
             //user
-            userObject = new UserObject();
-            userObject.Id = "F4D45AD1-D581-425C-A058-799AFA51FE01";
-            userObject.FullName = "Bui Ngoc Huy";
-            userObject.UserName = "aa";
-            userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
-            userObject.Email = "huyuit@gmail.com";
-            session.Store(userObject);
-
             userObject = new UserObject();
             userObject.Id = "3FDA3031-C5D0-4A7C-87EE-F0AF91EAC76E";
             userObject.FullName = "qq";

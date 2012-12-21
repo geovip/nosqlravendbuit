@@ -6,37 +6,36 @@
 }
 
 <script type="text/javascript">
-    var page = 0;
-    var maxPage = @TempData["paging"] - 1;
+    var pageSearch = 0;
+    var maxPageSearch = @TempData["paging"] - 1;
     
     $(document).ready(function () {
         $("#main").scroll(function () {
-            if (this.scrollHeight - $(this).scrollTop() == $(this).innerHeight()) {
+            if ((this.scrollHeight - $(this).scrollTop()) - $(this).innerHeight() < 5) {
                 LoadSearchPaging();
             }
         });
     });
 
     function LoadSearchPaging() {
-        page += 1;
+        pageSearch += 1;
 
-        if (page > maxPage) {
+        if (pageSearch > maxPageSearch) {
             return;
         }
-
-        $.post("/Search/More", getquerystr(page), function (data) {
+        $.post("/Search/More", getquerystr(pageSearch), function (data) {
             
             $("#tbGroup tr:last").after(data);
         });
     }
 
-    function getquerystr(_page) {
+    function getquerystr(_pageSearch) {
         var _searchStr = document.getElementById("hdSearchStr").value;
 
         var qstr =
             {
                 searchStr: _searchStr,
-                page: _page
+                page: _pageSearch
             };
 
         return qstr;

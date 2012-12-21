@@ -33,28 +33,53 @@ namespace UIT.NoSQL.Web.Controllers
             else
             {
                 TempData["IsNew"] = "False";
+                bool isEnd = user.ListUserGroup.Count <= 10;
                 IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
-                string[] arrId = new string[user.ListUserGroup.Count];
-                int i = 0;
-                foreach (var userGroup in user.ListUserGroup)
+                string[] arrId;
+                if (isEnd)
                 {
-                    arrId[i++] = userGroup.GroupId;
+                    arrId = new string[user.ListUserGroup.Count];
+                }
+                else
+                {
+                    arrId = new string[10];
+                }
+
+                for (int i = 0; i < arrId.Length; i++)
+                {
+                    arrId[i] = user.ListUserGroup[i].GroupId;
                 }
 
                 List<GroupObject> listGroup = groupService.LoadList(arrId);
+                TempData["paging"] = user.ListUserGroup.Count / 10 + +((user.ListUserGroup.Count % 10) != 0 ? 1 : 0); ;
                 return View(listGroup);
-            }    
-            //IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
-            
-            //TopicObject topic = new TopicObject();
-            //topic.TopicID = "T02";
-            //topic.Title = "new title";
-            //topic.Content = "new content";
-            //topic.CreateDate = DateTime.Now;
-            
-            //List<TopicObject> list = topicService.GetAll();
+            }
+        }
 
-            //return View();
+        [HttpPost]
+        public ActionResult IndexMore(int page)
+        {
+            IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+            var user = (UserObject)Session["user"];
+            string[] arrId;
+
+            if ((page + 1) * 10 > user.ListUserGroup.Count)
+            {
+                arrId = new string[user.ListUserGroup.Count - page * 10];
+            }
+            else
+            {
+                arrId = new string[10];
+            }
+
+            int start = page * 10;
+            for (int i = 0; i < arrId.Length; i++)
+            {
+                arrId[i] = user.ListUserGroup[start + i].GroupId;
+            }
+
+            List<GroupObject> listGroup = groupService.LoadList(arrId);
+            return View(listGroup);
         }
 
         public ActionResult LeftMenu(string id)
