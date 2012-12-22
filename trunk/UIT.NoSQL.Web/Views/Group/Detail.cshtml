@@ -1,4 +1,5 @@
 ﻿@model IEnumerable < UIT.NoSQL.Core.Domain.DenormalizedTopic < UIT.NoSQL.Core.Domain.TopicObject> >
+    
 
 <Style>
     .GI2MSK2DGQB .GI2MSK2DGL {
@@ -92,30 +93,73 @@ top: 17px;
     </section>
 }
 
-<h2>@ViewBag.GroupName</h2>
 
+    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#deleteTopic').css({ "visibility": "hidden" });
+            $('.topic').live('click', function () {
+                if ($('.topic').is(':checked')) {
+                    $('#deleteTopic').css({ "visibility": "visible" });
+                } else {
+                    $('#deleteTopic').css({ "visibility": "hidden" });
+                }
+            });
+            $('#deleteTopic').live('click',function () {
+                var i;
+                var checkboxes = $('.topic:checkbox:checked');
+                var url = "/Topic/DeleteTopic";
+                var ids = new Array(checkboxes.length);
+                for (i = 0; i < checkboxes.length; i++) {
+                    ids[i] = checkboxes[i].value;
+                }
+                $.post(url, { topicIds: ids.toString()}, function (data) {
+                    for (var i = 0; i < ids.length; i++) {
+                        $("#" + ids[i]).remove();  
+                    }                 
+                });
+                
+            });
+        });
+    </script>
+
+
+<h2>@ViewBag.GroupName</h2>
+<div id="deleteTopic" align="right">
+    <span class="BUTTONSTYLE DELETETOPIC">DELETE</span>
+</div>
 <table cellspacing="0" cellpadding="0" width="100%">
 @foreach (var item in Model)
 {
-        <tr style="background-color:White">
-            
-            <td style="padding-top:4px;border-top: 1px solid #AFABAB" width="5%">
-                <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat;" border="0">
-            </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="50%">
-                @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
-            </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
-                @Html.DisplayFor(modelItem => item.NumberOfView) lượt xem
-            </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
-                @Html.DisplayFor(modelItem => item.NumberOfComment) bình luận 
-            </td>
-            <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="25%">
-                cập nhật @Html.DisplayFor(modelItem => item.LastModified)
-            </td>
+    if(item.isDeleted == false)
+    {
+        <tr id="@item.Id" style="background-color:White">
+                @if (!ViewBag.IsMember)
+                { 
+                    <td style="border-top: 1px solid #AFABAB" align="center" width="4%">
+                        <input type="checkbox" value="@item.Id" class="topic"/>
+                    </td>
+                }
+                <td style="padding-top:4px;padding-left:4px;border-top: 1px solid #AFABAB" width="5%">
+                    <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat;" border="0">
+                </td>
+                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="46%">
+                    @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
+                </td>
+                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
+                    @Html.DisplayFor(modelItem => item.NumberOfView) lượt xem
+                </td>
+                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
+                    @Html.DisplayFor(modelItem => item.NumberOfComment) bình luận 
+                </td>
+                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="25%">
+                    cập nhật @Html.DisplayFor(modelItem => item.LastModified)
+                </td>
              
-        </tr>
+            </tr>
+        }
+        
 }
 </table>
 

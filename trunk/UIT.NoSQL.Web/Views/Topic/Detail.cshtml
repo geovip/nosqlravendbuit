@@ -24,23 +24,22 @@
         <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.11.js"></script>
         <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
         <script type="text/javascript">
-
+            var userId, isMember;
             var editor, html = '';
             var id = 1;
             function createEditor() {
                 if (editor)
                     return;
-
+                
                 // Create a new editor inside the <div id="editor">, setting its value to html
                 var dateAndUser = $('#dateAndUser').html();
                 html = '<p></p>' +
-                    '<div style="display:none"></div>'+ // cái này làm cờ tách phần content và parentcontent
+                    '<div class="hideContent" style="display:none"></div>'+ // cái này làm cờ tách phần content và parentcontent
                     dateAndUser + 
                     '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' + 
                     $('#content').html() +
                     '</blockquote>';
-                //var config = {startupFocus: true };
-                var config = { toolbar: 'Basic', startupFocus: true };
+                var config = { startupFocus: true };
                 editor = CKEDITOR.appendTo('editor', config, html);
                 document.getElementById('fullEditor').style.display = '';
 
@@ -61,8 +60,8 @@
                 document.getElementById('fullEditor').style.display = 'none';
             }
 
-            var flag1 = '<div', flag2='</div>';
-            var content='', parentContent='';
+            var flag1 = '<div class="hideContent"', flag2 = '</div>';
+            var content = '', parentContent = '';
             function addComment() {
                 url = "/Topic/AddComment";
                 var topicId = document.getElementById('topicId').value;
@@ -71,7 +70,7 @@
                 parentContent = fullContent.slice((fullContent.search(flag2) + 6),fullContent.length-1);
                 //alert(content + parentContent);
                 $.post(url, { Id: topicId, content: content, parentContent:parentContent }, function (data) {
-                    $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
+                    $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
                 });
                 removeEditor();
             }
@@ -85,8 +84,9 @@
                     $('#createDate').html(parseMicrosoftJsonDateTime(data.CreateDate));
                     if (data.ListComment != 0) {
                         $.each(data.ListComment, function (key, value) {
-                            if (value.isDeleted==false)
-                                $("#commentTemplate").tmpl(value, { getCreateDate: parseMicrosoftJsonDateTime(value.CreateDate) }).appendTo("#listComment");
+                            if (value.isDeleted == false) {
+                                $("#commentTemplate").tmpl(value, { getCreateDate: parseMicrosoftJsonDateTime(value.CreateDate), compareUserId : compareUserId(value.CreateBy.Id) }).appendTo("#listComment");
+                            }
                             else
                                 $("#listComment").append('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ');
                         });
@@ -95,6 +95,8 @@
             }
 
             $(document).ready(function () {
+                userId = $('#userId').val();
+                isMember = $('#isMember').val();
                 getTopicById();
 
                 $('.REPLYBUTTON').live('click', function () {
@@ -107,13 +109,13 @@
                     var divComment = divMainComment.children('.bodyComment').children('.divComment');
 
                     var html = '<p></p>' +
-                        '<div style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
+                        '<div class="hideContent" style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
                         divComment.find('.dateAndUser').html() +
                         '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
                         divComment.find('.comment').html() +
                         divComment.find('.parentComment').html() +
                         '</blockquote>';
-                    var config = { toolbar: 'Basic', startupFocus: true };
+                    var config = { startupFocus: true };
                     editor = CKEDITOR.appendTo('subEditor' + id, config, html);
                     divFullSubEditor.attr('style', 'display:""');
                     id += 1;
@@ -126,7 +128,7 @@
                     content = fullContent.slice(0, fullContent.search(flag1));
                     parentContent = fullContent.slice((fullContent.search(flag2) + 6), fullContent.length - 1);
                     $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
-                        $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate) }).appendTo("#listComment");
+                        $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
                     });
                     if (!editor)
                         return;
@@ -155,6 +157,26 @@
                     }
 
                 });
+
+                // xoa comment 
+                $('.DELETECOMMENT').live('click', function () {
+                    var checkstr = confirm('Are you sure you want to delete this?');
+                    if (checkstr == true) {
+                        // xoa comment
+                        var commentId = $(this).next().val();
+                        var url = "/Topic/DeleteComment";
+                        var topicId = document.getElementById('topicId').value;
+                        $.post(url, { topicId: topicId, commentId: commentId }, function (data) {
+                            //$("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
+                            //alert(data);
+                            //$(this).parents('.mainComment').replaceWith('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ');
+
+                        });
+                        $('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ').replaceAll($(this).parents('.mainComment'));
+                    } else {
+                        return false;
+                    }
+                });
             });
 
             function parseMicrosoftJsonDateTime(content) {
@@ -166,6 +188,12 @@
                 } catch (ex) {
                     return content;
                 }
+            }
+
+            function compareUserId(paraUserId) {
+                if (paraUserId == userId)
+                    return true;
+                return false;
             }
 
 
@@ -180,12 +208,22 @@
                             <td valign="top" width="5%">
                                 <img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(/Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
                             </td>
-                            <td align="left" class="GI2MSK2DP1" valign="top">
+                            <td align="left" class="GI2MSK2DP1" width="15%">
                                 <span style="color: rgb(0, 104, 28);font-weight:bold">${CreateBy.FullName}</span>
                              </td>
-                             <td align="right" valign="top">
+                             <td align="right" width=70%">
                                 <span>${$item.getCreateDate}</span> 
                                 <span class="BUTTONSTYLE REPLYBUTTON">Đăng trả lời</span>
+                             </td>
+                             <td align="left" width="10%">
+                                {{if !isMember}}
+                                    <span class="BUTTONSTYLE DELETECOMMENT">Xóa</span>
+                                    <input type="hidden" value="${Id}">
+                                {{else $item.compareUserId }}
+                                    <span class="BUTTONSTYLE DELETECOMMENT">Xóa</span>
+                                    <input type="hidden" value="${Id}">
+                                {{/if}}
+
                              </td>
                         </tr>
                     </tbody>                 
@@ -218,13 +256,16 @@
 
         
         @*<a href="#" style="text-decoration:none" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>*@
-        <br /><br />
         <input id="topicId" type="hidden" value="@Model.Id" />
+        <input id="userId" type="hidden" value="@ViewBag.UserId" />
+        <input id="isMember" type="hidden" value="@ViewBag.IsMember" />
 
-        <div id="topic">
-            <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/>
-            <span id="dateAndUser" style="display:none">Vào <span id="createDate"></span>, <span id="createBy"></span> đã viết:<br /></span>
-            <span id="content"></span><br />
+        <div id="topic" tabindex="0">
+            <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/><br/>
+            <span id="dateAndUser" >Vào <span id="createDate"></span>, <span id="createBy" style="color: rgb(0, 104, 28);font-weight:bold"></span> đã viết:</span><br />
+            <div tabindex="0">
+                <span id="content"></span><br />
+            </div>
         </div>
 
         <!-- This div will hold the editor. -->
