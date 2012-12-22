@@ -16,7 +16,6 @@
     </section>
 }
 
-<h2>Create</h2>
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
@@ -42,7 +41,8 @@
         <div class="editor-field">
             @Html.TextAreaFor(model => model.Content, new { @id = "ckeContent" })
             <script type="text/javascript">
-                CKEDITOR.replace("ckeContent", {toolbar: 'Basic'});
+                CKEDITOR.replace("ckeContent");
+//                CKEDITOR.replace("ckeContent", {toolbar: 'Basic'});
             </script>
             @*@Html.EditorFor(model => model.Content)
             @Html.ValidationMessageFor(model => model.Content)*@

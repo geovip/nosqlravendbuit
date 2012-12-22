@@ -109,6 +109,58 @@
         text-shadow: 0 1px rgba(0, 0, 0, 0.1);
         text-transform: uppercase;
     }
+    
+    .DELETECOMMENT
+    {
+        border: 1px solid transparent;
+        color: white;
+        background-color: #8A7E7E;
+        background-image: -webkit-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: -moz-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: -ms-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: -o-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: linear-gradient(top, #8A7E7E, #AA9696);
+        text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+    }
+    .DELETECOMMENT:hover
+    {
+        border: 1px solid transparent;
+        background-color: #8A7E7E;
+        background-image: -webkit-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: -moz-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: -ms-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: -o-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: linear-gradient(top, #8A7E7E, #978C8C);
+        text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+    }
+    
+    .DELETETOPIC
+    {
+        border: 1px solid transparent;
+        color: white;
+        background-color: #8A7E7E;
+        background-image: -webkit-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: -moz-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: -ms-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: -o-linear-gradient(top, #8A7E7E, #AA9696);
+        background-image: linear-gradient(top, #8A7E7E, #AA9696);
+        text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+    }
+    .DELETETOPIC:hover
+    {
+        border: 1px solid transparent;
+        background-color: #8A7E7E;
+        background-image: -webkit-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: -moz-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: -ms-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: -o-linear-gradient(top, #8A7E7E, #978C8C);
+        background-image: linear-gradient(top, #8A7E7E, #978C8C);
+        text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+    }
             
 
 
@@ -139,6 +191,28 @@
 		background-image: -o-linear-gradient(top, whiteSmoke, #F1F1F1);
 		background-image: linear-gradient(top, whiteSmoke, #F1F1F1);
 	}
+
+    .SEARCHBUTTON{
+		border: 1px solid transparent;
+		color: white;
+		background-color: #4D90FE;
+		background-image: -webkit-linear-gradient(top, #4D90FE, #4787ED);
+		background-image: -moz-linear-gradient(top, #4D90FE, #4787ED);
+		background-image: -ms-linear-gradient(top, #4D90FE, #4787ED);
+		background-image: -o-linear-gradient(top, #4D90FE, #4787ED);
+		background-image: linear-gradient(top, #4D90FE, #4787ED);
+		text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+		text-transform: uppercase;
+    }
+    .SEARCHBUTTON:hover {
+		border: 1px solid #2F5BB7;
+		background-color: #357AE8;
+		background-image: -webkit-linear-gradient(top, #4D90FE, #357AE8);
+		background-image: -moz-linear-gradient(top, #4D90FE, #357AE8);
+		background-image: -ms-linear-gradient(top, #4D90FE, #357AE8);
+		background-image: -o-linear-gradient(top, #4D90FE, #357AE8);
+		background-image: linear-gradient(top, #4D90FE, #357AE8);
+    }
 
 #tbGroup td{
     border-bottom: 1px solid #ddd;

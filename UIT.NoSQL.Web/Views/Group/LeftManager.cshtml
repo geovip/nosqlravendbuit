@@ -18,6 +18,7 @@
             url = "/Group/" + action;
             $.post(url, { id: id }, function (data) {
                 $("#MyContent").html(data);
+                window.location.replace(window.location.host + url + id);
             });
         }
         

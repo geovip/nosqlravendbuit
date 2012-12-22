@@ -13,6 +13,7 @@ namespace UIT.NoSQL.Core.Domain
         DateTime LastModified { get; set; }
         UInt32 NumberOfView { get; set; }
         UInt32 NumberOfComment { get; set; }
+        bool isDeleted { get; set; }
     }
 
     public class TopicObject : ITopicObjectDocument
@@ -26,6 +27,7 @@ namespace UIT.NoSQL.Core.Domain
         public DateTime LastModified { get; set; }
         public UInt32 NumberOfView { get; set; }
         public UInt32 NumberOfComment { get; set; }
+        public bool isDeleted { get; set; }
 
         public List<CommentObject> ListComment { get; set; }
 
@@ -49,6 +51,7 @@ namespace UIT.NoSQL.Core.Domain
         public DateTime LastModified { get; set; }
         public UInt32 NumberOfView { get; set; }
         public UInt32 NumberOfComment { get; set; }
+        public bool isDeleted { get; set; }
 
         public static implicit operator DenormalizedTopic<T>(T doc)
         {
@@ -59,7 +62,8 @@ namespace UIT.NoSQL.Core.Domain
                 CreateBy = doc.CreateBy,
                 LastModified = doc.LastModified,
                 NumberOfView = doc.NumberOfView,
-                NumberOfComment = doc.NumberOfComment
+                NumberOfComment = doc.NumberOfComment,
+                isDeleted = doc.isDeleted
             };
         }
     }

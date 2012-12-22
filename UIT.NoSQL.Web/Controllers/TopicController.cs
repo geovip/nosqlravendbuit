@@ -44,6 +44,16 @@ namespace UIT.NoSQL.Web.Controllers
                 group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfView += 1;
                 groupService.Save(group);
 
+                // kiem tra quyen cua user
+                UserObject user = (UserObject)(Session["user"]);
+                string role = user.ListUserGroup.Find(u => u.GroupId == topic.GroupId).GroupRole.GroupName;
+
+                // dua du lieu ra View gom UserId de kiem tra co cho xoa bai dang hay khong
+                if (role == "Manager" || role == "Owner" )
+                    ViewBag.IsMember = false;
+                else
+                    ViewBag.IsMember = true;
+                ViewBag.UserId = user.Id;
                 return View(topic);
             }
             else
@@ -126,30 +136,24 @@ namespace UIT.NoSQL.Web.Controllers
             }
         }
 
-        //
-        // GET: /Topic/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Topic/Delete/5
-
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public JsonResult DeleteTopic(string topicIds)
         {
-            try
+            string[] ids = topicIds.Split(',');
+            foreach (string id in ids)
             {
-                // TODO: Add delete logic here
+                var topic = topicService.Load(id);
+                if (topic != null)
+                {
+                    topic.isDeleted = true;
+                    topicService.Save(topic);
 
-                return RedirectToAction("Index");
+                    var group = groupService.Load(topic.GroupId);
+                    group.ListTopic.Find(t => t.Id.Equals(topic.Id)).isDeleted = true;
+                    groupService.Save(group);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAll()
@@ -197,6 +201,17 @@ namespace UIT.NoSQL.Web.Controllers
             groupService.Save(group);
 
             return Json(comment, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [LoginFilter]
+        public JsonResult DeleteComment(string topicId, string commentId)
+        {
+            var topic = topicService.Load(topicId);
+            topic.ListComment.Find(c => c.Id == commentId).isDeleted = true;
+            topicService.Save(topic);
+
+            return Json("OK", JsonRequestBehavior.AllowGet);
         }
     }
 }
