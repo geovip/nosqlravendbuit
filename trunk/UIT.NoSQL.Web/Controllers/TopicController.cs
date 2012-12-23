@@ -7,6 +7,7 @@ using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Service;
 using UIT.NoSQL.Core.Domain;
 using UIT.NoSQL.Web.Filters;
+using System.Diagnostics;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -172,17 +173,23 @@ namespace UIT.NoSQL.Web.Controllers
         [MemberFilter(TypeID = TypeIDEnum.TopicID)]
         public JsonResult AddComment(string Id, string content, string parentContent)
         {
+            
+            
             var topic = topicService.Load(Id);
             if (topic.ListComment == null)
             {
                 topic.ListComment = new List<CommentObject>();
             }
             CommentObject comment = new CommentObject();
+            
             var user = (UserObject)Session["user"];
+            
             comment.Content = content;
             comment.ParentContent = parentContent;
             comment.Id = Guid.NewGuid().ToString();
+            
             comment.CreateBy = user;
+            
             comment.CreateDate = DateTime.Now;
             comment.isDeleted = false;
             topic.ListComment.Add(comment);
@@ -190,7 +197,10 @@ namespace UIT.NoSQL.Web.Controllers
             topic.LastModified = DateTime.Now;
             topicService.Save(topic);
 
+            
             var group = groupService.Load(topic.GroupId);
+            
+
             group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfComment += 1;
             group.ListTopic.Find(t => t.Id.Equals(topic.Id)).LastModified = DateTime.Now;
 
@@ -198,9 +208,16 @@ namespace UIT.NoSQL.Web.Controllers
             group.NewEvent.CreateDate = comment.CreateDate;
             group.NewEvent.CreateBy = user.FullName;
 
+            // Create new stopwatch
+            Stopwatch stopwatch = new Stopwatch();
+            // Begin timing
+            stopwatch.Start();
             groupService.Save(group);
-
+            // Stop timing
+            stopwatch.Stop();
+            
             return Json(comment, JsonRequestBehavior.AllowGet);
+            //return Json(stopwatch.Elapsed.ToString(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

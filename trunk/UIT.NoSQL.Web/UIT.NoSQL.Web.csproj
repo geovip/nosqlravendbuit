@@ -213,6 +213,7 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\back-icon.png" />
     <Content Include="Images\clear.cache.gif" />
     <Content Include="Images\gm_icon.png" />
     <Content Include="Plugin\ckeditor\adapters\jquery.js" />

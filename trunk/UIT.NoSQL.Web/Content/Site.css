@@ -263,7 +263,7 @@ ul#menu {
 .featured {
     background-color: #fff;
 }
-
+    /*
     .featured .content-wrapper {
         background-color: #7ac0da;
         background-image: -ms-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
@@ -273,6 +273,12 @@ ul#menu {
         background-image: linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
         color: #3e5667;
         padding: 20px 40px 30px 40px;
+    }*/
+    
+    .featured .content-wrapper {
+        background-color: #4D90FE;
+        color: #3e5667;
+        padding: 10px 20px 10px 50px;
     }
 
         .featured hgroup.title h1, .featured hgroup.title h2 {
