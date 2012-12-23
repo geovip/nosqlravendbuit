@@ -26,7 +26,6 @@ namespace UIT.NoSQL.Web.Controllers
             var user = (UserObject)Session["user"];
             if (user == null || user.ListUserGroup.Count <= 0)
             {
-                ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
                 TempData["IsNew"] = "True";
                 return View();
             }

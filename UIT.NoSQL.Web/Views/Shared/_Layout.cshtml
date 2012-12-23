@@ -73,22 +73,53 @@
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
+                    <nav>
+                        <ul id="menu">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div id="DivNav" class="float-right">                
-                <nav>
+                @*<nav>
                     @RenderSection("menu", required: false)
-                </nav>
+                </nav>*@
             </div>
 
             <div class="clear"></div>
         </header>
         <div id="body">
-        
-            @RenderSection("LeftMenu", required: false)
+            @*
+            @RenderSection("featured", required: false)
+            thay dong nay bang doan code duoi
+            *@
+            
+            <div class="featured">
+                <div class="content-wrapper">
+                    <span style="font-size:medium; color:White">Welcom to DaHu Groups. Learn more?</span>
+                </div>
+            </div>
 
+            <div style="overflow:hidden">
+                <div style="float:left;width:240px">
+                    <div style="padding: 15px 10px 10px 25px">
+                        <span style="color:#DD4B39; font-size:medium">Group</span>
+                    </div>
+                </div>
+                <div style="float:left">
+                    <div style="padding: 10px 10px 10px 25px">
+                        @RenderSection("menu", required: false)
+                    </div>    
+                </div>
+            </div>
+            <div style="width:100%; border-bottom: 1px solid rgba(0, 0, 0, 0.1)">
+            </div>
+            @RenderSection("LeftMenu", required: false)
+            
             <div id="main">
-                @RenderSection("featured", required: false)
+                @*@RenderSection("featured", required: false)*@
                 <section id="SectionMain" class="content-wrapper main-content clear-fix">                    
                         @RenderBody()                    
                 </section>

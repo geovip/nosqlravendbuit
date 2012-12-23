@@ -9,37 +9,32 @@
     </section>
 }
 
-@section featured {
+@*@section featured {
 <section class="featured">
     <div class="content-wrapper">
-        <hgroup class="title">
-            <h1>@ViewBag.Title.</h1>
-            <h2>@ViewBag.Message</h2>
-        </hgroup>
-        <p>
-            To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>. 
-            The page features <span class="highlight">videos, tutorials, and samples</span> to help you get the most from 
-            ASP.NET MVC. If you have any questions about ASP.NET MVC visit 
-            <a href="http://forums.asp.net/1146.aspx/1?MVC" title="ASP.NET MVC Forum">our forums</a>.
-        </p>
+        <span style="font-size:medium; color:White">Welcom to DaHu Groups. Learn more?</span>
     </div>
 </section>
-}
-
+}*@
 @section menu {
-    <ul id="menu">
+    @*<ul id="menu">
         <li>@Html.ActionLink("New Group", "Create", "Group")</li>
         <li>@Html.ActionLink("Home", "Index", "Home")</li>
         <li>@Html.ActionLink("About", "About", "Home")</li>
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>
+    </ul>*@
+    <div class="BUTTONSTYLE CREATEGROUP" onclick = "createNewGroup()">Create New Group</div>
 }
+<script type="text/javascript">
+    function createNewGroup() {
+        window.location = "/Group/Create";
+    }
+
+</script>
+
 @if ( TempData["IsNew"].Equals("True"))
 {
 <h3>We suggest the following:</h3>
-
-    
-    
 <ol class="round">
     <li class="one">
         <h5>Configure ASP.NET Membership</h5>
