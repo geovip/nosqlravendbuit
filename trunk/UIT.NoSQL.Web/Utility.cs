@@ -9,6 +9,7 @@ using System.Text;
 using Raven.Client.Indexes;
 using Raven.Abstractions.Indexing;
 using System.IO;
+using UIT.NoSQL.Service;
 
 namespace UIT.NoSQL.Web
 {
@@ -23,22 +24,29 @@ namespace UIT.NoSQL.Web
 
         public void Initialized()
         {
-            //role
+            List<GroupRoleObject> listRole = new List<GroupRoleObject>();
+            List<UserObject> listUser = new List<UserObject>();
+            List<UserGroupObject> listUserGroup = new List<UserGroupObject>();
+            List<GroupObject> listGroup = new List<GroupObject>();
+            
+            //create data sample
             GroupRoleObject groupRole = null;
-
             groupRole = new GroupRoleObject();
             groupRole.Id = "7E946ED1-69E6-4B45-8273-FB7AC7367F50";
             groupRole.GroupName = "Manager";
+            groupRole.IsGeneral = MvcApplication.ServerGeneral;
             session.Store(groupRole);
 
             groupRole = new GroupRoleObject();
             groupRole.Id = "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
             groupRole.GroupName = "Member";
+            groupRole.IsGeneral = MvcApplication.ServerGeneral;
             session.Store(groupRole);
 
             groupRole = new GroupRoleObject();
             groupRole.Id = "79C6B725-F787-4FDF-B820-42A21174449D";
             groupRole.GroupName = "Owner";
+            groupRole.IsGeneral = MvcApplication.ServerGeneral;
             session.Store(groupRole);
 
             //user
@@ -50,6 +58,8 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "sa";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "duongthandan@gmail.com";
+            userObject.Region = MvcApplication.ServerRegion[0];
+            session.Store(userObject);
 
             //group
             GroupObject groupObject = null;
@@ -64,6 +74,7 @@ namespace UIT.NoSQL.Web
             groupObject.NewEvent.Title = "New group";
             groupObject.NewEvent.CreateDate = groupObject.CreateDate;
             groupObject.NewEvent.CreateBy = userObject.FullName;
+            session.Store(groupObject);
 
             var userGroup = new UserGroupObject();
             userGroup.Id = "565C2563-0CA2-4993-B322-1D05C885A996";
@@ -78,14 +89,12 @@ namespace UIT.NoSQL.Web
             groupObject.ListUserGroup.Add(userGroup);
             userObject.ListUserGroup.Add(userGroup);
 
-            session.Store(userObject);
             session.Store(userGroup);
             session.Store(groupObject);
 
 
-
             RandomData randomData = new RandomData();
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 7; i++)
             {
                 groupObject = new GroupObject();
                 groupObject.Id = Guid.NewGuid().ToString();
@@ -98,6 +107,7 @@ namespace UIT.NoSQL.Web
                 groupObject.NewEvent.Title = "New group";
                 groupObject.NewEvent.CreateDate = groupObject.CreateDate;
                 groupObject.NewEvent.CreateBy = userObject.FullName;
+                session.Store(groupObject);
 
                 var userGroupRandom = new UserGroupObject();
                 userGroupRandom.Id = Guid.NewGuid().ToString();
@@ -117,6 +127,7 @@ namespace UIT.NoSQL.Web
             }
 
             session.Store(userObject);
+            session.SaveChanges();
 
             //user
             userObject = new UserObject();
@@ -125,11 +136,11 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "aa";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "huyuit@gmail.com";
+            userObject.Region = MvcApplication.ServerRegion[1];
+
             session.Store(userObject);
 
-            session.SaveChanges();
-
-            for (int i = 0; i < 5000; i++)
+            for (int i = 0; i < 12; i++)
             {
                 groupObject = new GroupObject();
                 groupObject.Id = Guid.NewGuid().ToString();
@@ -142,6 +153,7 @@ namespace UIT.NoSQL.Web
                 groupObject.NewEvent.Title = "New group";
                 groupObject.NewEvent.CreateDate = groupObject.CreateDate;
                 groupObject.NewEvent.CreateBy = userObject.FullName;
+                session.Store(groupObject);
 
                 var userGroupRandom = new UserGroupObject();
                 userGroupRandom.Id = Guid.NewGuid().ToString();
@@ -161,7 +173,6 @@ namespace UIT.NoSQL.Web
             }
 
             session.Store(userObject);
-
 
 
 
@@ -172,6 +183,7 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "qq";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "qq@gmail.com";
+            userObject.Region = MvcApplication.ServerRegion[2];
             session.Store(userObject);
 
             userObject = new UserObject();
@@ -180,6 +192,7 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "ww";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "ww@gmail.com";
+            userObject.Region = MvcApplication.ServerRegion[2];
             session.Store(userObject);
 
             userObject = new UserObject();
@@ -188,29 +201,58 @@ namespace UIT.NoSQL.Web
             userObject.UserName = "ww";
             userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
             userObject.Email = "ee@gmail.com";
+            userObject.Region = MvcApplication.ServerRegion[2];
             session.Store(userObject);
 
             session.SaveChanges();
 
-            //create index
-            session.Advanced.DatabaseCommands.DeleteIndex("GroupName");
-            session.Advanced.DatabaseCommands.DeleteIndex("Group/ByTopicId");
+            ////save data
+            //foreach (var item in listRole)
+            //{
+            //    session.Store(item);
+            //}
+            //session.SaveChanges();
 
-            session.Advanced.DatabaseCommands.PutIndex("GroupName", new IndexDefinitionBuilder<GroupObject>
+            //foreach (var item in listUser)
+            //{
+            //    session.Store(item);
+            //}
+            //session.SaveChanges();
+
+            //foreach (var item in listGroup)
+            //{
+            //    session.Store(item);
+            //}
+            //session.SaveChanges();
+
+            //foreach (var item in listUserGroup)
+            //{
+            //    session.Store(item);
+            //}
+            //session.SaveChanges();
+
+            //create index
+            foreach (var store in MvcApplication.documentStores)
+            {
+                InitalIndex(store);
+            }
+            new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
+        }
+
+        private void InitalIndex(IDocumentStore documentStore)
+        {
+            var session = documentStore.OpenSession();
+
+            documentStore.DatabaseCommands.DeleteIndex("GroupName");
+            documentStore.DatabaseCommands.PutIndex("GroupName", new IndexDefinitionBuilder<GroupObject>
             {
                 Map = gr => from g in gr
-                               select new { g.GroupName, g.Description },
+                            select new { g.GroupName, g.Description },
                 Indexes =
                 {
                     { x => x.GroupName, FieldIndexing.Analyzed}
                 }
             });
-            session.Advanced.DatabaseCommands.PutIndex("Group/ByTopicId",
-                                        new IndexDefinitionBuilder<GroupObject>
-                                        {
-                                            Map = groupObjects => from grObject in groupObjects
-                                                                  select new { grObject.GroupName }
-                                        });
         }
 
         public static string GetMd5Hash(string input)

@@ -11,6 +11,8 @@ using Raven.Client.Document;
 using Microsoft.Practices.Unity;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Service;
+using Raven.Client.Shard;
+using UIT.NoSQL.Core.Domain;
 
 namespace UIT.NoSQL.Web
 {
@@ -21,7 +23,10 @@ namespace UIT.NoSQL.Web
     {
         private const string RavenSessionKey = "RavenMVC.Session";
         private static string databaseName;
-        public static IDocumentStore documentStore;
+        public static IDocumentStore documentStoreShard;
+        public static IDocumentStore[] documentStores;
+        public static List<string> ServerRegion;
+        public static string ServerGeneral;
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -49,7 +54,7 @@ namespace UIT.NoSQL.Web
         {
             //Create a DocumentSession on BeginRequest   
             //create a document session for every unit of work
-            BeginRequest += (sender, args) => HttpContext.Current.Items[RavenSessionKey] = documentStore.OpenSession(databaseName);
+            BeginRequest += (sender, args) => HttpContext.Current.Items[RavenSessionKey] = documentStoreShard.OpenSession();
             //Destroy the DocumentSession on EndRequest
             EndRequest += (o, eventArgs) =>
             {
@@ -68,18 +73,53 @@ namespace UIT.NoSQL.Web
 
             BundleTable.Bundles.RegisterTemplateBundles();
 
+            InitialConnect();
+            ConfigureUnity();
+        }
+
+        private void InitialConnect()
+        {
             //Create a DocumentStore in Application_Start
             //DocumentStore should be created once per application and stored as a singleton.
             databaseName = System.Configuration.ConfigurationManager.AppSettings["databaseName"];
-            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectRavenDB"].ConnectionString;
+            string ConnectRavenDB = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectRavenDB"].ConnectionString;
+            string[] connects = ConnectRavenDB.Split(';');
             //connection += "/databases/" + databaseName;
             //Raven.Client.Extensions.MultiDatabase.CreateDatabaseDocument(databaseName);
-            
-            
-            documentStore = new DocumentStore { Url = connection };
-            documentStore.Initialize();
 
-            ConfigureUnity();
+            var shards = new Dictionary<string, IDocumentStore>();
+            documentStores = new DocumentStore[connects.Length];
+            string shardName = string.Empty;
+            string shardUrl = string.Empty;
+            int i = 0;
+            ServerRegion = new List<string>();
+
+            foreach (var connect in connects)
+	        {
+                var co = connect.Split(',');
+                shardUrl = co[0];
+                shardName = co[1];
+                shards.Add(shardName, new DocumentStore { Url = shardUrl, DefaultDatabase = databaseName });
+
+                documentStores[i++] = new DocumentStore { Url = shardUrl, DefaultDatabase = databaseName }.Initialize();
+                ServerRegion.Add(shardName);
+	        }
+
+            DocumentConvention Conventions;
+            Conventions = shards.First().Value.Conventions.Clone();
+            var shardStrategy = new ShardStrategy(shards)
+                .ShardingOn<UserObject>(u => u.Region)
+                .ShardingOn<GroupObject>(g => g.CreateBy.Id)
+                .ShardingOn<TopicObject>(t => t.CreateBy.Id)
+                .ShardingOn<UserGroupObject>(u => u.UserId)
+                .ShardingOn<GroupRoleObject>(r => r.IsGeneral);
+            shardStrategy.Conventions.IdentityPartsSeparator = "-";
+            shardStrategy.ModifyDocumentId = (convention, shardId, documentId) => shardId + convention.IdentityPartsSeparator + documentId;
+
+            documentStoreShard = new ShardedDocumentStore(shardStrategy).Initialize();
+
+            //set server general
+            ServerGeneral = shardName;
         }
 
         //Getting the current DocumentSession
@@ -105,6 +145,12 @@ namespace UIT.NoSQL.Web
             ControllerBuilder.Current.SetControllerFactory(
                                 typeof(Factory.UnityControllerFactory));
         }
+    }
 
+    public enum ServerLocal
+    {
+        Asia,
+        MiddleEast,
+        America
     }
 }

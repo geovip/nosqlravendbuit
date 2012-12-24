@@ -19,6 +19,7 @@ namespace UIT.NoSQL.Core.Domain
         public string Email { get; set; }
         public string FullName { get; set; }
         public DateTime CreateDate { get; set; }
+        public string Region { get; set; }
 
         public List<UserGroupObject> ListUserGroup { get; set; }
         //List<DenormalizedGroup<GroupObject>> ListGroupView { get; set; }

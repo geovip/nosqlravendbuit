@@ -19,25 +19,9 @@ namespace UIT.NoSQL.Service
 
         public GroupRoleObject LoadByName(GroupRoleType type)
         {
-            string id = GetIdByType(type);
-            var groupRole = session.Load<GroupRoleObject>(id);
+            var groupRole = session.Query<GroupRoleObject>().Where(r => r.GroupName == type.ToString()).FirstOrDefault();
 
             return groupRole;
-        }
-
-        private string GetIdByType(GroupRoleType type)
-        {
-            switch (type)
-            {
-                case GroupRoleType.Manager:
-                    return "7E946ED1-69E6-4B45-8273-FB7AC7367F50";
-                case GroupRoleType.Owner:
-                    return "79C6B725-F787-4FDF-B820-42A21174449D";
-                case GroupRoleType.Member:
-                    return "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
-            }
-
-            return string.Empty;
         }
     }
 }
