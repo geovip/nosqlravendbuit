@@ -69,6 +69,9 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Create(string id)
         {
             TempData["GroupId"] = id;
+            GroupObject group = groupService.Load(id);
+            ViewBag.GroupName = group.GroupName;
+            ViewBag.FullName = group.CreateBy.FullName;
             return View();
         }
 
