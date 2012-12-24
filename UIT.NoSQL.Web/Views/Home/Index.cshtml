@@ -110,7 +110,7 @@ else
                 return;
             }
             $.post("/Home/IndexMore", getpagestr(pageHome), function (data) {
-                $("#tbHomeGroup tr:last").after(data);
+                $("#tbGroup tr:last").after(data);
             });
         }
 
@@ -124,7 +124,7 @@ else
         }
     </script>
     
-    <table id="tbHomeGroup" style="width:100%;">
+    <table id="tbGroup" style="width:100%;">
 
     @foreach (var item in Model)
     {
@@ -151,5 +151,4 @@ else
 
     </table>
     
-    <a href="javascript:{}" onclick="LoadHomePaging()">Load more item</a>
 }

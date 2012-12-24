@@ -6,6 +6,7 @@ using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Core.Domain;
 using Raven.Client;
 using Raven.Client.Linq;
+using Raven.Client.Indexes;
 
 namespace UIT.NoSQL.Service
 {
@@ -89,11 +90,42 @@ namespace UIT.NoSQL.Service
             //str = str.Replace("\\","");// OR Description: \"{0}\"
             //"GroupName"
             RavenQueryStatistics stats;
-            var listGroup = session.Advanced.LuceneQuery<GroupObject>("GroupName")
+            //var listGroup = session.Advanced.LuceneQuery<GroupObject>("GroupName")
+            //    .Statistics(out stats)
+            //    .Skip(skip)
+            //    .Take(take)
+            //    .Where(string.Format("GroupName:*{0}* OR Description:*{0}*", searchStr)).ToList();
+
+            //var listGroup = session.Query<GroupObject>("Groupname")
+            //    .Statistics(out stats)
+            //    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+            //    .Skip(skip)
+            //    .Take(take)
+            //    .Where(g => g.GroupName.StartsWith(searchStr) || g.GroupName.StartsWith("*" + searchStr))
+            //    .ToList();
+
+            
+            var listGroup = session.Query<GroupObject_Search.ReduceResult, GroupObject_Search>()
                 .Statistics(out stats)
                 .Skip(skip)
                 .Take(take)
-                .Where(string.Format("GroupName:*{0}* OR Description:*{0}*", searchStr)).ToList();
+                .Where(c => c.Query.In((object)searchStr))
+                .As<GroupObject>()
+                .ToList();
+
+            if (listGroup.Count == 0)
+            {
+                searchStr = string.Format("*{0}*", searchStr);
+
+                listGroup = session.Query<GroupObject_Search.ReduceResult, GroupObject_Search>()
+                .Statistics(out stats)
+                .Skip(skip)
+                .Take(take)
+                .Where(c => c.Query.In((object)searchStr))
+                .As<GroupObject>()
+                .ToList();
+            }
+
             totalResult = stats.TotalResults;
 
             return listGroup;
@@ -110,6 +142,29 @@ namespace UIT.NoSQL.Service
             var listGroup = session.Advanced.LuceneQuery<GroupObject>().Where(str).ToList();
             
             return listGroup;
+        }
+    }
+
+    public class GroupObject_Search : AbstractIndexCreationTask<GroupObject, GroupObject_Search.ReduceResult>
+    {
+        public class ReduceResult
+        {
+            public object[] Query { get; set; }
+        }
+
+        public GroupObject_Search()
+        {
+            Map = groups => from g in groups
+                            select new
+                            {
+                                Query = new[]
+                                    {
+                                        g.Id,
+                                        g.GroupName,
+                                        g.Description,
+                                        g.CreateBy.FullName
+                                    }
+                            };
         }
     }
 }

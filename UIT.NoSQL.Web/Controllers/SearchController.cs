@@ -65,7 +65,8 @@ namespace UIT.NoSQL.Web.Controllers
             return View(listGroup);
         }
     }
-    
+
+
     //var session = MvcApplication.CurrentSession;
     //    new GroupObject_Count().Execute(MvcApplication.documentStore);
 

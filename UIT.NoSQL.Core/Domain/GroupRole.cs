@@ -16,7 +16,8 @@ namespace UIT.NoSQL.Core.Domain
     {
         public string Id { get; set; }
         public string GroupName { get; set; }
-        
+        public string IsGeneral { get; set; }
+
         public GroupRoleObject()
         {
         }
