@@ -101,6 +101,7 @@ namespace UIT.NoSQL.Web.Controllers
             else
                 ViewBag.IsMember = false;
             ViewBag.GroupName = group.GroupName;
+            ViewBag.GroupId = group.Id;
 
             return View(group.ListTopic);
         }

@@ -15,7 +15,7 @@
 		border-radius: 2px;
 		display: inline-block;
     }
-    .POSTBUTTON, .CREATEGROUP{
+    .POSTBUTTON, .CREATEGROUP, .CREATETOPIC, .POSTTOPIC{
 		border: 1px solid transparent;
 		color: white;
 		background-color: #D14836;
@@ -27,7 +27,7 @@
 		text-shadow: 0 1px rgba(0, 0, 0, 0.1);
 		text-transform: uppercase;
     }
-    .POSTBUTTON, .CREATEGROUP:hover {
+    .POSTBUTTON, .CREATEGROUP, .CREATETOPIC, .POSTTOPIC:hover {
 		border: 1px solid #B0281A;
 		border-bottom-color: #AF301F;
 		background-color: #C53727;
@@ -188,7 +188,7 @@
 		font-weight: bold;
 	}
 
-	.CANCELEDITOR {
+	.CANCELEDITOR, .MANAGERBUTTON, .CANCELPOSTTOPIC {
 		color: #666;
 		border: 1px solid gainsboro;
 		border: 1px solid rgba(0, 0, 0, 0.1);
@@ -199,7 +199,7 @@
 		background-image: -o-linear-gradient(top, whiteSmoke, #F1F1F1);
 		background-image: linear-gradient(top, whiteSmoke, #F1F1F1);
 	}
-	.CANCELEDITOR:hover
+	.CANCELEDITOR, .MANAGERBUTTON, .CANCELPOSTTOPIC:hover
     {
         color: #333;
         border: 1px solid #C6C6C6;
@@ -271,3 +271,17 @@
     text-overflow:ellipsis;
     margin-bottom:50px;
 }
+
+
+    .MESSAGE 
+    {
+        padding: 7px 16px 7px 16px;
+        background: #F9EDBE !important;
+        border: 1px solid #F0C36D;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        line-height: 16px;
+        font-size: 11px;
+        position: relative;
+    }

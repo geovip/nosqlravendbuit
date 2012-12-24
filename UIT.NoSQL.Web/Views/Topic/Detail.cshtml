@@ -63,17 +63,20 @@
             var flag1 = '<div class="hideContent"', flag2 = '</div>';
             var content = '', parentContent = '';
             function addComment() {
+                $("#message").html("Replying...");
+                document.getElementById('message').style.display = "";
+                
                 url = "/Topic/AddComment";
                 var topicId = document.getElementById('topicId').value;
                 var fullContent = editor.getData(); // fullContent = content + parentContent
                 content = fullContent.slice(0, fullContent.search(flag1));
                 parentContent = fullContent.slice((fullContent.search(flag2) + 6),fullContent.length-1);
-                //alert(content + parentContent);
                 $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
-                    //alert(data);
+                    $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 3000).fadeOut(5000); ;
+                    removeEditor();
                     $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
                 });
-                removeEditor();
+                
             }
             function getTopicById() {
                 url = "/Topic/GetById";
@@ -96,6 +99,9 @@
             }
 
             $(document).ready(function () {
+                //test
+                $('#fullEditor').attr('disabled','disabled');
+
                 userId = $('#userId').val();
                 isMember = $('#isMember').val();
                 getTopicById();
@@ -272,7 +278,7 @@
         </div>
 
         <!-- This div will hold the editor. -->
-        <div id = "fullEditor" style="display: none">
+        <div id = "fullEditor" style="display:none">
             <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Đăng</span>
             <span class="BUTTONSTYLE CANCELEDITOR"  onclick="removeEditor()">Hủy</span>
             <div id="editor" style="margin-bottom:4px;margin-top:4px">

@@ -5,6 +5,12 @@
         function BackGroup(id) {
             window.location = "/Group/Detail/" + id;
         }
+        function createNewTopic(id) {
+            window.location = "/Topic/Create/" + id;
+        }
+        function manage(id) {
+            window.location = "/Group/Manager/" + id;
+        }
     </script>
 <div>
     
@@ -17,9 +23,11 @@
 
             <div tabindex="0" class="BUTTONSTYLE POSTBUTTON" onclick = "createEditor()">Đăng trả lời</div>
         </div>
+        
+        
     }
 
-    @if( TempData["account"].Equals("orther"))
+    @if (TempData["account"].Equals("orther"))
     {
         <div style="float:left;">
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
@@ -27,12 +35,11 @@
             </div>
         </div>
     }
-    <div style="float:right;">
+    @*<div style="float:right;">
         <ul id="menu">
             <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
             <li>@Html.ActionLink("Manager", "Manager", "Group", new { id = TempData["GroupId"] }, null)</li>
-            <li>@Html.ActionLink("About", "About", "Home")</li>
-            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
         </ul>
-    </div>
+    </div>*@
+        
 </div>

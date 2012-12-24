@@ -12,6 +12,15 @@
         <meta name="viewport" content="width=device-width" />
 
         <script type="text/javascript">
+            $(document).ready(function () {
+                $('#leftmenu').css("overflow-y", "hidden");
+                $('#leftmenu').mouseover(function () {
+                    $(this).css("overflow-y", "auto");
+                }).mouseout(function () {
+                    $(this).css("overflow-y", "hidden");
+                });
+                $('#SectionMain').css("border-left", '1px solid rgba(0, 0, 0, 0.1)');
+            });
             function AutoResize() {
                 var windowWidth = window.innerWidth;
                 var windowHeight = window.innerHeight;
@@ -19,11 +28,11 @@
                 var main = document.getElementById("main");
                 var DivNav = document.getElementById("DivNav");
                 main.style.width = (windowWidth - 240) + "px";
-                main.style.height = (windowHeight - 130) + "px";
+                main.style.height = (windowHeight - 180) + "px";
                 DivNav.style.width = (windowWidth - 240) + "px";
 
                 var leftmenu = document.getElementById("leftmenu");
-                leftmenu.style.height = (windowHeight - 130) + "px";
+                leftmenu.style.height = (windowHeight - 180) + "px";           
             }
             window.onresize = AutoResize;
 
@@ -62,7 +71,7 @@
                             @*<a href="javascript:{}" onclick="xmlhttpPost();">
                                 <img src="/Images/system-search-hi.png" />
                             </a>*@
-                            <div tabindex="0" class="BUTTONSTYLE gbqfb" onclick = "PostSearch();">
+                            <div id="idsearch" tabindex="0" class="BUTTONSTYLE gbqfb" onclick = "PostSearch();">
                                 Search
                             </div>
                         </form>
@@ -95,12 +104,31 @@
             @RenderSection("featured", required: false)
             thay dong nay bang doan code duoi
             *@
-            
-            <div class="featured">
-                <div class="content-wrapper">
-                    <span style="font-size:medium; color:White">Welcom to DaHu Groups. Learn more?</span>
-                </div>
-            </div>
+            @*<div style="overflow:hidden">
+                <div style="float:left;width:45%;height:50px">
+                    <div style="background-color: #4D90FE;color: #3e5667">
+                            <span style="font-size:medium; color:White; vertical-align:middle">Welcom to DaHu Groups. Learn more?</span>
+                    </div>  
+                </div>                   
+                <div style="float:left;width:55%">
+                    <div style="background-color: #4D90FE;color: #3e5667">
+                    sfdf
+                    </div>  
+                </div>                
+                    
+            </div>*@
+            <table style="background-color: #4D90FE;color: #3e5667;width:100%">
+                <tr style="height:40px">
+                    <td style="width:45%">
+                        <span style="font-size:medium; color:White; vertical-align:middle">Welcom to DaHu Groups. Learn more?</span>
+                    </td>
+                    <td style="width:55%">
+                        <span id="message" class="MESSAGE" style="display:none">
+                            Replying...
+                        </span>
+                    </td>
+                </tr>
+            </table>
 
             <div style="overflow:hidden">
                 <div style="float:left;width:240px">
@@ -116,6 +144,7 @@
             </div>
             <div style="width:100%; border-bottom: 1px solid rgba(0, 0, 0, 0.1)">
             </div>
+            
             @RenderSection("LeftMenu", required: false)
             
             <div id="main">

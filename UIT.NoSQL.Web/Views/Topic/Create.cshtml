@@ -12,17 +12,35 @@
 
 @section menu {
     <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group")
+        @*@Html.Action("TopMenuUser", "Group")*@
+        <div class="BUTTONSTYLE POSTTOPIC">Post Topic</div>
+        <div class="BUTTONSTYLE CANCELPOSTTOPIC" onclick = "BackGroup('@TempData["GroupId"]')">Cancel</div>
     </section>
 }
 
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.6.2.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")"></script>
+<script type="text/javascript">
+    function BackGroup(id) {
+        window.location = "/Group/Detail/" + id;
+    }
 
-@using (Html.BeginForm()) {
+    $(document).ready(function () {
+        $('.POSTTOPIC').click(function () {
+            $('#myForm').submit();
+        });
+    });
+</script>
+
+Group&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp<span style="font-size:medium;font-weight:bold">@ViewBag.GroupName</span><br/>
+Create by: @ViewBag.FullName<br/><br/>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myForm" }))
+{    
     @Html.ValidationSummary(true)
-
     <fieldset>
         <legend>TopicObject</legend>
         @Html.Hidden("GroupId", TempData["GroupId"])
@@ -49,11 +67,11 @@
         </div>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="POST" />
         </p>
     </fieldset>
 }
 
-<div>
+@*<div>
     @Html.ActionLink("Back to List", "Index")
-</div>
+</div>*@

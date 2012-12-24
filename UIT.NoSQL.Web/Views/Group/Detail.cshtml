@@ -89,7 +89,9 @@ top: 17px;
 
 @section menu {
     <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group")
+        @*@Html.Action("TopMenuUser", "Group")*@
+        <div class="BUTTONSTYLE CREATETOPIC" onclick = "createNewTopic('@ViewBag.GroupId')">Create New Topic</div>
+        <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId')">Manager</div>
     </section>
 }
 
@@ -122,6 +124,13 @@ top: 17px;
                 
             });
         });
+
+        function createNewTopic(id) {
+            window.location = "/Topic/Create/" + id;
+        }
+        function manage(id) {
+            window.location = "/Group/Manager/" + id;
+        }
     </script>
 
 
@@ -137,23 +146,23 @@ top: 17px;
         <tr id="@item.Id" style="background-color:White">
                 @if (!ViewBag.IsMember)
                 { 
-                    <td style="border-top: 1px solid #AFABAB" align="center" width="4%">
+                    <td style="border-top: 1px solid #DDDCDC;border-left: 1px solid #DDDCDC" align="center" width="4%">
                         <input type="checkbox" value="@item.Id" class="topic"/>
                     </td>
                 }
-                <td style="padding-top:4px;padding-left:4px;border-top: 1px solid #AFABAB" width="5%">
+                <td style="padding-top:4px;padding-left:4px;border-top: 1px solid #DDDCDC" width="5%">
                     <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat;" border="0">
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="46%">
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="46%">
                     @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="10%">
                     @Html.DisplayFor(modelItem => item.NumberOfView) lượt xem
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="10%">
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="10%">
                     @Html.DisplayFor(modelItem => item.NumberOfComment) bình luận 
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #AFABAB" width="25%">
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC;border-right: 1px solid #DDDCDC; border-bottom-style:" width="25%">
                     cập nhật @Html.DisplayFor(modelItem => item.LastModified)
                 </td>
              
@@ -163,33 +172,6 @@ top: 17px;
 }
 </table>
 
-@*<div>
-    <table cellspacing="0" cellpadding="0">
-    <tbody>
-        <tr>
-            <td>
-                <div tabindex="0">
-                    <div class="GI2MSK2DGL">
-                        <div><img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(https://groups.google.com/forum/96297F8C983EF6F2BE03872CBF36B4D2.cache.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0"></div>
-                    <div class="GI2MSK2DEL">
-                        <div class="GI2MSK2DDL">
-                            <a class="GI2MSK2DNH" href="#!topic/nosqldemo/FyUK9XUdTNM">chu de moi</a>
-                        </div>
-                    </div>
-                    <div class="GI2MSK2DEK">
-                        <div class="GI2MSK2DFK">
-                            <span class="GI2MSK2DDK">Tác giả Bùi Ngọc Huy</span>
-                            <span class="GI2MSK2DBL">7 bài đăng</span>
-                            <span class="GI2MSK2DBL" style="" aria-hidden="false">15 lượt xem</span>
-                            <span class="GI2MSK2DBL" style="" aria-hidden="false"> cập nhật <span>15 thg 11</span> </span>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
-</div>*@
+
 
 
