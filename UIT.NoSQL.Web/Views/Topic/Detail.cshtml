@@ -16,13 +16,14 @@
     </section>
 }
 
-
-        <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
+        @*<script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
         <script type="text/javascript" src="../../Scripts/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
         <script type="text/javascript" src="../../Plugin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.11.js"></script>
-        <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>
+        <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>*@
+        <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
+
         <script type="text/javascript">
             var userId, isMember;
             var editor, html = '';
@@ -63,16 +64,18 @@
             var flag1 = '<div class="hideContent"', flag2 = '</div>';
             var content = '', parentContent = '';
             function addComment() {
+                $("#message").hide();
+                $("#message").stop().css({ opacity: 1 }).clearQueue();
                 $("#message").html("Replying...");
-                document.getElementById('message').style.display = "";
-                
+                $("#message").show();
+
                 url = "/Topic/AddComment";
                 var topicId = document.getElementById('topicId').value;
                 var fullContent = editor.getData(); // fullContent = content + parentContent
                 content = fullContent.slice(0, fullContent.search(flag1));
                 parentContent = fullContent.slice((fullContent.search(flag2) + 6),fullContent.length-1);
                 $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
-                    $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 3000).fadeOut(5000); ;
+                    $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000); ;
                     removeEditor();
                     $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
                 });
@@ -100,7 +103,7 @@
 
             $(document).ready(function () {
                 //test
-                $('#fullEditor').attr('disabled','disabled');
+                //$('#fullEditor').attr('disabled','disabled');
 
                 userId = $('#userId').val();
                 isMember = $('#isMember').val();
@@ -129,19 +132,29 @@
                 });
 
                 $('.addComment').live('click', function () {
+                    var _this = $(this);
+                    $("#message").hide();
+                    $("#message").stop().css({ opacity: 1 }).clearQueue();
+                    $("#message").html("Replying...");
+                    $("#message").show();
+
                     url = "/Topic/AddComment";
                     var topicId = document.getElementById('topicId').value;
                     var fullContent = editor.getData(); // fullContent = content + parentContent
                     content = fullContent.slice(0, fullContent.search(flag1));
                     parentContent = fullContent.slice((fullContent.search(flag2) + 6), fullContent.length - 1);
-                    $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {     
+                    $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
+                        $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);
+                        //remove editor
+                        if (!editor)
+                            return;
+                        editor.destroy();
+                        editor = null;
+                        _this.parent().hide();
+
                         $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
                     });
-                    if (!editor)
-                        return;
-                    editor.destroy();
-                    editor = null;
-                    $(this).parent().hide();
+
                 });
                 $('.hideSubEditor').live('click', function () {
                     if (!editor)
@@ -167,19 +180,25 @@
 
                 // xoa comment 
                 $('.DELETECOMMENT').live('click', function () {
+                    var _this = $(this);
+                    $("#message").hide();
+                    $("#message").stop().css({ opacity: 1 }).clearQueue();
+                    $("#message").html("Deleting...");
                     var checkstr = confirm('Are you sure you want to delete this?');
-                    if (checkstr == true) {
+                    if (checkstr == true) { 
+                        $("#message").show();
+
                         // xoa comment
                         var commentId = $(this).next().val();
                         var url = "/Topic/DeleteComment";
                         var topicId = document.getElementById('topicId').value;
                         $.post(url, { topicId: topicId, commentId: commentId }, function (data) {
-                            //$("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
-                            //alert(data);
-                            //$(this).parents('.mainComment').replaceWith('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ');
-
+                            if (data == "success") {
+                                $("#message").html("Deleted.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);
+                                $('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ').replaceAll(_this.parents('.mainComment'));
+                            }
                         });
-                        $('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ').replaceAll($(this).parents('.mainComment'));
+                        
                     } else {
                         return false;
                     }

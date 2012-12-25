@@ -1,6 +1,5 @@
-﻿@model IEnumerable < UIT.NoSQL.Core.Domain.DenormalizedTopic < UIT.NoSQL.Core.Domain.TopicObject> >
+﻿@model IEnumerable<UIT.NoSQL.Core.Domain.DenormalizedTopic<UIT.NoSQL.Core.Domain.TopicObject>>
     
-
 <Style>
     .GI2MSK2DGQB .GI2MSK2DGL {
 padding: 4px;
@@ -86,7 +85,6 @@ top: 17px;
         @Html.Action("LeftMenu", "Home")
     </section>
 }
-
 @section menu {
     <section id="topmenu">
         @*@Html.Action("TopMenuUser", "Group")*@
@@ -95,20 +93,26 @@ top: 17px;
     </section>
 }
 
-
-    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery-1.6.2.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#deleteTopic').css({ "visibility": "hidden" });
             $('.topic').live('click', function () {
-                if ($('.topic').is(':checked')) {
+                if ($('.topic[checked!=true]').length == 0) {
+                    $('#checkAll').attr('checked', 'checked');
                     $('#deleteTopic').css({ "visibility": "visible" });
-                } else {
-                    $('#deleteTopic').css({ "visibility": "hidden" });
                 }
+                else {
+                    $('#checkAll').removeAttr('checked');
+                    if ($('.topic').is(':checked')) {
+                        $('#deleteTopic').css({ "visibility": "visible" });
+                    } else {
+                        $('#deleteTopic').css({ "visibility": "hidden" });
+                    }
+                }
+
+               
             });
-            $('#deleteTopic').live('click',function () {
+            $('#deleteTopic').live('click', function () {
                 var i;
                 var checkboxes = $('.topic:checkbox:checked');
                 var url = "/Topic/DeleteTopic";
@@ -116,12 +120,23 @@ top: 17px;
                 for (i = 0; i < checkboxes.length; i++) {
                     ids[i] = checkboxes[i].value;
                 }
-                $.post(url, { topicIds: ids.toString()}, function (data) {
+                $.post(url, { topicIds: ids.toString() }, function (data) {
                     for (var i = 0; i < ids.length; i++) {
-                        $("#" + ids[i]).remove();  
-                    }                 
+                        $("#" + ids[i]).remove();
+                    }
                 });
-                
+
+            });
+
+            $('#checkAll').click(function () {
+                if ($(this).attr('checked')) {
+                    $('.topic').attr('checked', 'checked');
+                    $('#deleteTopic').css({ "visibility": "visible" });
+                }
+                else {
+                    $('.topic').removeAttr('checked');
+                    $('#deleteTopic').css({ "visibility": "hidden" });
+                }
             });
         });
 
@@ -133,15 +148,32 @@ top: 17px;
         }
     </script>
 
-
-<h2>@ViewBag.GroupName</h2>
-<div id="deleteTopic" align="right" style="margin-bottom: 2px">
-    <span class="BUTTONSTYLE DELETETOPIC">DELETE</span>
-</div>
+<h2>@ViewBag.GroupName</h2><br/>
 <table cellspacing="0" cellpadding="0" width="100%">
+@if (Model.Count() > 0)
+{
+    <tr style="background-color:White">
+        @if (!ViewBag.IsMember)
+        {
+        <td align="center" width="4%">
+            <input type="checkbox" id="checkAll" value="checkAll" title="Check All"/>
+        </td>
+        }
+        <td style="padding-top:4px;padding-left:4px" width="5%">
+            <div id="deleteTopic" style="margin-bottom: 2px">
+                <span class="BUTTONSTYLE DELETETOPIC">Delete</span>
+            </div>
+        </td>
+        <td style="padding-left:10px" width="40%">Topic</td>
+        <td style="padding-left:10px" width="8%">No.Commets</td>
+        <td style="padding-left:10px" width="8%">No.Views</td>
+        <td style="padding-left:10px" width="10%">Create By</td>
+        <td style="padding-left:10px" width="25%">Last Update</td>
+    </tr>
+}
 @foreach (var item in Model)
 {
-    if(item.isDeleted == false)
+    if (item.isDeleted == false)
     {
         <tr id="@item.Id" style="background-color:White">
                 @if (!ViewBag.IsMember)
@@ -153,22 +185,25 @@ top: 17px;
                 <td style="padding-top:4px;padding-left:4px;border-top: 1px solid #DDDCDC" width="5%">
                     <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat;" border="0">
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="46%">
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="40%">
                     @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="10%">
-                    @Html.DisplayFor(modelItem => item.NumberOfView) lượt xem
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="8%">
+                    @Html.DisplayFor(modelItem => item.NumberOfComment)
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="10%">
-                    @Html.DisplayFor(modelItem => item.NumberOfComment) bình luận 
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="8%">
+                    @Html.DisplayFor(modelItem => item.NumberOfView)
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #DDDCDC;border-right: 1px solid #DDDCDC; border-bottom-style:" width="25%">
-                    cập nhật @Html.DisplayFor(modelItem => item.LastModified)
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="15%">
+                    @Html.DisplayFor(modelItem => item.CreateBy.FullName)
+                </td>
+                <td style="padding-left:10px;border-top: 1px solid #DDDCDC;border-right: 1px solid #DDDCDC; border-bottom-style:" width="20%">
+                    @Html.DisplayFor(modelItem => item.LastModified)
                 </td>
              
             </tr>
-        }
-        
+    }
+
 }
 </table>
 

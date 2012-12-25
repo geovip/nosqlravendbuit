@@ -21,8 +21,6 @@
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery-1.6.2.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")"></script>
 <script type="text/javascript">
     function BackGroup(id) {
         window.location = "/Group/Detail/" + id;
@@ -35,6 +33,7 @@
     });
 </script>
 
+<br/>
 Group&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp<span style="font-size:medium;font-weight:bold">@ViewBag.GroupName</span><br/>
 Create by: @ViewBag.FullName<br/><br/>
 
@@ -46,7 +45,7 @@ Create by: @ViewBag.FullName<br/><br/>
         @Html.Hidden("GroupId", TempData["GroupId"])
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.TopicName)
+            @Html.Label("Topic Name")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.TopicName)

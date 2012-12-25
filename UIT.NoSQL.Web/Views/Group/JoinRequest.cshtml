@@ -18,8 +18,8 @@
     }
 
 </script>
-<h2>JoinRequest</h2>
-
+<h2>Join Request</h2>
+<br/>
 @if (Model == null || Model.Count() == 0)
 {
     <h2>No request</h2>
@@ -29,14 +29,15 @@ else
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.User.UserName)
+            @Html.DisplayName("User Name")
         </th>
-        <th></th>
+        <th>
+        </th>
     </tr>
 
 @foreach (var item in Model)
 {
-    <tr id="@item.Id">
+    <tr id="@item.Id" style="background-color:White;border: 1px solid #DDDCDC">
         <td>
             @Html.DisplayFor(modelItem => item.User.UserName)
         </td>

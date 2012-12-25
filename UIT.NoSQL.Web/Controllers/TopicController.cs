@@ -231,7 +231,7 @@ namespace UIT.NoSQL.Web.Controllers
             topic.ListComment.Find(c => c.Id == commentId).isDeleted = true;
             topicService.Save(topic);
 
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
     }
 }

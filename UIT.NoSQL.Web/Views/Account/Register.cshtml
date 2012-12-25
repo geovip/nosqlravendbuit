@@ -4,8 +4,6 @@
     Layout = null;
 }
 
-    <h2>JsonRegister</h2>
-
     <script src="~/Scripts/jquery-1.6.2.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -25,7 +23,7 @@
             </div>
     
             <div class="editor-label">
-                @Html.LabelFor(model => model.UserName)
+                @Html.Label("User Name")
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.UserName)
@@ -33,7 +31,7 @@
             </div>
     
             <div class="editor-label">
-                @Html.LabelFor(model => model.Email)
+                @Html.Label("Email Address")
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Email)
@@ -57,11 +55,11 @@
             </div>
     
             <p>
-                <input type="submit" value="Create" />
+                <input type="submit" value="Register" />
             </p>
         </fieldset>
     }
     
-    <div>
+    @*<div>
         @Html.ActionLink("Back to List", "Index")
-    </div>
+    </div>*@

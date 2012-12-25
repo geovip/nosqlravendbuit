@@ -26,10 +26,11 @@
                 var windowHeight = window.innerHeight;
 
                 var main = document.getElementById("main");
-                var DivNav = document.getElementById("DivNav");
+
                 main.style.width = (windowWidth - 240) + "px";
                 main.style.height = (windowHeight - 180) + "px";
-                DivNav.style.width = (windowWidth - 240) + "px";
+//                var DivNav = document.getElementById("DivNav");
+//                DivNav.style.width = (windowWidth - 240) + "px";
 
                 var leftmenu = document.getElementById("leftmenu");
                 leftmenu.style.height = (windowHeight - 180) + "px";           
@@ -60,23 +61,38 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="float-left site-title">@Html.ActionLink("DaHu Group.", "Index", "Home")</p>
+                    @*<p class="float-left site-title">@Html.ActionLink("DaHu Groups", "Index", "Home")</p>*@
+                    <div style="overflow:hidden">
+                        <div style="float:left;width:197px; padding-top:18px">
+                             <a href='/' class="aimg"><img src="../../Images/logo-DaHuGroup.gif" alt="Home" /></a>
+                        </div>                   
+                        <div style="float:left">
+                            <div class="float-right search">
+                                <form action="/Search/Index" method="post" id="SearchForm"
+                                    onsubmit="xmlhttpPost(); return false;">
+                                    <input type="text" placeholder="Search here." class="text" id="searchStr" />
+                                    <div id="idsearch" tabindex="0" class="BUTTONSTYLE gbqfb" onclick = "PostSearch();">
+                                        Search
+                                    </div>
+                                </form>
+                            </div>
+                        </div>                
+                    </div>
 
+                    @*<img src="../../Images/logo-DaHuGroup.png" />
                     <div class="float-right search">
-
                         <form action="/Search/Index" method="post" id="SearchForm"
                             onsubmit="xmlhttpPost(); return false;">
 
                             <input type="text" placeholder="Search here." class="text" id="searchStr" />
                             @*<a href="javascript:{}" onclick="xmlhttpPost();">
                                 <img src="/Images/system-search-hi.png" />
-                            </a>*@
+                            </a>//
                             <div id="idsearch" tabindex="0" class="BUTTONSTYLE gbqfb" onclick = "PostSearch();">
                                 Search
                             </div>
                         </form>
-
-                    </div>
+                    </div>*@
                 </div>
                 <div class="float-right">
                     <section id="login">
@@ -91,11 +107,11 @@
                     </nav>
                 </div>
             </div>
-            <div id="DivNav" class="float-right">                
-                @*<nav>
+            @*<div id="DivNav" class="float-right">                
+                <nav>
                     @RenderSection("menu", required: false)
-                </nav>*@
-            </div>
+                </nav>
+            </div>*@
 
             <div class="clear"></div>
         </header>
@@ -119,7 +135,7 @@
             </div>*@
             <table style="background-color: #4D90FE;color: #3e5667;width:100%">
                 <tr style="height:40px">
-                    <td style="width:45%">
+                    <td style="padding-left:50px; width:45%">
                         <span style="font-size:medium; color:White; vertical-align:middle">Welcom to DaHu Groups. Learn more?</span>
                     </td>
                     <td style="width:55%">
@@ -146,13 +162,14 @@
             </div>
             
             @RenderSection("LeftMenu", required: false)
-            
+
             <div id="main">
                 @*@RenderSection("featured", required: false)*@
                 <section id="SectionMain" class="content-wrapper main-content clear-fix">                    
                         @RenderBody()                    
                 </section>
             </div>
+            
             <div class="clear-fix"></div>
         </div>
         <footer>
