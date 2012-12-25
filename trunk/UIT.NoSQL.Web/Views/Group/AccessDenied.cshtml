@@ -22,9 +22,10 @@
     <ul id="menu">
         @if(!TempData["GroupId"].Equals("null"))
         {
-        <li>
+        @*<li>
             <a href="javascript:{}" onclick="xmlhttpPost('@TempData["GroupId"]')">Join Group</a>
-        </li>    
+        </li>    *@
+            <div tabindex="0" class="BUTTONSTYLE JOINGROUP" onclick = "xmlhttpPost('@TempData["GroupId"]')">Join Group</div>
         }
 
         @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
