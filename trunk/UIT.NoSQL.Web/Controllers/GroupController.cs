@@ -56,9 +56,10 @@ namespace UIT.NoSQL.Web.Controllers
             IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
 
             var groupRole = groupRoleService.LoadByName(GroupRoleType.Owner);
-            
-            UserObject user = ((UserObject)Session["user"]);
-            string userId = user.Id;
+
+            string userId = ((UserObject)Session["user"]).Id;
+            UserObject user = userService.Load(userId);
+
             group.Id = Guid.NewGuid().ToString();
             group.CreateDate = DateTime.Now;
             group.CreateBy = user;
@@ -67,10 +68,12 @@ namespace UIT.NoSQL.Web.Controllers
             group.NewEvent.Title = "New group";
             group.NewEvent.CreateDate = group.CreateDate;
             group.NewEvent.CreateBy = user.FullName;
+            
+            groupService.Save(group);
 
             var userGroup = new UserGroupObject();
             userGroup.Id = Guid.NewGuid().ToString();
-            userGroup.UserId = userId;
+            userGroup.UserId = user.Id;
             userGroup.GroupId = group.Id;
             userGroup.GroupName = group.GroupName;
             userGroup.Description = group.Description;
@@ -78,15 +81,15 @@ namespace UIT.NoSQL.Web.Controllers
             userGroup.JoinDate = DateTime.Now;
             userGroup.GroupRole = groupRole;
             group.ListUserGroup.Add(userGroup);
-            
-            //var user = (UserObject)Session["user"];
+
+            userGroupService.Save(userGroup);
             user.ListUserGroup.Add(userGroup);
-            
+            Session["user"] = user;
+
             userService.Save(user);
             groupService.Save(group);
-            userGroupService.Save(userGroup);
 
-            return RedirectToAction("Detail", "Group", new  { id = group.Id });
+            return RedirectToAction("Detail", "Group", new { id = group.Id });
         }
 
         [MemberFilter(TypeID=TypeIDEnum.GroupID)]

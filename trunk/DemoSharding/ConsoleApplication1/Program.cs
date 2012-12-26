@@ -27,10 +27,14 @@ namespace DemoSharding
                     {CompanyEnum.America.ToString(), new DocumentStore {Url = "http://localhost:8083"}},
                 };
 
-            var shardStrategy = new ShardStrategy(shards);
-                //.ShardingOn<Company>(company => company.Region);
+            var shardStrategy = new ShardStrategy(shards)
+                .ShardingOn<Company>(company => company.Region);
                 //.ShardingOn<User>(u => u.CompanyId);
-            shardStrategy.ShardResolutionStrategy = new DefaultShardResolutionStrategy(shards.Keys, shardStrategy);
+            //shardStrategy.ShardResolutionStrategy = new DefaultShardResolutionStrategy(shards.Keys, shardStrategy);
+            DocumentConvention Conventions;
+            Conventions = shards.First().Value.Conventions.Clone();
+            shardStrategy.Conventions.IdentityPartsSeparator = "-";
+            shardStrategy.ModifyDocumentId = (convention, shardId, documentId) => shardId + convention.IdentityPartsSeparator + documentId;
 
             documentStore = new ShardedDocumentStore(shardStrategy).Initialize();
         }
@@ -39,30 +43,34 @@ namespace DemoSharding
         {
             var session = documentStore.OpenSession();
             RandomData rd = new RandomData();
-            //Company company = null;
+            Company company = null;
 
             //for (int i = 0; i < 10000; i++)
-            //{
-            //    company = new Company();
-            //    company.Id = Guid.NewGuid().ToString();
-            //    company.Name = rd.RandomString() + " " + rd.RandomString();
-            //    company.Region = region.ToString();
+            {
+                company = new Company();
+                company.Id = "1054e361-b123-4c12-aa41-ed15329f16ba";
+                company.Name = "444";
+                company.Region = region.ToString();
 
-            //    session.Store(company);
-            //}
+                session.Store(company);
+            }
 
+            session.SaveChanges();
+
+            //company.Name = "456";
+            //session.Store(company);
             //session.SaveChanges();
 
-            User user = null;
-            for (int i = 0; i < 10000; i++)
-            {
-                user = new User();
-                user.Id = Guid.NewGuid().ToString();
-                user.Name = rd.RandomString() + " " + rd.RandomString();
+            //User user = null;
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    user = new User();
+            //    user.Id = Guid.NewGuid().ToString();
+            //    user.Name = rd.RandomString() + " " + rd.RandomString();
 
-                session.Store(user);
-            }
-            session.SaveChanges();
+            //    session.Store(user);
+            //}
+            //session.SaveChanges();
         }
 
         public void Run()
@@ -133,12 +141,12 @@ namespace DemoSharding
             Program p = new Program();
 
             p.InitialData(CompanyEnum.Asia);
-            p.InitialData(CompanyEnum.MiddleEast);
+            //p.InitialData(CompanyEnum.MiddleEast);
             //p.InitialData(CompanyEnum.America);
 
             //p.Insert();
             p.documentStore.Dispose();
-
+            Console.WriteLine("Finish");
             Console.ReadLine();
         }
     }
