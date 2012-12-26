@@ -234,15 +234,6 @@ namespace UIT.NoSQL.Web
             new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
         }
 
-        public void InitalIndex()
-        {
-            foreach (var store in MvcApplication.documentStores)
-            {
-                InitalIndex(store);
-            }
-            new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
-        }
-
         public void Initialized2()
         {
             GroupRoleObject groupRoleManager, groupRoleOwner, groupRoleMember;
@@ -401,20 +392,37 @@ namespace UIT.NoSQL.Web
             }
             session.SaveChanges();
         }
+        
+        public void InitalIndex()
+        {
+            foreach (var store in MvcApplication.documentStores)
+            {
+                InitalIndex(store);
+            }
+            new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
+        }
 
         private void InitalIndex(IDocumentStore documentStore)
         {
             var session = documentStore.OpenSession();
 
-            documentStore.DatabaseCommands.DeleteIndex("GroupName");
-            documentStore.DatabaseCommands.PutIndex("GroupName", new IndexDefinitionBuilder<GroupObject>
+            //documentStore.DatabaseCommands.DeleteIndex("GroupName");
+            documentStore.DatabaseCommands.DeleteIndex("LoginIndex");
+
+            //documentStore.DatabaseCommands.PutIndex("GroupName", new IndexDefinitionBuilder<GroupObject>
+            //{
+            //    Map = gr => from g in gr
+            //                select new { g.GroupName, g.Description },
+            //    Indexes =
+            //    {
+            //        { x => x.GroupName, FieldIndexing.Analyzed}
+            //    }
+            //});
+
+            documentStore.DatabaseCommands.PutIndex("LoginIndex", new IndexDefinitionBuilder<UserObject>
             {
-                Map = gr => from g in gr
-                            select new { g.GroupName, g.Description },
-                Indexes =
-                {
-                    { x => x.GroupName, FieldIndexing.Analyzed}
-                }
+                Map = users => from u in users
+                            select new { u.UserName, u.Password }
             });
         }
 

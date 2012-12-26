@@ -53,7 +53,7 @@ namespace UIT.NoSQL.Service
         //Check Login success or not
         public bool CheckLoginSuccess(string username, string password)
         {
-            var userLogin = (from user in session.Query<UserObject>()
+            var userLogin = (from user in session.Query<UserObject>("LoginIndex")
                              where user.UserName.Equals(username) && user.Password.Equals(password)
                             select user).SingleOrDefault();
             if (userLogin == null)
