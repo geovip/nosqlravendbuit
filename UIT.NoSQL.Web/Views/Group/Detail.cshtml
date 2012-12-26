@@ -113,23 +113,26 @@ top: 17px;
 
             });
             $('#deleteTopic').live('click', function () {
-                var i;
-                var checkboxes = $('.topic:checkbox:checked');
-                var url = "/Topic/DeleteTopic";
-                var ids = new Array(checkboxes.length);
-                for (i = 0; i < checkboxes.length; i++) {
-                    ids[i] = checkboxes[i].value;
-                }
-                $.post(url, { topicIds: ids.toString() }, function (data) {
-                    if (data == "success") {
-                        for (var i = 0; i < ids.length; i++) {
-                            $("#" + ids[i]).remove();
+                var checkstr = confirm('Are you sure you want to delete this?');
+                if (checkstr == true) {
+                    var i;
+                    var checkboxes = $('.topic:checkbox:checked');
+                    var url = "/Topic/DeleteTopic";
+                    var ids = new Array(checkboxes.length);
+                    for (i = 0; i < checkboxes.length; i++) {
+                        ids[i] = checkboxes[i].value;
+                    }
+                    $.post(url, { topicIds: ids.toString() }, function (data) {
+                        if (data == "success") {
+                            for (var i = 0; i < ids.length; i++) {
+                                $("#" + ids[i]).remove();
+                            }
                         }
-                    }
-                    if ($('.topic').length == 0) {
-                        $('#tableTopic').remove();
-                    }
-                });
+                        if ($('.topic').length == 0) {
+                            $('#tableTopic').remove();
+                        }
+                    });
+                }
 
             });
 
