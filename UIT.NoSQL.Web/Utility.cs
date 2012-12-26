@@ -251,11 +251,13 @@ namespace UIT.NoSQL.Web
 
             for (int j = 0; j < MvcApplication.ServerRegion.Count; j++)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     Initialized3(MvcApplication.ServerRegion[j], groupRoleManager, groupRoleOwner, groupRoleMember, userObjectSA);
                 }
             }
+
+            InitalIndex();
         }
 
         private void CreateDataFix(out GroupRoleObject groupRoleManager, out GroupRoleObject groupRoleOwner, out GroupRoleObject groupRoleMember, out UserObject userObjectSA)
@@ -364,24 +366,27 @@ namespace UIT.NoSQL.Web
             session.Store(userObjectSA);
             //session.SaveChanges();
             Random rdInt = new Random();
-            
-            for (int i = 0; i < ListUser.Count; i++)
+            int n = ListUser.Count - 10;
+            for (int i = 0; i < n; i++)
             {
-                GroupObject groupRandom = ListGroup[rdInt.Next(0, ListGroup.Count)];
+                for (int j = 1; j < 10; j++)
+                {
+                    GroupObject groupRandom = ListGroup[j+i];
 
-                var userGroupRandom = new UserGroupObject();
-                userGroupRandom.Id = Guid.NewGuid().ToString();
-                userGroupRandom.UserId = ListUser[i].Id;
-                userGroupRandom.GroupId = groupRandom.Id;
-                userGroupRandom.GroupName = groupRandom.GroupName;
-                userGroupRandom.Description = groupRandom.Description;
-                userGroupRandom.IsApprove = UserGroupStatus.Approve;
-                userGroupRandom.JoinDate = DateTime.Now;
-                userGroupRandom.GroupRole = groupRoleMember;
+                    var userGroupRandom = new UserGroupObject();
+                    userGroupRandom.Id = Guid.NewGuid().ToString();
+                    userGroupRandom.UserId = ListUser[i].Id;
+                    userGroupRandom.GroupId = groupRandom.Id;
+                    userGroupRandom.GroupName = groupRandom.GroupName;
+                    userGroupRandom.Description = groupRandom.Description;
+                    userGroupRandom.IsApprove = UserGroupStatus.Approve;
+                    userGroupRandom.JoinDate = DateTime.Now;
+                    userGroupRandom.GroupRole = groupRoleMember;
 
-                groupRandom.ListUserGroup.Add(userGroupRandom);
-                ListUser[i].ListUserGroup.Add(userGroupRandom);
-                session.Store(userGroupRandom);
+                    groupRandom.ListUserGroup.Add(userGroupRandom);
+                    ListUser[i].ListUserGroup.Add(userGroupRandom);
+                    session.Store(userGroupRandom);
+                }
             }
 
             for (int i = 0; i < ListGroup.Count; i++)
@@ -395,8 +400,6 @@ namespace UIT.NoSQL.Web
                 session.Store(ListUser[i]);
             }
             session.SaveChanges();
-
-            InitalIndex();
         }
 
         private void InitalIndex(IDocumentStore documentStore)
