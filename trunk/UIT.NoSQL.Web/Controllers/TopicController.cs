@@ -157,7 +157,7 @@ namespace UIT.NoSQL.Web.Controllers
                     groupService.Save(group);
                 }
             }
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAll()
