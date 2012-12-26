@@ -1,4 +1,4 @@
-mot so tu dien tieng anh co nen dich ra khong. vi du: request data databace processing ...
+﻿mot so tu dien tieng anh co nen dich ra khong. vi du: request data databace processing ...
 
 nhung viec can lam tiep:
 - giao dien: button giong google group
@@ -11,3 +11,32 @@ nhung viec can lam tiep:
 - file bao cao
 	+ chi muc, muc luc
 	+ format: line spacing, cac table code
+
+26/12/2012
+In pdf
+1. Chinh trang bia-huy
+2. Loi mo dau-huy
+3. Muc luc -huy
+4. Danh muc bang so do hinh-huy
+5. Dan: -  1.1 van de tim hieu: viet thanh doan van va dai ra, khong gach dau dong ma tab zo
+        -  1.2 muc tieu de tai: tim hieu nosql, kien truc, cac phan loai
+	-  phan cuoi noi ve mot so dang nosql: mongodb, hadoop, raven. sau do tap trung gioi thieu raven
+6. Dan: -  2.1 nosql la gi: viet thanh doan van ko gach dau dong.
+	-  2.2 mot so khai niem trong nosql: index ~ counterparts sua lai cho nay. bang tuong quan danh so
+	-  2.3, 2.4 dua len truoc
+	-  2.5 kien truc thieu cai hinh
+	-  2.6 mot so thuat ngu lien quan: nen xem lai
+	-  trang 8 - chua du "chin"
+	-  trang 10 - dư document, tên hình thiếu, mô tả dữ liệu trước cái hình.
+7. Huy: -  code in nghien, bo mot so hinh trong tinh nang ravendb
+	-  coi lai bo cuc bao cao, danh chi muc lai 
+	-  mot so nguon thi neu nguon trich dan ra
+	-  phan nao ko can thiet thi dua qua phu luc
+8. Dan: - chuong 5: tieu de tren 1 dong
+	- 5.2 ly do chon de tai: viet dai ra, neu nhung han che rdbms, nhung yeu cau hien tai ma nosql dap ung duoc=> chon nosql
+	- 5.3 neu cac chuc nang cua chuong trinh bang tieng viet
+	- use cae
+9. Huy: - ket qua dat duoc: 
+	- ly thuyet: tom tat lai nhung dang nosql da tim hieu
+	- thuc te: xay dung chuong trinh nhu the nao gom nhung chuc nang gi 
+		
