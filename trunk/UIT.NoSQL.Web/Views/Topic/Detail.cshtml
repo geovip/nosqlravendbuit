@@ -167,13 +167,13 @@
                 // hien thi noi dung trich dan
                 $('.aShowHideParentComment').live('click', function () {
                     var divTemp = $(this).parent().find('.divShowHideParentComment');
-                    if ($(this).text() == "-hiển thị nội dung trích dẫn-") {
+                    if ($(this).text() == "-show quote-") {
                         divTemp.attr('style', 'display:""');
-                        $(this).text('-ẩn nội dung trích dẫn-');
+                        $(this).text('-hide quote-');
                     }
                     else {
                         divTemp.attr('style', 'display:none');
-                        $(this).text('-hiển thị nội dung trích dẫn-');
+                        $(this).text('-show quote-');
                     }
 
                 });
@@ -195,7 +195,7 @@
                         $.post(url, { topicId: topicId, commentId: commentId }, function (data) {
                             if (data == "success") {
                                 $("#message").html("Deleted.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);
-                                $('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>Bài viết này đã bị xóa.</span></div> ').replaceAll(_this.parents('.mainComment'));
+                                $('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>This post was deleted.</span></div> ').replaceAll(_this.parents('.mainComment'));
                             }
                         });
                         
