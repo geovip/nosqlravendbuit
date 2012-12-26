@@ -24,11 +24,6 @@ namespace UIT.NoSQL.Web
 
         public void Initialized()
         {
-            List<GroupRoleObject> listRole = new List<GroupRoleObject>();
-            List<UserObject> listUser = new List<UserObject>();
-            List<UserGroupObject> listUserGroup = new List<UserGroupObject>();
-            List<GroupObject> listGroup = new List<GroupObject>();
-            
             //create data sample
             GroupRoleObject groupRole = null;
             groupRole = new GroupRoleObject();
@@ -237,6 +232,171 @@ namespace UIT.NoSQL.Web
                 InitalIndex(store);
             }
             new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
+        }
+
+        public void InitalIndex()
+        {
+            foreach (var store in MvcApplication.documentStores)
+            {
+                InitalIndex(store);
+            }
+            new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
+        }
+
+        public void Initialized2()
+        {
+            GroupRoleObject groupRoleManager, groupRoleOwner, groupRoleMember;
+            UserObject userObjectSA;
+            CreateDataFix(out groupRoleManager, out groupRoleOwner, out groupRoleMember, out userObjectSA);
+
+            for (int j = 0; j < MvcApplication.ServerRegion.Count; j++)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Initialized3(MvcApplication.ServerRegion[j], groupRoleManager, groupRoleOwner, groupRoleMember, userObjectSA);
+                }
+            }
+        }
+
+        private void CreateDataFix(out GroupRoleObject groupRoleManager, out GroupRoleObject groupRoleOwner, out GroupRoleObject groupRoleMember, out UserObject userObjectSA)
+        {
+            //create data sample
+            groupRoleManager = new GroupRoleObject();
+            groupRoleManager.Id = "7E946ED1-69E6-4B45-8273-FB7AC7367F50";
+            groupRoleManager.GroupName = "Manager";
+            groupRoleManager.IsGeneral = MvcApplication.ServerGeneral;
+            session.Store(groupRoleManager);
+
+            groupRoleMember = new GroupRoleObject();
+            groupRoleMember.Id = "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
+            groupRoleMember.GroupName = "Member";
+            groupRoleMember.IsGeneral = MvcApplication.ServerGeneral;
+            session.Store(groupRoleMember);
+
+            groupRoleOwner = new GroupRoleObject();
+            groupRoleOwner.Id = "79C6B725-F787-4FDF-B820-42A21174449D";
+            groupRoleOwner.GroupName = "Owner";
+            groupRoleOwner.IsGeneral = MvcApplication.ServerGeneral;
+            session.Store(groupRoleOwner);
+
+            //user sa
+            userObjectSA = new UserObject();
+            userObjectSA.Id = "D035A3B8-961D-4DA0-827A-D58E8FCE3832";
+            userObjectSA.FullName = "Duong Than Dan";
+            userObjectSA.UserName = "sa";
+            userObjectSA.Password = "c4ca4238a0b923820dcc509a6f75849b";
+            userObjectSA.Email = "duongthandan@gmail.com";
+            userObjectSA.Region = MvcApplication.ServerRegion[0];
+            session.Store(userObjectSA);
+
+            session.SaveChanges();
+        }
+
+        public void Initialized3(string serverRegion, GroupRoleObject groupRoleManager, GroupRoleObject groupRoleOwner, GroupRoleObject groupRoleMember, UserObject userObjectSA)
+        {
+            //data random
+            List<UserObject> ListUser = new List<UserObject>();
+            List<GroupObject> ListGroup = new List<GroupObject>();
+            UserObject userObject = null;
+            GroupObject groupObject = null;
+            RandomData randomData = new RandomData();
+
+            
+            for (int i = 0; i < 1000; i++)
+            {
+                userObject = new UserObject();
+                userObject.Id = Guid.NewGuid().ToString();
+                userObject.FullName = randomData.RandomString() + " " + randomData.RandomString();
+                userObject.UserName = randomData.RandomString();
+                userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
+                userObject.Email = randomData.RandomString() + "@" + randomData.RandomString();
+                userObject.Region = serverRegion;
+                session.Store(userObject);
+
+                groupObject = new GroupObject();
+                groupObject.Id = Guid.NewGuid().ToString();
+                groupObject.GroupName = randomData.RandomString();
+                groupObject.Description = randomData.RandomString() + " " + randomData.RandomString();
+                groupObject.IsPublic = false;
+                groupObject.CreateDate = DateTime.Now;
+                groupObject.CreateBy = userObject;
+                groupObject.NewEvent = new GroupEvent();
+                groupObject.NewEvent.Title = "New group";
+                groupObject.NewEvent.CreateDate = groupObject.CreateDate;
+                groupObject.NewEvent.CreateBy = userObject.FullName;
+                session.Store(groupObject);
+
+                var userGroupRandom = new UserGroupObject();
+                userGroupRandom.Id = Guid.NewGuid().ToString();
+                userGroupRandom.UserId = userObject.Id;
+                userGroupRandom.GroupId = groupObject.Id;
+                userGroupRandom.GroupName = groupObject.GroupName;
+                userGroupRandom.Description = groupObject.Description;
+                userGroupRandom.IsApprove = UserGroupStatus.Approve;
+                userGroupRandom.JoinDate = DateTime.Now;
+                userGroupRandom.GroupRole = groupRoleOwner;
+
+                groupObject.ListUserGroup.Add(userGroupRandom);
+                userObject.ListUserGroup.Add(userGroupRandom);
+                session.Store(userGroupRandom);
+
+                userGroupRandom = new UserGroupObject();
+                userGroupRandom.Id = Guid.NewGuid().ToString();
+                userGroupRandom.UserId = userObjectSA.Id;
+                userGroupRandom.GroupId = groupObject.Id;
+                userGroupRandom.GroupName = groupObject.GroupName;
+                userGroupRandom.Description = groupObject.Description;
+                userGroupRandom.IsApprove = UserGroupStatus.Approve;
+                userGroupRandom.JoinDate = DateTime.Now;
+                userGroupRandom.GroupRole = groupRoleManager;
+
+                groupObject.ListUserGroup.Add(userGroupRandom);
+                userObjectSA.ListUserGroup.Add(userGroupRandom);
+
+                session.Store(userGroupRandom);
+                session.Store(groupObject);
+                session.Store(userObject);
+
+                ListUser.Add(userObject);
+                ListGroup.Add(groupObject);
+            }
+
+            session.Store(userObjectSA);
+            //session.SaveChanges();
+            Random rdInt = new Random();
+            
+            for (int i = 0; i < ListUser.Count; i++)
+            {
+                GroupObject groupRandom = ListGroup[rdInt.Next(0, ListGroup.Count)];
+
+                var userGroupRandom = new UserGroupObject();
+                userGroupRandom.Id = Guid.NewGuid().ToString();
+                userGroupRandom.UserId = ListUser[i].Id;
+                userGroupRandom.GroupId = groupRandom.Id;
+                userGroupRandom.GroupName = groupRandom.GroupName;
+                userGroupRandom.Description = groupRandom.Description;
+                userGroupRandom.IsApprove = UserGroupStatus.Approve;
+                userGroupRandom.JoinDate = DateTime.Now;
+                userGroupRandom.GroupRole = groupRoleMember;
+
+                groupRandom.ListUserGroup.Add(userGroupRandom);
+                ListUser[i].ListUserGroup.Add(userGroupRandom);
+                session.Store(userGroupRandom);
+            }
+
+            for (int i = 0; i < ListGroup.Count; i++)
+            {
+                session.Store(ListGroup[i]);
+            }
+            session.SaveChanges();
+
+            for (int i = 0; i < ListUser.Count; i++)
+            {
+                session.Store(ListUser[i]);
+            }
+            session.SaveChanges();
+
+            InitalIndex();
         }
 
         private void InitalIndex(IDocumentStore documentStore)

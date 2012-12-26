@@ -124,7 +124,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         public string Initialized()
         {
-            new Utility(MvcApplication.CurrentSession).Initialized();
+            new Utility(MvcApplication.CurrentSession).Initialized2();
 
             return "Initialized data success!!!<br/><a href='/Home'>Go Home</a>";
         }
