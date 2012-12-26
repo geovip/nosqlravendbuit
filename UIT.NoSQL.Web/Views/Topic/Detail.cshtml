@@ -239,14 +239,14 @@
                              </td>
                              <td align="right" width=70%">
                                 <span>${$item.getCreateDate}</span> 
-                                <span class="BUTTONSTYLE REPLYBUTTON">Đăng trả lời</span>
+                                <span class="BUTTONSTYLE REPLYBUTTON">Post Reply</span>
                              </td>
                              <td align="left" width="10%">
                                 {{if !isMember}}
-                                    <span class="BUTTONSTYLE DELETECOMMENT">Xóa</span>
+                                    <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
                                     <input type="hidden" value="${Id}">
                                 {{else $item.compareUserId }}
-                                    <span class="BUTTONSTYLE DELETECOMMENT">Xóa</span>
+                                    <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
                                     <input type="hidden" value="${Id}">
                                 {{/if}}
 
@@ -281,7 +281,7 @@
     </script>
 
         
-        @*<a href="#" style="text-decoration:none" onclick="createEditor()"><span style="font-weight:bold;font-size:larger; color:White; background-color:Red">ĐĂNG TRẢ LỜI</span></a>*@
+        <br/>
         <input id="topicId" type="hidden" value="@Model.Id" />
         <input id="userId" type="hidden" value="@ViewBag.UserId" />
         <input id="isMember" type="hidden" value="@ViewBag.IsMember" />
@@ -290,7 +290,7 @@
 
         <div id="topic" tabindex="0">
             <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/><br/>
-            <span id="dateAndUser" >Vào <span id="createDate"></span>, <span id="createBy" style="color: rgb(0, 104, 28);font-weight:bold"></span> đã viết:</span><br />
+            <span id="dateAndUser" >At <span id="createDate"></span>, <span id="createBy" style="color: rgb(0, 104, 28);font-weight:bold"></span> wrote:</span><br />
             <div tabindex="0">
                 <span id="content"></span><br />
             </div>
@@ -298,12 +298,12 @@
 
         <!-- This div will hold the editor. -->
         <div id = "fullEditor" style="display:none">
-            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Đăng</span>
-            <span class="BUTTONSTYLE CANCELEDITOR"  onclick="removeEditor()">Hủy</span>
+            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Post</span>
+            <span class="BUTTONSTYLE CANCELEDITOR"  onclick="removeEditor()">Cancel</span>
             <div id="editor" style="margin-bottom:4px;margin-top:4px">
 	        </div>
-            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Đăng</span>
-            <span class="BUTTONSTYLE CANCELEDITOR" onclick="removeEditor()">Hủy</span>
+            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Post</span>
+            <span class="BUTTONSTYLE CANCELEDITOR" onclick="removeEditor()">Cancel</span>
         </div>
         <div id = "listComment">
         </div>
