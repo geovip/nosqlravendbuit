@@ -26,7 +26,7 @@ namespace UIT.NoSQL.Service
         //Load UserObject based on UserName
         public UserObject LoadByUserName(string username)
         {
-            return session.Query<UserObject>().Where(u => u.UserName == username).SingleOrDefault();
+            return session.Query<UserObject>().Where(u => u.UserName == username).FirstOrDefault();
         }
 
         // Get all users
@@ -55,7 +55,7 @@ namespace UIT.NoSQL.Service
         {
             var userLogin = (from user in session.Query<UserObject>("LoginIndex")
                              where user.UserName.Equals(username) && user.Password.Equals(password)
-                            select user).SingleOrDefault();
+                            select user).FirstOrDefault();
             if (userLogin == null)
                 return false;
             return true;

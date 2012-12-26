@@ -300,9 +300,9 @@ namespace UIT.NoSQL.Web
                 userObject = new UserObject();
                 userObject.Id = Guid.NewGuid().ToString();
                 userObject.FullName = randomData.RandomString() + " " + randomData.RandomString();
-                userObject.UserName = randomData.RandomString();
+                userObject.UserName = randomData.RandomShortString();
                 userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
-                userObject.Email = randomData.RandomString() + "@" + randomData.RandomString();
+                userObject.Email = randomData.RandomShortString() + "@" + randomData.RandomShortString();
                 userObject.Region = serverRegion;
                 session.Store(userObject);
 
@@ -356,40 +356,40 @@ namespace UIT.NoSQL.Web
 
             session.Store(userObjectSA);
             //session.SaveChanges();
-            Random rdInt = new Random();
-            int n = ListUser.Count - 10;
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 1; j < 10; j++)
-                {
-                    GroupObject groupRandom = ListGroup[j+i];
+            //Random rdInt = new Random();
+            //int n = ListUser.Count - 10;
+            //for (int i = 0; i < n; i++)
+            //{
+            //    for (int j = 1; j < 10; j++)
+            //    {
+            //        GroupObject groupRandom = ListGroup[j+i];
 
-                    var userGroupRandom = new UserGroupObject();
-                    userGroupRandom.Id = Guid.NewGuid().ToString();
-                    userGroupRandom.UserId = ListUser[i].Id;
-                    userGroupRandom.GroupId = groupRandom.Id;
-                    userGroupRandom.GroupName = groupRandom.GroupName;
-                    userGroupRandom.Description = groupRandom.Description;
-                    userGroupRandom.IsApprove = UserGroupStatus.Approve;
-                    userGroupRandom.JoinDate = DateTime.Now;
-                    userGroupRandom.GroupRole = groupRoleMember;
+            //        var userGroupRandom = new UserGroupObject();
+            //        userGroupRandom.Id = Guid.NewGuid().ToString();
+            //        userGroupRandom.UserId = ListUser[i].Id;
+            //        userGroupRandom.GroupId = groupRandom.Id;
+            //        userGroupRandom.GroupName = groupRandom.GroupName;
+            //        userGroupRandom.Description = groupRandom.Description;
+            //        userGroupRandom.IsApprove = UserGroupStatus.Approve;
+            //        userGroupRandom.JoinDate = DateTime.Now;
+            //        userGroupRandom.GroupRole = groupRoleMember;
 
-                    groupRandom.ListUserGroup.Add(userGroupRandom);
-                    ListUser[i].ListUserGroup.Add(userGroupRandom);
-                    session.Store(userGroupRandom);
-                }
-            }
+            //        groupRandom.ListUserGroup.Add(userGroupRandom);
+            //        ListUser[i].ListUserGroup.Add(userGroupRandom);
+            //        session.Store(userGroupRandom);
+            //    }
+            //}
 
-            for (int i = 0; i < ListGroup.Count; i++)
-            {
-                session.Store(ListGroup[i]);
-            }
-            session.SaveChanges();
+            //for (int i = 0; i < ListGroup.Count; i++)
+            //{
+            //    session.Store(ListGroup[i]);
+            //}
+            //session.SaveChanges();
 
-            for (int i = 0; i < ListUser.Count; i++)
-            {
-                session.Store(ListUser[i]);
-            }
+            //for (int i = 0; i < ListUser.Count; i++)
+            //{
+            //    session.Store(ListUser[i]);
+            //}
             session.SaveChanges();
         }
         
@@ -406,19 +406,7 @@ namespace UIT.NoSQL.Web
         {
             var session = documentStore.OpenSession();
 
-            //documentStore.DatabaseCommands.DeleteIndex("GroupName");
             documentStore.DatabaseCommands.DeleteIndex("LoginIndex");
-
-            //documentStore.DatabaseCommands.PutIndex("GroupName", new IndexDefinitionBuilder<GroupObject>
-            //{
-            //    Map = gr => from g in gr
-            //                select new { g.GroupName, g.Description },
-            //    Indexes =
-            //    {
-            //        { x => x.GroupName, FieldIndexing.Analyzed}
-            //    }
-            //});
-
             documentStore.DatabaseCommands.PutIndex("LoginIndex", new IndexDefinitionBuilder<UserObject>
             {
                 Map = users => from u in users
@@ -449,6 +437,13 @@ namespace UIT.NoSQL.Web
         public RandomData()
         {
             random = new Random((int)DateTime.Now.Ticks);
+        }
+
+        public string RandomShortString()
+        {
+            string path = Path.GetRandomFileName();
+            path = path.Replace(".", "");
+            return path;
         }
 
         public string RandomString()
