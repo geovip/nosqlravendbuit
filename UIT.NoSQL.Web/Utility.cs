@@ -293,7 +293,6 @@ namespace UIT.NoSQL.Web
             UserObject userObject = null;
             GroupObject groupObject = null;
             RandomData randomData = new RandomData();
-
             
             for (int i = 0; i < 1000; i++)
             {

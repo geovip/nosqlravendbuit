@@ -38,13 +38,13 @@ else
 @foreach (var item in Model)
 {
     <tr id="@item.Id" style="background-color:White;border: 1px solid #DDDCDC">
-        <td>
+        <td width="25%">
             @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
-        <td>
+        <td width="15%">
             <a href="javascript:{}" onclick="xmlhttpPost('/Group/ActiveRequest','@item.Id')">Accept Member</a>
         </td>
-        <td>
+        <td width="15%">
             <a href="javascript:{}" onclick="xmlhttpPost('/Group/RejectRequest/','@item.Id')">Reject</a>
         </td>
     </tr>
