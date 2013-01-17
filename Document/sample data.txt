@@ -1,0 +1,12 @@
+user: 10.000
+group: 20.000
+
+usergroup: 
+	owner: 20.000 
+	member: 10.000*40
+
+qf2u3qyvvo0
+
+qhx20pvdast
+
+s3d5jyrt5uv
