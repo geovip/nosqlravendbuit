@@ -1,0 +1,70 @@
+<groups>
+	<GroupName>
+	</GroupName>
+	<Description>
+	</Description>
+	<CreateDate>
+	</CreateDate>
+	<CreateBy>
+		<Id>
+		</Id>
+		<FullName>
+		</FullName>
+	</CreateBy>
+	<NewEvent>
+		<Title>
+		</Title>
+		<CreateBy>
+		</CreateBy>
+		<CreateDate>
+		</CreateDate>
+	</NewEvent>
+<IsPublic>
+</IsPublic>
+<ListTopic>
+	<Id>
+	</Id>
+	<TopicName>
+	</TopicName>
+	<CreateBy>
+		<Id>
+		</Id>
+		<FullName>
+		</FullName>
+	</CreateBy>
+	<LastModified>
+	</LastModified>
+	<NumberOfView>
+	</NumberOfView>
+	<NumberOfComment>
+	</NumberOfComment>
+	<isDeleted>
+	</isDeleted>
+</ListTopic>
+<ListUserGroup>
+	<Id>
+	</Id>
+	<UserId>
+	</UserId>
+	<User>
+	</User>
+	<GroupId>
+	</GroupId>
+	<GroupName>
+	</GroupName>
+	<Description>
+	</Description>
+	<JoinDate>
+	</JoinDate>
+	<IsApprove>
+	</IsApprove>
+	<GroupRole>
+		<Id>
+		</Id>
+		<GroupName>
+		</GroupName>
+		<IsGeneral>
+		</IsGeneral>
+	</GroupRole>
+</ListUserGroup>
+</groups>
