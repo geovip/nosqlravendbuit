@@ -96,13 +96,24 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Detail(string id)
         {
             var group = groupService.Load(id);
+            bool isMember = false;
 
             UserObject user = (UserObject)Session["user"];
-            var role = user.ListUserGroup.Find(u => u.GroupId == id).GroupRole.GroupName;
-            if(role.Equals("Member"))
-                ViewBag.IsMember = true;
-            else
+            if (user == null)
+            {
                 ViewBag.IsMember = false;
+            }
+            else
+            {
+
+                var role = user.ListUserGroup.Find(u => u.GroupId == id);
+                if (role != null && role.GroupRole.GroupName.Equals("Member"))
+                {
+                    ViewBag.IsMember = true;
+                }
+            }
+
+            ViewBag.IsMember = isMember;
             ViewBag.GroupName = group.GroupName;
             ViewBag.GroupId = group.Id;
 

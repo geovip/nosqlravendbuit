@@ -8,6 +8,15 @@
         @Html.Action("LeftMenu", "Home", new {id = ""})
     </section>
 }
+<script type="text/javascript">
+
+    function aaa() {
+        $tags = simplexml_load_file("http://api.ipinfodb.com/v3/ip-country/?key=b944be0ad83f963d1e49482a1f19681b81986257e222624d0ae6da30c99d061f&ip=113.161.92.123&format=json");
+
+        alert($tags);
+    }
+</script>
+
 
 @*@section featured {
 <section class="featured">

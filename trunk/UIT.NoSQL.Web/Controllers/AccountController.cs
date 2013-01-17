@@ -84,6 +84,7 @@ namespace UIT.NoSQL.Web.Controllers
                 user.Email = model.Email;
                 user.Password = Utility.GetMd5Hash(model.Password);
                 user.CreateDate = DateTime.Now;
+                user.Region = MvcApplication.ServerGeneral;
                 userService.Save(user);
 
                 //

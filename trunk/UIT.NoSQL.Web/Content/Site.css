@@ -421,6 +421,7 @@ fieldset {
     }
 
     fieldset input[type="text"],
+    fieldset input[type="email"],
     fieldset input[type="password"] {
         border: 1px solid #e2e2e2;
         color: #333;
@@ -431,6 +432,7 @@ fieldset {
     }
 
         fieldset input[type="text"]:focus,
+        fieldset input[type="email"]:focus,
         fieldset input[type="password"]:focus {
             border: 1px solid #7ac0da;
         }
@@ -450,6 +452,7 @@ fieldset {
 }
 
     .modal-popup input[type="text"],
+    .modal-popup input[type="email"],
     .modal-popup input[type="password"] {
         width: 90%;
     }

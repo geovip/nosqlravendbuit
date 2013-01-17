@@ -47,14 +47,22 @@ namespace UIT.NoSQL.Web.Controllers
 
                 // kiem tra quyen cua user
                 UserObject user = (UserObject)(Session["user"]);
-                string role = user.ListUserGroup.Find(u => u.GroupId == topic.GroupId).GroupRole.GroupName;
-
-                // dua du lieu ra View gom UserId de kiem tra co cho xoa bai dang hay khong
-                if (role == "Manager" || role == "Owner" )
-                    ViewBag.IsMember = false;
+                if (user == null)
+                {
+                    ViewBag.GroupPublic = true;
+                }
                 else
-                    ViewBag.IsMember = true;
-                ViewBag.UserId = user.Id;
+                {
+                    ViewBag.GroupPublic = false;
+                    string role = user.ListUserGroup.Find(u => u.GroupId == topic.GroupId).GroupRole.GroupName;
+
+                    // dua du lieu ra View gom UserId de kiem tra co cho xoa bai dang hay khong
+                    if (role == "Manager" || role == "Owner")
+                        ViewBag.IsMember = false;
+                    else
+                        ViewBag.IsMember = true;
+                    ViewBag.UserId = user.Id;
+                }
                 return View(topic);
             }
             else
