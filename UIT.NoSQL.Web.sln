@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIT.NoSQL.Service", "UIT.No
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIT.NoSQL.Core", "UIT.NoSQL.Core\UIT.NoSQL.Core.csproj", "{AF804DA5-B589-46AB-8A0A-BE847EE3D019}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateDataSample", "CreateDataSample\CreateDataSample.csproj", "{FB0F4000-C9B6-41E0-850B-F13FE94B1708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsertDataSampleToRavenDB", "InsertDataSampleToRavenDB\InsertDataSampleToRavenDB.csproj", "{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{AF804DA5-B589-46AB-8A0A-BE847EE3D019}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF804DA5-B589-46AB-8A0A-BE847EE3D019}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF804DA5-B589-46AB-8A0A-BE847EE3D019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB0F4000-C9B6-41E0-850B-F13FE94B1708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB0F4000-C9B6-41E0-850B-F13FE94B1708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB0F4000-C9B6-41E0-850B-F13FE94B1708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB0F4000-C9B6-41E0-850B-F13FE94B1708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

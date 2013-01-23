@@ -1,12 +1,27 @@
-user: 10.000
-group: 20.000
+﻿users: 10.000
+groups: 20.000
 
-usergroup: 
-	owner: 20.000 
-	member: 10.000*40
+usergroups: 
+	owners: 20.000 
+	members: 10.000*100
+topics/1 group: 1000 => total: 20.000 * 1000
+comments/ 1topic: 100 => total: 20.000 * 1000 * 100
 
 qf2u3qyvvo0
 
 qhx20pvdast
 
 s3d5jyrt5uv
+
+Kịch bản:
+- Bước 1: chuẩn bị 10.000 users có tên đầy đủ đàng hoàng, username đăng nhập không trùng nhau, mật khẩu mặc định là 123456 => có 10.000 records users
+- Bước 2: chuẩn bị 20.000 groups có tên group đàng hoàng và không trùng nhau,người tạo là 1 trong 10.000 users trên(random ngẫu nhiên) => có 20.000 records groups
+	Trong quá trình tạo groups thì chúng ta tạo ra usergroups theo quy tắc là: 
+	* mỗi group cần 1 user làm owner (1 user có thể làm owner của nhiều group hoặc ko group nào, trung bình 1user làm owner 2 group)=> có 20.000 records usergroups owner
+	* mỗi group có 50 member (hoặc cách tiếp cận khác: 1 user thuộc 100 group)=> có 20.000 * 50 records usergroups member ( = 10.000 * 100 = 1.000.000 records)
+	Trong quá trình tạo group thì đối tượng usergroups mới được lưu vào 2 đối tượng cha là user và group
+- Bước 3: chuẩn bị 1.000 topics cho mỗi group => có 1.000 * 20.000 = 20.000.000 records topics
+	Trong quá trình lưu topic xuống thì có lưu DenormalizedTopic vào trong Group
+- Bước 4: chuẩn bị 100 comments cho mỗi topic => có 100 * 20.000.000 = 2.000.000.000 (2 tỷ records)
+	Quá trình lưu comment xuống là quá trình update lại Topic
+- Bước 5: chuẩn bị một số dữ liệu cho GroupRole, NewEvent...
