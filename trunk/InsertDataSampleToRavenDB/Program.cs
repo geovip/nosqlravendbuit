@@ -1,5 +1,7 @@
-﻿using Raven.Client;
+﻿using Raven.Abstractions.Indexing;
+using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 using Raven.Client.Shard;
 using System;
 using System.Collections.Generic;
@@ -45,8 +47,9 @@ namespace InsertDataSampleToRavenDB
             st.Start();
             
             Init();
-
-            InsertDataSampleToServers();
+            //InsertDataSampleToServers();
+            //InitIndexes();
+            FullTextSearch();
 
             st.Stop();
             Console.WriteLine("Insert Data Sample Success!");
@@ -87,7 +90,51 @@ namespace InsertDataSampleToRavenDB
 
             //set server general
             ServerGeneral = shardName;
-        }        
+        }
+
+        public static void InitIndexes()
+        {
+            foreach (var doc in documentStores)
+            {
+                IndexCreation.CreateIndexes(typeof(LoginIndex).Assembly,doc);
+                IndexCreation.CreateIndexes(typeof(GroupIndex).Assembly, doc);
+                IndexCreation.CreateIndexes(typeof(GroupObject_Search).Assembly, doc);
+            }     
+        }
+
+        public class LoginIndex : AbstractIndexCreationTask<UserObject>
+        {
+            public LoginIndex()
+            {
+                Map = users => from user in users
+                               select new { user.Id, user.UserName, user.Password };
+            }
+        }
+
+        public class GroupIndex : AbstractIndexCreationTask<GroupObject>
+        {
+            public GroupIndex()
+            {
+                Map = groups => from g in groups
+                                select new { g.Id };
+            }
+        }
+
+        public class GroupObject_Search : AbstractIndexCreationTask<GroupObject>
+        {
+            public GroupObject_Search()
+            {
+                Map = groups => from g in groups
+                                select new
+                                {
+                                    g.GroupName,
+                                    g.Description,
+                                    g.CreateBy.FullName
+                                };
+                Indexes.Add(x => x.GroupName, FieldIndexing.Analyzed);
+                Indexes.Add(x=> x.Description, FieldIndexing.Analyzed);
+            }
+        }
 
         /// <summary>
         ///  ham insert du lieu chinh
@@ -177,6 +224,7 @@ namespace InsertDataSampleToRavenDB
                 int lengthListUserReferecen = listUserReference.Count;
                 UserObject userObjectRandom;
                 UserObject userObjectReal;
+                string region;
                 foreach (var group in listGroup)
                 {
                     // tao group
@@ -190,6 +238,7 @@ namespace InsertDataSampleToRavenDB
                     // tao ngau nhien user trong 15.000 Users
                     indexRandom = random.Next(lengthListUserReferecen);
                     userObjectRandom = listUserReference[indexRandom];
+                    region = userObjectRandom.Region;
 
                     groupObject.CreateBy = userObjectRandom;
                     groupObject.NewEvent = new GroupEvent();
@@ -201,18 +250,28 @@ namespace InsertDataSampleToRavenDB
                     var userGroupObject = new UserGroupObject();
                     userGroupObject.Id = Guid.NewGuid().ToString();
                     userGroupObject.UserId = userObjectRandom.Id;
-                    userGroupObject.GroupId = groupObject.Id;
+                    userGroupObject.GroupId = userObjectRandom.Region + "-" + groupObject.Id;
                     userGroupObject.GroupName = groupObject.GroupName;
                     userGroupObject.Description = groupObject.Description;
                     userGroupObject.IsApprove = UserGroupStatus.Approve;
                     userGroupObject.JoinDate = DateTime.Now;
                     userGroupObject.GroupRole = groupRoleOwner;
 
-                    // them usergroup vap group
-                    groupObject.ListUserGroup.Add(userGroupObject);
+                    var userGroupObjectTemp = new UserGroupObject();
+                    userGroupObjectTemp.Id = region + "-" + userGroupObject.Id;
+                    userGroupObjectTemp.UserId = userGroupObject.UserId;
+                    userGroupObjectTemp.GroupId = userGroupObject.GroupId;
+                    userGroupObjectTemp.GroupName = userGroupObject.GroupName;
+                    userGroupObjectTemp.Description = userGroupObject.Description;
+                    userGroupObjectTemp.IsApprove = userGroupObject.IsApprove;
+                    userGroupObjectTemp.JoinDate = userGroupObject.JoinDate;
+                    userGroupObjectTemp.GroupRole = userGroupObject.GroupRole;
 
+                    // them usergroup vap group
+                    groupObject.ListUserGroup.Add(userGroupObjectTemp);
+            
                     // them user group vao user
-                    ListUserObject.Find(u => u.UserName == userObjectRandom.UserName).ListUserGroup.Add(userGroupObject);
+                    ListUserObject.Find(u => u.UserName == userObjectRandom.UserName).ListUserGroup.Add(userGroupObjectTemp);
 
                     
 
@@ -234,24 +293,34 @@ namespace InsertDataSampleToRavenDB
                     int lengthList50Members = listUserObjectMember.Count;
 
                     UserGroupObject userGroupObjectMember;
-                    
+                    UserGroupObject ugTemp;
                     foreach (var user in listUserObjectMember) // duyet qua danh sach 50 member de luu xuong db
                     {
                         userGroupObjectMember = new UserGroupObject();
                         userGroupObjectMember.Id = Guid.NewGuid().ToString();
                         userGroupObjectMember.UserId = user.Id;
-                        userGroupObjectMember.GroupId = groupObject.Id;
+                        userGroupObjectMember.GroupId = userObjectRandom.Region + "-" + groupObject.Id;
                         userGroupObjectMember.GroupName = groupObject.GroupName;
                         userGroupObjectMember.Description = groupObject.Description;
                         userGroupObjectMember.IsApprove = UserGroupStatus.Approve;
                         userGroupObjectMember.JoinDate = DateTime.Now;
                         userGroupObjectMember.GroupRole = groupRoleMember;
 
+                        ugTemp = new UserGroupObject();
+                        ugTemp.Id = user.Region + "-" + userGroupObjectMember.Id;
+                        ugTemp.UserId = userGroupObjectMember.UserId;
+                        ugTemp.GroupId = userGroupObjectMember.GroupId;
+                        ugTemp.GroupName = userGroupObjectMember.GroupName;
+                        ugTemp.Description = userGroupObjectMember.Description;
+                        ugTemp.IsApprove = userGroupObjectMember.IsApprove;
+                        ugTemp.JoinDate = userGroupObjectMember.JoinDate;
+                        ugTemp.GroupRole = userGroupObjectMember.GroupRole;
+
                         // them member vao group
-                        groupObject.ListUserGroup.Add(userGroupObjectMember); 
+                        groupObject.ListUserGroup.Add(ugTemp);
 
                         // lay user ListUsersReference len de cap nhat danh sach ListUserGroup, ko lay tu db
-                        ListUserObject.Find(u => u.UserName == user.UserName).ListUserGroup.Add(userGroupObjectMember);                      
+                        ListUserObject.Find(u => u.UserName == user.UserName).ListUserGroup.Add(ugTemp);                      
 
                         // luu user group member xuong db
                         //session.Store(userGroupObjectMember);
@@ -296,7 +365,7 @@ namespace InsertDataSampleToRavenDB
                                     indexRandomIn50Members = random.Next(lengthList50Members);
                                     userObjectRandomIn50Members = listUserObjectMember[indexRandomIn50Members];
                                     topicObject.CreateBy = userObjectRandomIn50Members;
-                                    topicObject.GroupId = groupObject.Id;
+                                    topicObject.GroupId =  userObjectRandom.Region + "-" + groupObject.Id;
                                     topicObject.CreateDate = DateTime.Now;
                                     topicObject.LastModified = topicObject.CreateDate;
                                     topicObject.NumberOfView = 0;
@@ -331,12 +400,21 @@ namespace InsertDataSampleToRavenDB
                         }
                         
                     }
-
+                    TopicObject tempTopic;
                     // them denormalize topic vao group
-                    foreach (TopicObject topicObject in listTopicObject)
+                    foreach (TopicObject topic in listTopicObject)
                     {
-                        groupObject.ListTopic.Add(topicObject);
-                        //session.Store(topicObject);
+                        var reg = listUserObjectMember.Find(x => x.Id == topic.CreateBy.Id).Region;
+                        tempTopic = new TopicObject();
+                        tempTopic.Id = reg + "-" + topic.Id;
+                        tempTopic.TopicName = topic.TopicName;
+                        tempTopic.CreateBy = topic.CreateBy;
+                        tempTopic.LastModified = topic.LastModified;
+                        tempTopic.NumberOfComment = topic.NumberOfComment;
+                        tempTopic.NumberOfView = topic.NumberOfView;
+                        tempTopic.isDeleted = topic.isDeleted;
+                        
+                        groupObject.ListTopic.Add(tempTopic);
                     }
 
                     // luu vao session userGroupObject
@@ -399,6 +477,17 @@ namespace InsertDataSampleToRavenDB
             
         }
 
+        public static void FullTextSearch()
+        {
+            Console.Write("Enter key word:");
+            string search = Console.ReadLine();
+            var session = documentStoreShard.OpenSession();
+            var list = session.Query<GroupObject, GroupObject_Search>().Search(x=>x.GroupName, search);
+            foreach (var l in list)
+            {
+                Console.WriteLine(l.GroupName);
+            }
+        }
         
 
         public static List<Comment> ConvertXElementToComment(List<XElement> listElement)
