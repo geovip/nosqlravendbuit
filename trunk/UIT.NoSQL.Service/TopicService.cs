@@ -42,26 +42,26 @@ namespace UIT.NoSQL.Service
 
         public void UpdateNumberOfCommentInDenormalizedTopic(string groupId, string topicId)
         {
-            session.Advanced.DatabaseCommands.Patch(
-                groupId,
-                new[]
-                     {
-                         new PatchRequest
-                             {
-                                 Type = PatchCommandType.Modify, 
-                                 Name = "ListTopic", 
-                                 Nested = new[]
-                                    {
-                                        new PatchRequest
-                                            {
-                                                Type = PatchCommandType.Set, 
-                                                Name = "NumberOfComment", 
-                                                Value = new RavenJValue(1)
-                                            }
-                                    }
-                             }
-                     }
-                     );
+            //session.Advanced.DatabaseCommands.Patch(
+            //    groupId,
+            //    new[]
+            //         {
+            //             new PatchRequest
+            //                 {
+            //                     Type = PatchCommandType.Modify, 
+            //                     Name = "ListTopic", 
+            //                     Nested = new[]
+            //                        {
+            //                            new PatchRequest
+            //                                {
+            //                                    Type = PatchCommandType.Set, 
+            //                                    Name = "NumberOfComment", 
+            //                                    Value = new RavenJValue(1)
+            //                                }
+            //                        }
+            //                 }
+            //         }
+            //         );
         }
     }
 }
