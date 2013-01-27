@@ -96,7 +96,7 @@ namespace InsertDataSampleToRavenDB
         {
             foreach (var doc in documentStores)
             {
-                IndexCreation.CreateIndexes(typeof(LoginIndex).Assembly,doc);
+                IndexCreation.CreateIndexes(typeof(LoginIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupRoleIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search).Assembly, doc);
@@ -506,14 +506,14 @@ namespace InsertDataSampleToRavenDB
 
         public static void FullTextSearch()
         {
-            Console.Write("Enter key word:");
-            string search = Console.ReadLine();
-            var session = documentStoreShard.OpenSession();
-            var list = session.Query<GroupObject, GroupObject_Search>().Search(x=>x.GroupName, search);
-            foreach (var l in list)
-            {
-                Console.WriteLine(l.GroupName);
-            }
+            //Console.Write("Enter key word:");
+            //string search = Console.ReadLine();
+            //var session = documentStoreShard.OpenSession();
+            //var list = session.Query<GroupObject, GroupObject_Search>().Search(x=>x.GroupName, search);
+            //foreach (var l in list)
+            //{
+            //    Console.WriteLine(l.GroupName);
+            //}
         }
         
 

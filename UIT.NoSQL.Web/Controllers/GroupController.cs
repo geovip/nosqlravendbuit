@@ -99,18 +99,11 @@ namespace UIT.NoSQL.Web.Controllers
             bool isMember = false;
 
             UserObject user = (UserObject)Session["user"];
-            if (user == null)
+            if (user != null)
             {
-                //ViewBag.IsMember = false;
-                isMember = false;
-            }
-            else
-            {
-
                 var role = user.ListUserGroup.Find(u => u.GroupId == id);
                 if (role != null && role.GroupRole.GroupName.Equals("Member"))
                 {
-                    //ViewBag.IsMember = true;
                     isMember = true;
                 }
             }

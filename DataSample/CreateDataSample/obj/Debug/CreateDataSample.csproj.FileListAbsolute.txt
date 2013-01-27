@@ -1,0 +1,5 @@
+E:\University curriculum\HK IX\project\nosqlravendbuit\CreateDataSample\obj\Debug\CreateDataSample.csprojResolveAssemblyReference.cache
+E:\University curriculum\HK IX\project\nosqlravendbuit\CreateDataSample\obj\Debug\CreateDataSample.Form1.resources
+E:\University curriculum\HK IX\project\nosqlravendbuit\CreateDataSample\obj\Debug\CreateDataSample.Properties.Resources.resources
+E:\University curriculum\HK IX\project\nosqlravendbuit\CreateDataSample\obj\Debug\CreateDataSample.csproj.GenerateResource.Cache
+E:\University curriculum\HK IX\project\nosqlravendbuit\DataSample\CreateDataSample\bin\Debug\CreateDataSample.exe.config
