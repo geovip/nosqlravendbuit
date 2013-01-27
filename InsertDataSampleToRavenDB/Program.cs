@@ -47,9 +47,9 @@ namespace InsertDataSampleToRavenDB
             st.Start();
             
             Init();
-            //InsertDataSampleToServers();
-            //InitIndexes();
-            FullTextSearch();
+            InsertDataSampleToServers();
+            InitIndexes();
+            //FullTextSearch();
 
             st.Stop();
             Console.WriteLine("Insert Data Sample Success!");
@@ -98,6 +98,7 @@ namespace InsertDataSampleToRavenDB
             {
                 IndexCreation.CreateIndexes(typeof(LoginIndex).Assembly,doc);
                 IndexCreation.CreateIndexes(typeof(GroupIndex).Assembly, doc);
+                IndexCreation.CreateIndexes(typeof(GroupRoleIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search).Assembly, doc);
             }     
         }
@@ -117,6 +118,15 @@ namespace InsertDataSampleToRavenDB
             {
                 Map = groups => from g in groups
                                 select new { g.Id };
+            }
+        }
+
+        public class GroupRoleIndex : AbstractIndexCreationTask<GroupRoleObject>
+        {
+            public GroupRoleIndex()
+            {
+                Map = groupRoles => from gr in groupRoles
+                                    select new { gr.GroupName };
             }
         }
 
@@ -209,7 +219,7 @@ namespace InsertDataSampleToRavenDB
                                                   }).ToList();
 
             // doc du lieu Groups tu xml
-            string groupsInfoXmlFilePath = STR_DATA_SERVER_GROUPRSS + "GroupRSS.xml";
+            string groupsInfoXmlFilePath = STR_DATA_SERVER_GROUPS + "GroupRSS.xml";
             if (File.Exists(groupsInfoXmlFilePath))
             {
                 XElement xmlGroupRSS = XElement.Load(groupsInfoXmlFilePath);
@@ -434,9 +444,26 @@ namespace InsertDataSampleToRavenDB
                 {
                     session1.Store(u);
                 }
+                //foreach (GroupObject g in ListGroupObject)
+                //{
+                //    session1.Store(g);
+                //}
+                //foreach (UserGroupObject u in ListUserGroupObject)
+                //{
+                //    session1.Store(u);
+                //}
+                //foreach (UserGroupObject u in ListUserGroupObjectMember)
+                //{
+                //    session1.Store(u);
+                //}
+                //foreach (TopicObject t in ListTopicObject)
+                //{
+                //    session1.Store(t);
+                //}
                 session1.SaveChanges();
                 session1.Dispose();
             }
+            
             using (var session1 = documentStoreShard.OpenSession())
             {
                 foreach (GroupObject g in ListGroupObject)

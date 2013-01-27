@@ -5,8 +5,9 @@ using System.Text;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Core.Domain;
 using Raven.Client;
-using Raven.Client.Linq;
+//using Raven.Client.Linq;
 using Raven.Client.Indexes;
+using Raven.Abstractions.Indexing;
 
 namespace UIT.NoSQL.Service
 {
@@ -104,7 +105,7 @@ namespace UIT.NoSQL.Service
             //    .Where(g => g.GroupName.StartsWith(searchStr) || g.GroupName.StartsWith("*" + searchStr))
             //    .ToList();
 
-            
+            /* doan nay thay thanh doan duoi fulltext search
             var listGroup = session.Query<GroupObject_Search.ReduceResult, GroupObject_Search>()
                 .Statistics(out stats)
                 .Skip(skip)
@@ -123,6 +124,27 @@ namespace UIT.NoSQL.Service
                 .Take(take)
                 .Where(c => c.Query.In((object)searchStr))
                 .As<GroupObject>()
+                .ToList();
+            }
+            */
+            //Raven.Client.Linq.IRavenQueryable<GroupObject> listGroup;
+
+            List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search>()
+                .Statistics(out stats)
+                .Skip(skip)
+                .Take(take)
+                .Search(x => x.GroupName, searchStr)
+                .ToList();
+
+            if (listGroup.Count == 0)
+            {
+                searchStr = string.Format("*{0}*", searchStr);
+
+                listGroup = session.Query<GroupObject, GroupObject_Search>()
+                .Statistics(out stats)
+                .Skip(skip)
+                .Take(take)
+                .Search(x=>x.GroupName, searchStr)
                 .ToList();
             }
 
@@ -145,26 +167,42 @@ namespace UIT.NoSQL.Service
         }
     }
 
-    public class GroupObject_Search : AbstractIndexCreationTask<GroupObject, GroupObject_Search.ReduceResult>
-    {
-        public class ReduceResult
+    public class GroupObject_Search : AbstractIndexCreationTask<GroupObject>
         {
-            public object[] Query { get; set; }
+            public GroupObject_Search()
+            {
+                Map = groups => from g in groups
+                                select new
+                                {
+                                    g.GroupName,
+                                    g.Description,
+                                    g.CreateBy.FullName
+                                };
+                Indexes.Add(x => x.GroupName, FieldIndexing.Analyzed);
+                Indexes.Add(x=> x.Description, FieldIndexing.Analyzed);
+            }
         }
 
-        public GroupObject_Search()
-        {
-            Map = groups => from g in groups
-                            select new
-                            {
-                                Query = new[]
-                                    {
-                                        g.Id,
-                                        g.GroupName,
-                                        g.Description,
-                                        g.CreateBy.FullName
-                                    }
-                            };
-        }
-    }
+    //public class GroupObject_Search : AbstractIndexCreationTask<GroupObject, GroupObject_Search.ReduceResult>
+    //{
+    //    public class ReduceResult
+    //    {
+    //        public object[] Query { get; set; }
+    //    }
+
+    //    public GroupObject_Search()
+    //    {
+    //        Map = groups => from g in groups
+    //                        select new
+    //                        {
+    //                            Query = new[]
+    //                                {
+    //                                    g.Id,
+    //                                    g.GroupName,
+    //                                    g.Description,
+    //                                    g.CreateBy.FullName
+    //                                }
+    //                        };
+    //    }
+    //}
 }

@@ -31,23 +31,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Raven_Client\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\RavenDB\RavenDB-Build-2230\Client\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\Raven_Client\NLog.dll</HintPath>
+    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\RavenDB\RavenDB-Build-2230\Client\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\Raven_Client\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\RavenDB\RavenDB-Build-2230\Client\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Debug">
-      <HintPath>..\Raven_Client\Raven.Client.Debug.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\Raven_Client\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.MvcIntegration">
-      <HintPath>..\Raven_Client\Raven.Client.MvcIntegration.dll</HintPath>
+    <Reference Include="Raven.Client.MvcIntegration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\RavenDB\RavenDB-Build-2230\Client\Raven.Client.MvcIntegration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

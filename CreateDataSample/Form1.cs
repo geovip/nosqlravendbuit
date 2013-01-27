@@ -395,18 +395,18 @@ namespace CreateDataSample
                     user1 = new XElement("UserObject",
                                 new XElement("Id", id),
                                 new XElement("FullName", dt.Rows[index]["FullName"].ToString()),
-                                new XElement("UserName", "username" + index + 1),
+                                new XElement("UserName", "username" + (index + 1).ToString()),
                                 new XElement("Password", "c4ca4238a0b923820dcc509a6f75849b"),
-                                new XElement("Email", "username" + index + "@gmail.com"),
+                                new XElement("Email", "username" + (index + 1).ToString() + "@gmail.com"),
                                 new XElement("Region", ServerRegion[i])
                                 );
                     listUser1.Add(user1);
                     user2 = new XElement("UserObject",
                                 new XElement("Id", ServerRegion[i] + "-" +id),
                                 new XElement("FullName", dt.Rows[index]["FullName"].ToString()),
-                                new XElement("UserName", "username" + index + 1),
+                                new XElement("UserName", "username" + (index + 1).ToString()),
                                 new XElement("Password", "c4ca4238a0b923820dcc509a6f75849b"),
-                                new XElement("Email", "username" + index + "@gmail.com"),
+                                new XElement("Email", "username" + (index + 1).ToString() + "@gmail.com"),
                                 new XElement("Region", ServerRegion[i])
                                 );
                     listUser2.Add(user2);
@@ -694,7 +694,10 @@ namespace CreateDataSample
                     AddDataToTable(title, link, description, myDataTable);
                 }
             }
-            catch { }
+            catch 
+            {
+                
+            }
             return myDataTable;
         }
 
@@ -803,7 +806,11 @@ namespace CreateDataSample
                 doc.Add(xTree);
 
                 string fileName = "ListTopics.xml";
-                doc.Save(strPathTemp + fileName);
+                try
+                {
+                    doc.Save(strPathTemp + fileName);
+                }
+                catch { }
             }
             MessageBox.Show("Lưu thành công!");
         }
@@ -944,7 +951,7 @@ namespace CreateDataSample
         private void btnReadContentFromRSS_Click(object sender, EventArgs e)
         {
             //string strLink = "http://www.24h.com.vn/tin-tuc-trong-ngay/100-nguoi-giau-nhat-du-xoa-doi-ngheo-ca-tg-c46a515625.html";
-            string strLink = "http://vietnamnet.vn/vn/xa-hoi/106284/o-to-mat-lai-roi-vuc-20m-tren-duong-len-da-lat.html";
+            string strLink = "http://dantri.com.vn/giao-duc-khuyen-hoc/dh-london-danh-gia-cao-dao-tao-tai-chinh-ngan-hang-tai-buv-689213.htm";
             
             string content = GetWebContent(strLink);
                         
