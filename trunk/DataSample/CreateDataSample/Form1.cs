@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Raven.Client.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
@@ -21,7 +22,6 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using UIT.NoSQL.Core.Domain;
-
 
 namespace CreateDataSample
 {

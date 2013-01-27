@@ -1,0 +1,1 @@
+E:\University curriculum\HK IX\project\nosqlravendbuit\InsertDataSampleToRavenDB\obj\Debug\InsertDataSampleToRavenDB.csprojResolveAssemblyReference.cache
