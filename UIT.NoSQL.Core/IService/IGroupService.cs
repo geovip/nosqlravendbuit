@@ -18,5 +18,6 @@ namespace UIT.NoSQL.Core.IService
         GroupObject LoadWithUser(string id);
         List<GroupObject> Search(string searchStr, int skip, int take, out int totalResult);
         List<GroupObject> LoadList(string[] arrId);
+        bool SendEmail(List<UserGroupObject> listUser, string subject, string body);
     }
 }

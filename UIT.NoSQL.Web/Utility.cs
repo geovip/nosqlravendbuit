@@ -10,6 +10,8 @@ using Raven.Client.Indexes;
 using Raven.Abstractions.Indexing;
 using System.IO;
 using UIT.NoSQL.Service;
+using System.Net.Mail;
+using System.Net;
 
 namespace UIT.NoSQL.Web
 {
@@ -236,17 +238,17 @@ namespace UIT.NoSQL.Web
 
         public void Initialized2()
         {
-            GroupRoleObject groupRoleManager, groupRoleOwner, groupRoleMember;
-            UserObject userObjectSA;
-            CreateDataFix(out groupRoleManager, out groupRoleOwner, out groupRoleMember, out userObjectSA);
+            //GroupRoleObject groupRoleManager, groupRoleOwner, groupRoleMember;
+            //UserObject userObjectSA;
+            //CreateDataFix(out groupRoleManager, out groupRoleOwner, out groupRoleMember, out userObjectSA);
 
-            for (int j = 0; j < MvcApplication.ServerRegion.Count; j++)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    Initialized3(MvcApplication.ServerRegion[j], groupRoleManager, groupRoleOwner, groupRoleMember, userObjectSA);
-                }
-            }
+            //for (int j = 0; j < MvcApplication.ServerRegion.Count; j++)
+            //{
+            //    for (int i = 0; i < 5; i++)
+            //    {
+            //        Initialized3(MvcApplication.ServerRegion[j], groupRoleManager, groupRoleOwner, groupRoleMember, userObjectSA);
+            //    }
+            //}
 
             InitalIndex();
         }
@@ -427,6 +429,7 @@ namespace UIT.NoSQL.Web
 
             return sBuilder.ToString();
         }
+
     }
 
     public class RandomData

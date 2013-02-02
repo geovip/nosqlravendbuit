@@ -8,6 +8,9 @@ using Raven.Client;
 //using Raven.Client.Linq;
 using Raven.Client.Indexes;
 using Raven.Abstractions.Indexing;
+using System.Net.Mail;
+using System.Net;
+using System.Threading;
 
 namespace UIT.NoSQL.Service
 {
@@ -165,8 +168,68 @@ namespace UIT.NoSQL.Service
             
             return listGroup;
         }
+
+        public bool SendEmail(List<UserGroupObject> listUser, string subject, string body)
+        {
+            bool result = false;
+            string from = System.Configuration.ConfigurationManager.AppSettings["email.username"];
+            string pass = System.Configuration.ConfigurationManager.AppSettings["email.password"];
+
+            var threadSendEmail = new ThreadSendEmail(from, pass, listUser, subject, body, session);
+
+            Thread sendEmail = new Thread(new ThreadStart(threadSendEmail.Run));
+            sendEmail.Start();
+
+            return result;
+        }
     }
 
+    public class ThreadSendEmail
+    {
+        private string from, pass, subject, body;
+        private List<UserGroupObject> listUser;
+        private IDocumentSession session;
+
+        public ThreadSendEmail(string from, string pass, List<UserGroupObject> listUser, string subject, string body, IDocumentSession session)
+        {
+            this.from = from;
+            this.pass = pass;
+            this.listUser = listUser;
+            this.subject = subject;
+            this.body = body;
+            this.session = session;
+        }
+
+        public void Run()
+        {
+            try
+            {
+                SmtpClient host = new SmtpClient("smtp.gmail.com", 587);
+                host.EnableSsl = true;
+                host.DeliveryMethod = SmtpDeliveryMethod.Network;
+                host.UseDefaultCredentials = false;
+                host.Credentials = new NetworkCredential(from, pass);
+
+                MailMessage mail = null;
+                UserObject userObject = null;
+                foreach (var userGroup in listUser)
+                {
+                    if (userGroup.IsReceiveEmail)
+                    {
+                        userObject = session.Load<UserObject>(userGroup.UserId);
+                        mail = new MailMessage(from, userObject.Email, subject, body);
+                        mail.IsBodyHtml = true;
+                        host.Send(mail);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+    
     public class GroupObject_Search : AbstractIndexCreationTask<GroupObject>
         {
             public GroupObject_Search()

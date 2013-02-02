@@ -96,19 +96,19 @@ namespace UIT.NoSQL.Web.Controllers
         public ActionResult Detail(string id)
         {
             var group = groupService.Load(id);
-            bool isMember = false;
+            string roleStr = "unlogin";
 
-            UserObject user = (UserObject)Session["user"];
-            if (user != null)
+            UserObject userSession = (UserObject)Session["user"];
+            if (userSession != null)
             {
-                var role = user.ListUserGroup.Find(u => u.GroupId == id);
-                if (role != null && role.GroupRole.GroupName.Equals("Member"))
+                var userGroup = userSession.ListUserGroup.Find(u => u.GroupId == id);
+                if (userGroup != null)
                 {
-                    isMember = true;
+                    roleStr = userGroup.GroupRole.GroupName;
                 }
             }
 
-            ViewBag.IsMember = isMember;
+            ViewBag.Role = roleStr;
             ViewBag.GroupName = group.GroupName;
             ViewBag.GroupId = group.Id;
 
@@ -362,6 +362,31 @@ namespace UIT.NoSQL.Web.Controllers
         {
             return View();
         }
+
+        [MemberFilter(TypeID = TypeIDEnum.GroupID)]
+        public ActionResult ManagerUser(string id)
+        {
+            var userSession = (UserObject)Session["user"];
+            if (userSession == null)
+            {
+                return RedirectToAction("AccessDenied", new { id });
+            }
+
+            var group = groupService.Load(id);
+            UserGroupObject userGroup = null;
+
+            foreach (var item in group.ListUserGroup)
+            {
+                if (item.UserId == userSession.Id)
+                {
+                    userGroup = item;
+                }
+            }
+
+            return View(userGroup);
+        }
+
+
         [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Setting(string id)
         {
