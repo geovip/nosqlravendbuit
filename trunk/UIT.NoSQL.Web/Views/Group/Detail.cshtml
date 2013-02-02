@@ -89,7 +89,7 @@ top: 17px;
     <section id="topmenu">
         @*@Html.Action("TopMenuUser", "Group")*@
         <div class="BUTTONSTYLE CREATETOPIC" onclick = "createNewTopic('@ViewBag.GroupId')">Create New Topic</div>
-        <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId')">Manager</div>
+        <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId', '@ViewBag.Role')">Manager</div>
     </section>
 }
 
@@ -151,8 +151,13 @@ top: 17px;
         function createNewTopic(id) {
             window.location = "/Topic/Create/" + id;
         }
-        function manage(id) {
-            window.location = "/Group/Manager/" + id;
+        function manage(id, role) {
+            if (role == 'Member') {
+                window.location = "/Group/ManagerUser/" + id;
+            }
+            else if(role == 'Owner' || role == 'Manager') {
+                window.location = "/Group/Manager/" + id;
+            }
         }
     </script>
 
@@ -161,7 +166,7 @@ top: 17px;
 @if (Model.Any(t => t.isDeleted == false))
 {
     <tr style="background-color:White">
-        @if (!ViewBag.IsMember)
+        @if (ViewBag.Role == "Owner" || ViewBag.Role == "Manager")
         {
         <td align="center" width="4%">
             <input type="checkbox" id="checkAll" value="checkAll" title="Check All"/>
@@ -184,7 +189,7 @@ top: 17px;
     if (item.isDeleted == false)
     {
         <tr id="@item.Id" style="background-color:White">
-                @if (!ViewBag.IsMember)
+                @if (ViewBag.Role == "Owner" || ViewBag.Role == "Manager")
                 { 
                     <td style="border-top: 1px solid #DDDCDC;border-left: 1px solid #DDDCDC" align="center" width="4%">
                         <input type="checkbox" value="@item.Id" class="topic"/>

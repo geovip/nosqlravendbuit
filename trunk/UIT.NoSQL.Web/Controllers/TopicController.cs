@@ -114,6 +114,11 @@ namespace UIT.NoSQL.Web.Controllers
                 group.NewEvent.CreateBy = user.FullName; ;
                 groupService.Save(group);
 
+                //send email
+                string subject = user.FullName + " created " + topic.TopicName;
+                string body = topic.Content;
+                groupService.SendEmail(group.ListUserGroup, subject, body);
+
                 return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
             }
             catch
@@ -220,13 +225,18 @@ namespace UIT.NoSQL.Web.Controllers
             group.NewEvent.CreateBy = user.FullName;
 
             // Create new stopwatch
-            Stopwatch stopwatch = new Stopwatch();
+            //Stopwatch stopwatch = new Stopwatch();
             // Begin timing
-            stopwatch.Start();
+            //stopwatch.Start();
             groupService.Save(group);
             // Stop timing
-            stopwatch.Stop();
+            //stopwatch.Stop();
             
+            //send email
+            string subject = user.FullName + " replied topic: " + topic.TopicName;
+            string body = comment.Content;
+            groupService.SendEmail(group.ListUserGroup, subject, body);
+
             return Json(comment, JsonRequestBehavior.AllowGet);
             //return Json(stopwatch.Elapsed.ToString(), JsonRequestBehavior.AllowGet);
         }

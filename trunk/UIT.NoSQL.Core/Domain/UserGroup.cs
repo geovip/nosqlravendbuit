@@ -20,6 +20,7 @@ namespace UIT.NoSQL.Core.Domain
         public string GroupId { get; set; }
         public string GroupName { get; set; }
         public string Description { get; set; }
+        public bool IsReceiveEmail { get; set; }
         public DateTime JoinDate { get; set; }
         public UserGroupStatus IsApprove { get; set; }
 
