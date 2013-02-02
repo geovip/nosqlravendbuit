@@ -11,6 +11,7 @@ namespace UIT.NoSQL.Core.IService
         //GroupObject Load(string id);
         GroupObject LoadByUser(string userId);
         List<GroupObject> GetAll();
+        List<GroupObject> GetTenGroupPublic();
         List<GroupObject> GetByUser(string userId);
         void Save(GroupObject group);
         GroupObject Load(string id);

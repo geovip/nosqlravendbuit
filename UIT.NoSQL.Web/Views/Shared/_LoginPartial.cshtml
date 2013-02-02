@@ -2,7 +2,7 @@
 
 @if (Session["user"] != null) {
     <p>
-        Hello, @Html.ActionLink(((UserObject)Session["user"]).FullName, "ChangePassword", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Change password" })!
+        Hello, @Html.ActionLink(((UserObject)Session["user"]).FullName, "ViewProfile", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "ViewProfile" })!
         @Html.ActionLink("Log off", "LogOff", "Account")
     </p>
 } else {

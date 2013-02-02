@@ -47,7 +47,7 @@ namespace InsertDataSampleToRavenDB
             st.Start();
             
             Init();
-            InsertDataSampleToServers();
+            //InsertDataSampleToServers();
             InitIndexes();
             //FullTextSearch();
 
@@ -100,6 +100,7 @@ namespace InsertDataSampleToRavenDB
                 IndexCreation.CreateIndexes(typeof(GroupIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupRoleIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search).Assembly, doc);
+                IndexCreation.CreateIndexes(typeof(GroupObject_Search_NotAnalyed).Assembly, doc);
             }     
         }
 
@@ -143,6 +144,19 @@ namespace InsertDataSampleToRavenDB
                                 };
                 Indexes.Add(x => x.GroupName, FieldIndexing.Analyzed);
                 Indexes.Add(x=> x.Description, FieldIndexing.Analyzed);
+            }
+        }
+
+        public class GroupObject_Search_NotAnalyed : AbstractIndexCreationTask<GroupObject>
+        {
+            public GroupObject_Search_NotAnalyed()
+            {
+                Map = groups => from g in groups
+                                select new
+                                {
+                                    g.GroupName
+                                };
+                Indexes.Add(x => x.GroupName, FieldIndexing.NotAnalyzed);                
             }
         }
 
@@ -218,12 +232,12 @@ namespace InsertDataSampleToRavenDB
                                                       Region = u.Element("Region").Value,
                                                   }).ToList();
 
-            // doc du lieu Groups tu xml
-            string groupsInfoXmlFilePath = STR_DATA_SERVER_GROUPS + "GroupRSS.xml";
+            // doc du lieu danh sách Groups tu ListGroups.xml
+            string groupsInfoXmlFilePath = STR_DATA_SERVER_GROUPS + "ListGroups.xml";
             if (File.Exists(groupsInfoXmlFilePath))
             {
                 XElement xmlGroupRSS = XElement.Load(groupsInfoXmlFilePath);
-                List<GroupRSS> listGroup = (from u in xmlGroupRSS.Elements("GroupRSS")
+                List<GroupRSS> listGroup = (from u in xmlGroupRSS.Elements("Group")
                                             select new GroupRSS
                                             {
                                                 GroupName = u.Element("GroupName").Value,
@@ -438,28 +452,42 @@ namespace InsertDataSampleToRavenDB
                 }
             }
 
+            #region RavenDB 2.0
+            /*
+            using (var bulkInsert = documentStoreShard.BulkInsert())
+            {
+                foreach (UserObject u in ListUserObject)
+                {
+                    bulkInsert.Store(u);
+                }
+                //foreach (GroupObject g in ListGroupObject)
+                //{
+                //    bulkInsert.Store(g);
+                //}
+                //foreach (UserGroupObject u in ListUserGroupObject)
+                //{
+                //    bulkInsert.Store(u);
+                //}
+                //foreach (UserGroupObject u in ListUserGroupObjectMember)
+                //{
+                //    bulkInsert.Store(u);
+                //}
+                //foreach (TopicObject t in ListTopicObject)
+                //{
+                //    bulkInsert.Store(t);
+                //}
+            }
+            */
+            #endregion
+
+            #region RavenDB 1.0
+            
             using (var session1 = documentStoreShard.OpenSession())
             {
                 foreach (UserObject u in ListUserObject)
                 {
                     session1.Store(u);
                 }
-                //foreach (GroupObject g in ListGroupObject)
-                //{
-                //    session1.Store(g);
-                //}
-                //foreach (UserGroupObject u in ListUserGroupObject)
-                //{
-                //    session1.Store(u);
-                //}
-                //foreach (UserGroupObject u in ListUserGroupObjectMember)
-                //{
-                //    session1.Store(u);
-                //}
-                //foreach (TopicObject t in ListTopicObject)
-                //{
-                //    session1.Store(t);
-                //}
                 session1.SaveChanges();
                 session1.Dispose();
             }
@@ -500,8 +528,8 @@ namespace InsertDataSampleToRavenDB
                 session1.SaveChanges();
                 session1.Dispose();
             }
-            
-            
+             
+            #endregion
         }
 
         public static void FullTextSearch()

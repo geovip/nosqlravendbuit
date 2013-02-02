@@ -27,7 +27,9 @@ namespace UIT.NoSQL.Web.Controllers
             if (user == null || user.ListUserGroup.Count <= 0)
             {
                 TempData["IsNew"] = "True";
-                return View();
+                IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+                List<GroupObject> listGroup = groupService.GetTenGroupPublic();
+                return View(listGroup);
             }
             else
             {

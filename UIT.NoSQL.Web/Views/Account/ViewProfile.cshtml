@@ -1,0 +1,44 @@
+﻿@model UIT.NoSQL.Core.Domain.UserObject
+
+@{
+    ViewBag.Title = "ViewProfile";
+}
+
+<h2>Profile</h2>
+
+<fieldset>
+    <legend>UserObject</legend>
+
+    <div>
+         <span style="width:100px">@Html.DisplayNameFor(model => model.UserName)</span>
+         @Html.DisplayFor(model => model.UserName)
+    </div>
+
+    <div>
+         <span style="width:100px">@Html.DisplayNameFor(model => model.Email)</span>
+        @Html.DisplayFor(model => model.Email)
+    </div>
+
+    <div>
+         <span style="width:100px">@Html.DisplayNameFor(model => model.FullName)</span>
+        @Html.DisplayFor(model => model.FullName)
+    </div>
+
+    <div>
+         <span style="width:100px">@Html.DisplayNameFor(model => model.CreateDate)</span>
+        @Html.DisplayFor(model => model.CreateDate)
+    </div>
+
+    <div>
+         <span style="width:100px">@Html.DisplayNameFor(model => model.Region)</span>
+        @Html.DisplayFor(model => model.Region)
+    </div>
+
+    <div>
+        <a href="~/Account/ChangePassword">Change Password</a>
+    </div>
+</fieldset>
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@

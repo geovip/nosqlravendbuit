@@ -48,31 +48,7 @@ namespace CreateDataSample
             //IndexCreation.CreateIndexes(typeof(GroupRSSIndex).Assembly, documentStore1);
             //IndexCreation.CreateIndexes(typeof(User_UserGroupIndex).Assembly, documentStore1);
             //IndexCreation.CreateIndexes(typeof(User_ByCustomerOrderInList_Analyzed).Assembly, documentStore);
-            //CreateGroupRole();
         }
-
-        private void CreateGroupRole()
-        {
-            var session = documentStore1.OpenSession();
-            //create data sample
-            groupRoleManager = new GroupRoleObject();
-            groupRoleManager.Id = "7E946ED1-69E6-4B45-8273-FB7AC7367F50";
-            groupRoleManager.GroupName = "Manager";
-            session.Store(groupRoleManager);
-
-            groupRoleMember = new GroupRoleObject();
-            groupRoleMember.Id = "9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
-            groupRoleMember.GroupName = "Member";
-            session.Store(groupRoleMember);
-
-            groupRoleOwner = new GroupRoleObject();
-            groupRoleOwner.Id = "79C6B725-F787-4FDF-B820-42A21174449D";
-            groupRoleOwner.GroupName = "Owner";
-            session.Store(groupRoleOwner);
-
-            session.SaveChanges();
-        }
-
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -152,13 +128,7 @@ namespace CreateDataSample
             MessageBox.Show("Insert 20.000 groups success!");
         }
 
-        public void TestSaveWithQuery()
-        {
-            var session = documentStore1.OpenSession();
-            UserObject user = session.Load<UserObject>("dcbe05c2-9706-43dd-a7ad-66a798ccb24b");
-            user.Password = "7";
-            session.SaveChanges();
-        }
+        
 
         public class User_ByCustomerOrderInList_Analyzed : AbstractIndexCreationTask<UserObject>
         {
@@ -168,11 +138,6 @@ namespace CreateDataSample
                                select new { user.UserName };
                 Indexes.Add(x => x.UserName, FieldIndexing.Analyzed);
             }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            TestSaveWithQuery();
         }
 
         public int NumberOfUserGroup()
@@ -268,8 +233,8 @@ namespace CreateDataSample
             }
             return allUsers;
         }
-        //---------
 
+        // tạo ngẫu nhiên tên user
         public DataTable GetListFullName(int length)
         {
             string[] listHo1 = {"Nguyễn","Trần","Lê","Phạm","Hoàng","Huỳnh","Phan","Vũ","Võ","Đặng","Bùi","Đỗ","Hồ","Ngô","Dương","Lý",
@@ -455,39 +420,17 @@ namespace CreateDataSample
             MessageBox.Show("Lưu thành công!");
         }
 
-        private void TestWriteXMLToFile()
+
+        private void button5_Click(object sender, EventArgs e)
         {
-            DataTable dt = GetListFullName(10000);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            XmlTextWriter xmlwriter = new XmlTextWriter(Application.StartupPath + "/Test.xml", Encoding.UTF8);
-            xmlwriter.Formatting = Formatting.Indented;
-            xmlwriter.WriteStartDocument();
-            xmlwriter.WriteComment("Ghi dữ liệu họ tên ra XML");
-            xmlwriter.WriteStartElement("ListUserObject");
-
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                xmlwriter.WriteStartElement("UserObject");
-                xmlwriter.WriteElementString("FullName", dt.Rows[i]["FullName"].ToString());
-                xmlwriter.WriteEndElement();
-            }
-            xmlwriter.WriteEndElement();
-            xmlwriter.WriteEndDocument();
-            xmlwriter.Flush();
-            xmlwriter.Close();
-
-            sw.Stop();
-            MessageBox.Show(sw.Elapsed.ToString());
+            WriteUsersInfoXMLToFile();
+            
         }
-
 
         private void ReadUsersInfoXMLFile()
         {
             try
             {
-                //XmlTextReader reader = new XmlTextReader(Application.StartupPath + "/FullNameOf10000Users.xml");
                 string xmlFilePath = STR_DATA_SERVER_USERS + "ListUsers.xml";
                 XElement xmlUser = XElement.Load(xmlFilePath);
                 List<User> listUser = (from u in xmlUser.Elements("UserObject")
@@ -502,12 +445,6 @@ namespace CreateDataSample
                 dataGridView1.DataSource = listUser;
             }
             catch { }
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            WriteUsersInfoXMLToFile();
-            
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -530,16 +467,7 @@ namespace CreateDataSample
             }
         }
 
-        private void btnAddGroup_Click(object sender, EventArgs e)
-        {
-            var session = documentStore1.OpenSession("GroupAndLinkRSSDB");
-            session.Store(new GroupRSS { GroupName = txtGroupName.Text.Trim(), LinkRSS=txtLinkRSS.Text.Trim()});
-            session.SaveChanges();
-
-            List<GroupRSS> listGroupRSS = session.Query<GroupRSS>("GroupRSSIndex").ToList();
-            dGVListGroupRSS.DataSource = listGroupRSS;
-        }
-
+        
         private void button4_Click(object sender, EventArgs e)
         {
             //ShowListGroupRSS();
@@ -581,18 +509,6 @@ namespace CreateDataSample
                     dataAdapter.Fill(dataSet);
 
                     DataTable dt = dataSet.Tables[0];
-                    // luu du lieu xuong RavenDB
-                    //var session = documentStore1.OpenSession("GroupAndLinkRSSDB");
-                    //int i;
-                    //for (i = 0; i < dt.Rows.Count; i++)
-                    //{
-                    //    var groupRSS = new GroupRSS { GroupName = dt.Rows[i]["GroupName"].ToString(), LinkRSS = dt.Rows[i]["LinkRSS"].ToString() };
-                    //    session.Store(groupRSS);
-                    //}
-                    //session.SaveChanges();
-
-                    // doc du lieu len tu RavenDB
-                    //ShowListGroupRSS();
 
                     // luu du lieu xuong XML
                     WriteGroupRSSInfoXMLToFile(dt);
@@ -602,8 +518,7 @@ namespace CreateDataSample
                 catch
                 {
                     MessageBox.Show("Error write!");
-                }
-                
+                }             
             }
             else
             {
@@ -773,7 +688,7 @@ namespace CreateDataSample
                     Directory.CreateDirectory(strPathTemp);
                 }
 
-                // ghi du lieu ra file
+                // 
                 dt = BindRSSItem(groupRSS.LinkRSS);
 
                 XDocument doc = new XDocument();
@@ -804,13 +719,16 @@ namespace CreateDataSample
                 }
                 xTree.Add(listTopics);
                 doc.Add(xTree);
-
+                
                 string fileName = "ListTopics.xml";
                 try
                 {
                     doc.Save(strPathTemp + fileName);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Directory.Delete(strPathTemp,true);
+                }
             }
             MessageBox.Show("Lưu thành công!");
         }
@@ -846,70 +764,7 @@ namespace CreateDataSample
             catch { }
         }
 
-        public void TestPath()
-        {
-            string path = Path.GetFullPath("F:\\RavenServers-2230\\Data\\GroupRSS") + "\\Spam";
-
-            if (!Directory.Exists(path))
-            {
                 
-                Directory.CreateDirectory(path);
-            }
-            else
-            {
-                MessageBox.Show("OK!");
-            }
-        }
-
-        private void btnTestPath_Click(object sender, EventArgs e)
-        {
-            //TestPath();
-            TestXDocument();
-        }
-
-        public void TestXDocument()
-        {
-            DataTable dt = GetListFullName(10000);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            XDocument doc = new XDocument();
-            XElement root = new XElement("ListUserObject");
-            int i;
-            for (i = 0; i < 10000; i++)
-            {
-                XElement el = new XElement("UserObject",
-                                  new XElement("FullName", dt.Rows[i]["FullName"].ToString())
-                              );
-                root.Add(el);
-            }
-
-            doc.Add(root);
-            doc.Save("List.xml");
-
-
-            //XDocument doc = XDocument.Load("List.xml");
-            //List<XElement> li = new List<XElement>();
-
-            //int i;
-            //for (i = 0; i < 10000; i++)
-            //{
-            //    XElement el = new XElement("UserObject",
-            //                      new XElement("FullName", dt.Rows[i]["FullName"].ToString())
-            //                  );
-            //    li.Add(el);
-
-            //}
-
-            //doc.Root.AddFirst(li);
-            //doc.Save("List.xml");
-           
-            sw.Stop();
-            MessageBox.Show(sw.Elapsed.ToString());
-           
-            //TestWriteXMLToFile();
-        }
-        
         private void btnWriteFromRSS_Click(object sender, EventArgs e)
         {
             WriteTopicsInfoXMLToFile();
@@ -950,7 +805,6 @@ namespace CreateDataSample
 
         private void btnReadContentFromRSS_Click(object sender, EventArgs e)
         {
-            //string strLink = "http://www.24h.com.vn/tin-tuc-trong-ngay/100-nguoi-giau-nhat-du-xoa-doi-ngheo-ca-tg-c46a515625.html";
             string strLink = "http://dantri.com.vn/giao-duc-khuyen-hoc/dh-london-danh-gia-cao-dao-tao-tai-chinh-ngan-hang-tai-buv-689213.htm";
             
             string content = GetWebContent(strLink);
@@ -972,7 +826,75 @@ namespace CreateDataSample
             WriteTwoListOfUsersInfoXMLToFile();
         }
 
+        private void btnBrowseListGroup_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            DialogResult dlgResult = dlg.ShowDialog();
+            if (dlgResult == DialogResult.OK)
+            {
+                txtPathListGroup.Text = dlg.FileName;
+            }
+        }
 
+        private void WriteListGroupXMLToFile(DataTable dt)
+        {
+            string strPath = STR_DATA_SERVER_GROUPS;
+            string fileName = "ListGroups.xml";
+
+            XDocument doc = new XDocument();
+            XElement root = new XElement("ListGroups");
+            int i, lenght = dt.Rows.Count;
+            List<XElement> listGroup = new List<XElement>();
+            XElement group;
+            for (i = 0; i < lenght; i++)
+            {
+                group = new XElement("Group",
+                                new XElement("GroupName", dt.Rows[i]["GroupName"].ToString())
+                                );
+                listGroup.Add(group);
+            }
+            root.Add(listGroup);
+            doc.Add(root);
+            doc.Save(strPath + fileName);
+            MessageBox.Show("Ghi thành công!");
+        }
+
+        private void btnLoadListGroup_Click(object sender, EventArgs e)
+        {
+            if (System.IO.File.Exists(txtPathListGroup.Text))
+            {
+                string excelContentType = "application/vnd.ms-excel";
+                string excel2013ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                try
+                {
+                    //System.IO.FileInfo fileInfo = new FileInfo(txtPath.Text);
+
+                    string connectionString = String.Format(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=""Excel 8.0;HDR=YES;IMEX=1;""", txtPathListGroup.Text);
+                    string query = String.Format("select * from [{0}$]", "Sheet1");
+                    OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, connectionString);
+                    DataSet dataSet = new DataSet();
+                    dataAdapter.Fill(dataSet);
+
+                    DataTable dt = dataSet.Tables[0];
+
+                    // luu du lieu xuong XML
+                    WriteListGroupXMLToFile(dt);
+                }
+                catch
+                {
+                    MessageBox.Show("Error write!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No File is Selected");
+            }
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            WriteTopicsInfoXMLToFile();
+        }
         
     }
 }
