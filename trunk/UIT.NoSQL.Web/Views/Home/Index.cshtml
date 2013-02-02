@@ -5,7 +5,7 @@
 }
 @section LeftMenu {
     <section id="leftmenu">
-        @Html.Action("LeftMenu", "Home", new {id = ""})
+        @Html.Action("LeftMenu", "Home", new { id = "" })
     </section>
 }
 <script type="text/javascript">
@@ -41,9 +41,35 @@
 
 </script>
 
-@if ( TempData["IsNew"].Equals("True"))
+@if (TempData["IsNew"].Equals("True"))
 {
-<h3>We suggest the following:</h3>
+    <table id="tbGroup" style="width:100%;">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="width:70%;">
+                <div class="GLTURNLNJ">
+                    <div class="GLTURNLCK">
+                        <div class="GLTURNLKW"></div>
+                      
+                        @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.Id }, null)
+                    </div>
+                    <div class="GLTURNLNK">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div>@item.NewEvent.Title</div>
+                <b>@item.NewEvent.CreateBy</b>
+                <div>@item.NewEvent.CreateDate</div>
+            </td>
+        </tr>
+    }
+
+    </table>
+@*<h3>We suggest the following:</h3>
 <ol class="round">
     <li class="one">
         <h5>Configure ASP.NET Membership</h5>
@@ -94,7 +120,7 @@
             explore offerings from many providers.
         </p>
     </section>
-</section>
+</section>*@
 }
 else
 {    

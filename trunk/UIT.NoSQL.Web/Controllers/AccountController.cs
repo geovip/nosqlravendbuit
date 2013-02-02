@@ -147,8 +147,20 @@ namespace UIT.NoSQL.Web.Controllers
                 bool changePasswordSucceeded;
                 try
                 {
-                    MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
-                    changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
+                    //MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
+                    //changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
+                    UserObject user = userService.Load(((UserObject)Session["user"]).Id);
+                    if (Utility.GetMd5Hash(model.OldPassword) != user.Password)
+                    {
+                        changePasswordSucceeded = false;
+                    }
+                    else
+                    {
+                        user.Password = Utility.GetMd5Hash(model.NewPassword);
+                        userService.Save(user);
+                        changePasswordSucceeded = true;
+                    }
+                    
                 }
                 catch (Exception)
                 {
@@ -195,6 +207,12 @@ namespace UIT.NoSQL.Web.Controllers
         private IEnumerable<string> GetErrorsFromModelState()
         {
             return ModelState.SelectMany(x => x.Value.Errors.Select(error => error.ErrorMessage));
+        }
+
+        public ActionResult ViewProfile()
+        { 
+            UserObject user =  userService.Load(((UserObject)Session["user"]).Id);
+            return View(user);
         }
 
         #region Status Codes

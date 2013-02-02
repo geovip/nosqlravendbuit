@@ -60,6 +60,12 @@ namespace UIT.NoSQL.Service
             return groups.ToList();
         }
 
+        public List<GroupObject> GetTenGroupPublic()
+        {
+            var groups = session.Query<GroupObject>().Where(x => x.IsPublic == true).Take(10);
+            return groups.ToList();
+        }
+
         public List<GroupObject> GetByUser(string userId)
         {
             //var groups = session.Query<GroupObject>().Where;
@@ -132,7 +138,7 @@ namespace UIT.NoSQL.Service
             */
             //Raven.Client.Linq.IRavenQueryable<GroupObject> listGroup;
 
-            List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search>()
+            List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search_NotAnalyed>()
                 .Statistics(out stats)
                 .Skip(skip)
                 .Take(take)
@@ -141,7 +147,7 @@ namespace UIT.NoSQL.Service
 
             if (listGroup.Count == 0)
             {
-                searchStr = string.Format("*{0}*", searchStr);
+                //searchStr = string.Format("*{0}*", searchStr);
 
                 listGroup = session.Query<GroupObject, GroupObject_Search>()
                 .Statistics(out stats)
@@ -231,20 +237,33 @@ namespace UIT.NoSQL.Service
     }
     
     public class GroupObject_Search : AbstractIndexCreationTask<GroupObject>
+    {
+        public GroupObject_Search()
         {
-            public GroupObject_Search()
-            {
-                Map = groups => from g in groups
-                                select new
-                                {
-                                    g.GroupName,
-                                    g.Description,
-                                    g.CreateBy.FullName
-                                };
-                Indexes.Add(x => x.GroupName, FieldIndexing.Analyzed);
-                Indexes.Add(x=> x.Description, FieldIndexing.Analyzed);
-            }
+            Map = groups => from g in groups
+                            select new
+                            {
+                                g.GroupName,
+                                g.Description,
+                                g.CreateBy.FullName
+                            };
+            Indexes.Add(x => x.GroupName, FieldIndexing.Analyzed);
+            Indexes.Add(x=> x.Description, FieldIndexing.Analyzed);
         }
+    }
+
+    public class GroupObject_Search_NotAnalyed : AbstractIndexCreationTask<GroupObject>
+    {
+        public GroupObject_Search_NotAnalyed()
+        {
+            Map = groups => from g in groups
+                            select new
+                            {
+                                g.GroupName
+                            };
+            Indexes.Add(x => x.GroupName, FieldIndexing.NotAnalyzed);
+        }
+    }
 
     //public class GroupObject_Search : AbstractIndexCreationTask<GroupObject, GroupObject_Search.ReduceResult>
     //{
