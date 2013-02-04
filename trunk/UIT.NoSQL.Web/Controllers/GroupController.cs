@@ -357,9 +357,28 @@ namespace UIT.NoSQL.Web.Controllers
             return View();
         }
 
-        [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
+        [MemberFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Manager(string id)
         {
+            bool Member = false;
+
+            if (Session["user"] != null)
+            {
+                var user = (UserObject)Session["user"];
+                foreach (var userGroup in user.ListUserGroup)
+                {
+                    if (userGroup.GroupId.Equals(id))
+                    {
+                        if (userGroup.GroupRole.GroupName == GroupRoleEnum.Member.ToString())
+                        {
+                            Member = true;
+                        }
+                    }
+                }
+
+                ViewBag.Member = Member;
+            }
+
             return View();
         }
 
@@ -386,6 +405,37 @@ namespace UIT.NoSQL.Web.Controllers
             return View(userGroup);
         }
 
+        [HttpPost]
+        public string UpdateManagerUser(UserGroupObject userGroup)
+        {
+            IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;//var user = 
+            var userGroupLoad = userGroupService.Load(userGroup.Id);
+            var group = groupService.Load(userGroup.GroupId);
+            var user = userService.Load(userGroup.UserId);
+
+            userGroupLoad.IsReceiveEmail = userGroup.IsReceiveEmail;
+            foreach (var item in group.ListUserGroup)
+            {
+                if (item.Id.Equals(userGroup.Id))
+                {
+                    item.IsReceiveEmail = userGroup.IsReceiveEmail;
+                }
+            }
+            foreach (var item in user.ListUserGroup)
+            {
+                if (item.Id.Equals(userGroup.Id))
+                {
+                    item.IsReceiveEmail = userGroup.IsReceiveEmail;
+                }
+            }
+
+
+            userGroupService.Save(userGroupLoad);
+            groupService.Save(group);
+            userService.Save(user);
+
+            return "success";
+        }
 
         [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Setting(string id)

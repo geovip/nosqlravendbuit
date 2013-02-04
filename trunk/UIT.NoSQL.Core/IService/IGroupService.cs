@@ -17,7 +17,8 @@ namespace UIT.NoSQL.Core.IService
         GroupObject Load(string id);
         GroupObject LoadWithUser(string groupID, out List<UserObject> listUser, out List<UserGroupObject> listUserGroup);
         GroupObject LoadWithUser(string id);
-        List<GroupObject> Search(string searchStr, int skip, int take, out int totalResult);
+        List<GroupObject> Search(string searchStr, int take, out int totalResult);
+        List<GroupObject> Search(string searchStr, int skip, int take);
         List<GroupObject> LoadList(string[] arrId);
         bool SendEmail(List<UserGroupObject> listUser, string subject, string body);
     }
