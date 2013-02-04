@@ -2,46 +2,54 @@
 
 @{
     ViewBag.Title = "ManagerUser";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-
-@section LeftMenu {
-    <section id="leftmenu">
-        @Html.Action("LeftMenu", "Home")
-    </section>
-}
 
 @section menu {
     <section id="topmenu">
         @Html.Action("TopMenuUser", "Group", new{action = "orther"})
     </section>
 }
+
+<script type="text/javascript">
+    function xmlhttpPost(strURL) {
+        
+        $.post(strURL, getUserObject(), function (data) {
+            alert(data);
+        });
+
+    }
+    function getUserObject() {
+        var id = document.getElementById("Id").value;
+        var groupId = document.getElementById("GroupId").value;
+        var userId = document.getElementById("UserId").value;
+        var isReceiveEmail = document.getElementById("IsReceiveEmail").checked;
+        
+        var qstr = 
+            {
+                Id: id,
+                GroupId: groupId,
+                UserId: userId,
+                IsReceiveEmail: isReceiveEmail
+                
+            };
+        
+        return qstr;
+    }
+</script>
+
 <h2>ManagerUser</h2>
 
-@using (Html.BeginForm()) {
+<div>
     @Html.ValidationSummary(true)
 
     <fieldset>
         <legend>UserGroupObject</legend>
 
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.UserId)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.UserId)
-            @Html.ValidationMessageFor(model => model.UserId)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.GroupId)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.GroupId)
-            @Html.ValidationMessageFor(model => model.GroupId)
-        </div>
+        <input type="hidden" id="Id" value="@Model.Id" />
+        <input type="hidden" id="GroupId" value="@Model.GroupId" />
+        <input type="hidden" id="UserId" value="@Model.UserId" />
 
         <div class="editor-label">
             @Html.LabelFor(model => model.GroupName)
@@ -66,12 +74,20 @@
             @Html.EditorFor(model => model.JoinDate)
             @Html.ValidationMessageFor(model => model.JoinDate)
         </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsReceiveEmail)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsReceiveEmail)
+            @Html.ValidationMessageFor(model => model.IsReceiveEmail)
+        </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <input type="button" value="Save" onclick="xmlhttpPost('/Group/UpdateManagerUser'); return false;" />
         </p>
     </fieldset>
-}
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")

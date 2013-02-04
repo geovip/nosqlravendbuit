@@ -89,7 +89,7 @@ top: 17px;
     <section id="topmenu">
         @*@Html.Action("TopMenuUser", "Group")*@
         <div class="BUTTONSTYLE CREATETOPIC" onclick = "createNewTopic('@ViewBag.GroupId')">Create New Topic</div>
-        <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId', '@ViewBag.Role')">Manager</div>
+        <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId')">Manager</div>
     </section>
 }
 
@@ -151,13 +151,13 @@ top: 17px;
         function createNewTopic(id) {
             window.location = "/Topic/Create/" + id;
         }
-        function manage(id, role) {
-            if (role == 'Member') {
-                window.location = "/Group/ManagerUser/" + id;
-            }
-            else if(role == 'Owner' || role == 'Manager') {
+        function manage(id) {
+            //if (role == 'Member') {
+            //    window.location = "/Group/ManagerUser/" + id;
+            //}
+            //else if(role == 'Owner' || role == 'Manager') {
                 window.location = "/Group/Manager/" + id;
-            }
+            //}
         }
     </script>
 
