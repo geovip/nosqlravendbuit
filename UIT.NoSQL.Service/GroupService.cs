@@ -94,7 +94,7 @@ namespace UIT.NoSQL.Service
             return group;
         }
 
-        public List<GroupObject> Search(string searchStr, int skip, int take, out int totalResult)
+        public List<GroupObject> Search(string searchStr, int take, out int totalResult)
         {
             //string str = string.Format("GroupName: *\"{0}\"* OR Description: *\"{0}\"*", searchStr);
             //str = str.Replace("\\","");// OR Description: \"{0}\"
@@ -138,27 +138,38 @@ namespace UIT.NoSQL.Service
             */
             //Raven.Client.Linq.IRavenQueryable<GroupObject> listGroup;
 
-            List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search_NotAnalyed>()
-                .Statistics(out stats)
-                .Skip(skip)
-                .Take(take)
-                .Search(x => x.GroupName, searchStr)
-                .ToList();
+            //List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search_NotAnalyed>()
+            //    .Statistics(out stats)
+            //    .Skip(skip)
+            //    .Take(take)
+            //    .Search(x => x.GroupName, searchStr)
+            //    .ToList();
 
-            if (listGroup.Count == 0)
-            {
+            //if (listGroup.Count == 0)
+            //{
                 //searchStr = string.Format("*{0}*", searchStr);
 
-                listGroup = session.Query<GroupObject, GroupObject_Search>()
+                List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search>()
                 .Statistics(out stats)
-                .Skip(skip)
-                .Take(take)
+                //.Skip(skip)
+                //.Take(10)
                 .Search(x=>x.GroupName, searchStr)
                 .ToList();
-            }
+            //}
 
-            totalResult = stats.TotalResults;
+                totalResult = stats.TotalResults;
 
+            return listGroup;
+        }
+
+        public List<GroupObject> Search(string searchStr, int skip, int take)
+        {
+            List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search>()
+            .Skip(skip)
+            .Take(take)
+            .Search(x => x.GroupName, searchStr)
+            .ToList();
+            
             return listGroup;
         }
 

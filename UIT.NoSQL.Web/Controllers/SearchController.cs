@@ -21,7 +21,7 @@ namespace UIT.NoSQL.Web.Controllers
         // GET: /Search/
 
         [HttpPost]
-        public ActionResult Index(string searchStr, int page)
+        public ActionResult Index(string searchStr)
         {
             DateTime start;
             DateTime end;
@@ -30,7 +30,7 @@ namespace UIT.NoSQL.Web.Controllers
             start = DateTime.Now;
             searchStr = searchStr.Trim();
 
-            List<GroupObject> listGroup = groupService.Search(searchStr, page*10, 10, out totalResult);
+            List<GroupObject> listGroup = groupService.Search(searchStr, 10, out totalResult);
             end = DateTime.Now;
 
             TempData["totalResult"] = totalResult;
@@ -54,12 +54,11 @@ namespace UIT.NoSQL.Web.Controllers
         {
             DateTime start;
             DateTime end;
-            int totalResult;
 
             start = DateTime.Now;
             searchStr = searchStr.Trim();
 
-            List<GroupObject> listGroup = groupService.Search(searchStr, page*10, 10, out totalResult);
+            List<GroupObject> listGroup = groupService.Search(searchStr, page*10, 10);
             end = DateTime.Now;
             
             return View(listGroup);
