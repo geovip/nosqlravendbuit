@@ -3,16 +3,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section LeftMenu {
-    <section id="leftmenu">
-        @Html.Action("LeftManager", "Group")
-    </section>
-}
+@if (ViewBag.Member == true)
+{
+   
+    @section LeftMenu {
+        <section id="leftmenu">
+            @Html.Action("LeftMenu", "Home")
+        </section>
+    }
 
-@section menu {
-    <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group", new{action = "orther"})
-    </section>
+    @Html.Action("ManagerUser", "Group")
 }
+else
+{
+    @section LeftMenu {
+        <section id="leftmenu">
+            @Html.Action("LeftManager", "Group")
+        </section>
+    }
 
-<div id="MyContent"></div>
+    <div id="MyContent"></div>
+}
+    @section menu {
+        <section id="topmenu">
+            @Html.Action("TopMenuUser", "Group", new{action = "orther"})
+        </section>
+    }
