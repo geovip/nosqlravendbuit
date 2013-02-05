@@ -92,6 +92,7 @@ namespace UIT.NoSQL.Web.Controllers
             return RedirectToAction("Detail", "Group", new { id = group.Id });
         }
 
+        
         [MemberFilter(TypeID=TypeIDEnum.GroupID)]
         public ActionResult Detail(string id)
         {
@@ -104,13 +105,17 @@ namespace UIT.NoSQL.Web.Controllers
                 var userGroup = userSession.ListUserGroup.Find(u => u.GroupId == id);
                 if (userGroup != null)
                 {
-                    roleStr = userGroup.GroupRole.GroupName;
+                    if (userGroup.IsApprove == UserGroupStatus.Approve)
+                        roleStr = userGroup.GroupRole.GroupName;
+                    else
+                        roleStr = "JoinRequest";
                 }
             }
 
             ViewBag.Role = roleStr;
             ViewBag.GroupName = group.GroupName;
             ViewBag.GroupId = group.Id;
+            TempData["Role"] = roleStr;
 
             return View(group.ListTopic);
         }

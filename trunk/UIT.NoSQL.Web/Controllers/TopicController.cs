@@ -35,6 +35,7 @@ namespace UIT.NoSQL.Web.Controllers
         [MemberFilter(TypeID = TypeIDEnum.TopicID)]
         public ActionResult Detail(string id)
         {
+            ViewBag.Role = TempData["Role"];
             var topic = topicService.Load(id);
             if (topic != null)
             {

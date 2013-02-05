@@ -87,9 +87,22 @@ top: 17px;
 }
 @section menu {
     <section id="topmenu">
-        @*@Html.Action("TopMenuUser", "Group")*@
-        <div class="BUTTONSTYLE CREATETOPIC" onclick = "createNewTopic('@ViewBag.GroupId')">Create New Topic</div>
-        <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId')">Manager</div>
+        @if (ViewBag.Role == "Owner" || ViewBag.Role == "Manager" || ViewBag.Role == "Member")
+        {
+            <div class="BUTTONSTYLE CREATETOPIC" onclick = "createNewTopic('@ViewBag.GroupId')">Create New Topic</div>
+            <div class="BUTTONSTYLE MANAGERBUTTON" onclick = "manage('@ViewBag.GroupId')">Manager</div>
+        }
+        else
+        {
+            if(ViewBag.Role == "JoinRequest")
+            {
+                <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Wait for Accepting...</div>
+            }
+            else
+            {
+                <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Register for discussion</div>
+            }
+        }
     </section>
 }
 
@@ -158,6 +171,14 @@ top: 17px;
             //else if(role == 'Owner' || role == 'Manager') {
                 window.location = "/Group/Manager/" + id;
             //}
+        }
+
+        function xmlhttpPost(_id) {
+
+            $.post("/Group/Join", { id: _id }, function (data) {
+                alert(data);
+            });
+
         }
     </script>
 

@@ -12,16 +12,27 @@
 
 @section menu {
     <section id="topmenu">
-        @Html.Action("TopMenuUser", "Group", new{id = @Model.GroupId, action = "topic"})
+        @if (ViewBag.Role == "Owner" || ViewBag.Role == "Manager" || ViewBag.Role == "Member")
+        {
+            @Html.Action("TopMenuUser", "Group", new{id = @Model.GroupId, action = "PostReply"})
+        }
+        else
+        {
+            if (ViewBag.Role == "JoinRequest")
+            {
+                @Html.Action("TopMenuUser", "Group", new{id = @Model.GroupId, action = "WaitForAccepting"})   
+            }
+            else
+            {
+                if (ViewBag.Role == "unlogin")
+                {
+                    @Html.Action("TopMenuUser", "Group", new{id = @Model.GroupId, action = "JoinGroup"})   
+                }
+            }
+        }
     </section>
 }
 
-        @*<script type="text/javascript" src="../../Scripts/jquery-1.6.2.js"></script>
-        <script type="text/javascript" src="../../Scripts/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
-        <script type="text/javascript" src="../../Plugin/ckeditor/ckeditor.js"></script>
-        <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.11.js"></script>
-        <script type="text/javascript" src="../../Scripts/knockout-2.0.0.js"></script>*@
         <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
 
         <script type="text/javascript">
@@ -107,6 +118,7 @@
 
                 userId = $('#userId').val();
                 isMember = $('#isMember').val();
+                role = $('#role').val();
                 groupPublic = $('#groupPublic').val();
                 getTopicById();
 
@@ -240,9 +252,20 @@
                              </td>
                              <td align="right" width=70%">
                                 <span>${$item.getCreateDate}</span> 
-                                <span class="BUTTONSTYLE REPLYBUTTON">Post Reply</span>
+                                 {{if role == "Owner" || role == "Manager" || role == "Member"}}
+                                    <span class="BUTTONSTYLE REPLYBUTTON">Post Reply</span>
+                                 {{/if}}
                              </td>
-                             <td align="left" width="10%">
+                            <td align="left" width="10%">
+                                {{if role == "Owner" || role == "Manager" }}
+                                    <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
+                                    <input type="hidden" value="${Id}">
+                                {{else role == "Member" && $item.compareUserId }}
+                                    <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
+                                    <input type="hidden" value="${Id}">
+                                {{/if}}
+                             </td>
+                             @*<td align="left" width="10%">
                                 {{if !isMember}}
                                     <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
                                     <input type="hidden" value="${Id}">
@@ -250,8 +273,7 @@
                                     <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
                                     <input type="hidden" value="${Id}">
                                 {{/if}}
-
-                             </td>
+                             </td>*@
                         </tr>
                     </tbody>                 
                 </table>
@@ -286,6 +308,7 @@
         <input id="topicId" type="hidden" value="@Model.Id" />
         <input id="userId" type="hidden" value="@ViewBag.UserId" />
         <input id="isMember" type="hidden" value="@ViewBag.IsMember" />
+        <input id="role" type="hidden" value="@ViewBag.Role" />
         <input id="groupPublic" type="hidden" value="@ViewBag.GroupPublic" />
 
         <input id="time" type="hidden" value="@ViewBag.time" />

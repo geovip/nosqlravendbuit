@@ -23,19 +23,21 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult Index()
         {
+            IGroupService groupService;
+            List<GroupObject> listGroup;
             var user = (UserObject)Session["user"];
             if (user == null || user.ListUserGroup.Count <= 0)
             {
                 TempData["IsNew"] = "True";
-                IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
-                List<GroupObject> listGroup = groupService.GetTenGroupPublic();
-                return View(listGroup);
+                groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+                listGroup = groupService.GetTenGroupPublic();
+                //return View(listGroup);
             }
             else
             {
                 TempData["IsNew"] = "False";
                 bool isEnd = user.ListUserGroup.Count <= 10;
-                IGroupService groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
+                groupService = MvcUnityContainer.Container.Resolve(typeof(IGroupService), "") as IGroupService;
                 string[] arrId;
                 if (isEnd)
                 {
@@ -51,10 +53,16 @@ namespace UIT.NoSQL.Web.Controllers
                     arrId[i] = user.ListUserGroup[i].GroupId;
                 }
 
-                List<GroupObject> listGroup = groupService.LoadList(arrId);
+                listGroup = groupService.LoadList(arrId);
                 TempData["paging"] = user.ListUserGroup.Count / 10 + +((user.ListUserGroup.Count % 10) != 0 ? 1 : 0); ;
-                return View(listGroup);
+                //return View(listGroup);
             }
+
+            if (user == null)
+                ViewBag.IsLogin = false;
+            else
+                ViewBag.IsLogin = true;
+            return View(listGroup);
         }
 
         [HttpPost]
