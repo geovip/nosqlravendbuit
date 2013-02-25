@@ -16,7 +16,7 @@ using System.Net;
 namespace UIT.NoSQL.Web
 {
     public class Utility
-    {
+    { 
         private IDocumentSession session;
 
         public Utility(IDocumentSession session)

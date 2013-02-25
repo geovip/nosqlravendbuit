@@ -8,6 +8,8 @@ using UIT.NoSQL.Service;
 using UIT.NoSQL.Core.Domain;
 using UIT.NoSQL.Web.Filters;
 using System.Diagnostics;
+using System.IO;
+using System.Configuration;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -35,7 +37,7 @@ namespace UIT.NoSQL.Web.Controllers
         [MemberFilter(TypeID = TypeIDEnum.TopicID)]
         public ActionResult Detail(string id)
         {
-            ViewBag.Role = TempData["Role"];
+            //ViewBag.Role = TempData["Role"];
             var topic = topicService.Load(id);
             if (topic != null)
             {
@@ -46,24 +48,24 @@ namespace UIT.NoSQL.Web.Controllers
                 group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfView += 1;
                 groupService.Save(group);
 
-                // kiem tra quyen cua user
-                UserObject user = (UserObject)(Session["user"]);
-                if (user == null)
+                // Get Current Role
+                string roleStr = "unlogin";
+                UserObject userSession = (UserObject)Session["user"];
+                if (userSession != null)
                 {
-                    ViewBag.GroupPublic = true;
+                    var userGroup = userSession.ListUserGroup.Find(u => u.GroupId == topic.GroupId);
+                    if (userGroup != null)
+                    {
+                        if (userGroup.IsApprove == UserGroupStatus.Approve)
+                            roleStr = userGroup.GroupRole.GroupName;
+                        else
+                            roleStr = "JoinRequest";
+                        ViewBag.UserId = userSession.Id;
+                    }
                 }
-                else
-                {
-                    ViewBag.GroupPublic = false;
-                    string role = user.ListUserGroup.Find(u => u.GroupId == topic.GroupId).GroupRole.GroupName;
-
-                    // dua du lieu ra View gom UserId de kiem tra co cho xoa bai dang hay khong
-                    if (role == "Manager" || role == "Owner")
-                        ViewBag.IsMember = false;
-                    else
-                        ViewBag.IsMember = true;
-                    ViewBag.UserId = user.Id;
-                }
+                ViewBag.Role = roleStr;
+                ViewBag.HostData = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+                
                 return View(topic);
             }
             else
@@ -89,24 +91,43 @@ namespace UIT.NoSQL.Web.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(TopicObject topic)
+        public string Create(string GroupId, string TopicName, string Content, List<FileAttach> listFilesAttach)
         {
             try
             {
                 // TODO: Add insert logic here
                 var user = (UserObject)Session["user"];
                 //string groupId = TempData["GroupId"].ToString();
-
+                TopicObject topic = new TopicObject();
                 topic.Id = Guid.NewGuid().ToString();
+                topic.TopicName = TopicName;
+                topic.Content = Content;
                 topic.CreateDate = DateTime.Now;
                 topic.LastModified = DateTime.Now;
                 topic.NumberOfView = 0;
                 topic.NumberOfComment = 0;
                 topic.CreateBy = user;
-                //topic.GroupId = groupId;
-                
-                topicService.Save(topic);
+                topic.GroupId = GroupId;
 
+                if (listFilesAttach != null)
+                {
+                    List<FileAttach> listTemp = new List<FileAttach>();
+                    foreach (var fileAttach in listFilesAttach)
+                    {
+                        var file = new FileAttach();
+                        file.Id = Guid.NewGuid().ToString();
+                        file.DisplayName = fileAttach.DisplayName;
+                        file.Size = fileAttach.Size;
+                        var realName = fileAttach.RealName.Replace("/Files/", "").Replace("/", "-");
+                        //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
+                        file.RealName = realName;
+                        listTemp.Add(file);
+                    }
+                    topic.ListFilesAttach = listTemp;
+                }
+                
+
+                topicService.Save(topic);
 
                 var group = groupService.Load(topic.GroupId);
                 group.ListTopic.Add(topic);
@@ -120,13 +141,68 @@ namespace UIT.NoSQL.Web.Controllers
                 string body = topic.Content;
                 groupService.SendEmail(group.ListUserGroup, subject, body);
 
-                return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
+                return "success";
+                //return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
             }
             catch
             {
-                return View();
+                return "error";
+                //return View();
             }
         }
+        //public ActionResult Create(string GroupId,string TopicName, string Content, List<FileAttach> listFilesAttach)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add insert logic here
+        //        var user = (UserObject)Session["user"];
+        //        //string groupId = TempData["GroupId"].ToString();
+        //        TopicObject topic = new TopicObject();
+        //        topic.Id = Guid.NewGuid().ToString();
+        //        topic.TopicName = TopicName;
+        //        topic.Content = Content;
+        //        topic.CreateDate = DateTime.Now;
+        //        topic.LastModified = DateTime.Now;
+        //        topic.NumberOfView = 0;
+        //        topic.NumberOfComment = 0;
+        //        topic.CreateBy = user;
+        //        topic.GroupId = GroupId;
+
+        //        List<FileAttach> listTemp = new List<FileAttach>();
+        //        foreach (var fileAttach in listFilesAttach)
+        //        {
+        //            var file = new FileAttach();
+        //            file.Id = Guid.NewGuid().ToString();
+        //            file.DisplayName = fileAttach.DisplayName;
+        //            file.Size = fileAttach.Size;
+        //            var realName = fileAttach.RealName.Replace("/Files/", "").Replace("/", "-");
+        //            //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
+        //            file.RealName = realName;
+        //            listTemp.Add(file);
+        //        }
+        //        topic.ListFilesAttach = listTemp;
+      
+        //        topicService.Save(topic);
+
+        //        var group = groupService.Load(topic.GroupId);
+        //        group.ListTopic.Add(topic);
+        //        group.NewEvent.Title = topic.TopicName;
+        //        group.NewEvent.CreateDate = topic.CreateDate;
+        //        group.NewEvent.CreateBy = user.FullName; ;
+        //        groupService.Save(group);
+
+        //        //send email
+        //        string subject = user.FullName + " created " + topic.TopicName;
+        //        string body = topic.Content;
+        //        groupService.SendEmail(group.ListUserGroup, subject, body);
+
+        //        return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         //
         // GET: /Topic/Edit/5
@@ -188,10 +264,8 @@ namespace UIT.NoSQL.Web.Controllers
         [ValidateInput(false)]
         [LoginFilter]
         [MemberFilter(TypeID = TypeIDEnum.TopicID)]
-        public JsonResult AddComment(string Id, string content, string parentContent)
+        public JsonResult AddComment(string Id, string content, string parentContent, List<FileAttach> listFilesAttach)
         {
-            
-            
             var topic = topicService.Load(Id);
             if (topic.ListComment == null)
             {
@@ -209,6 +283,22 @@ namespace UIT.NoSQL.Web.Controllers
             
             comment.CreateDate = DateTime.Now;
             comment.isDeleted = false;
+
+            List<FileAttach> listTemp = new List<FileAttach>();
+            foreach (var fileAttach in listFilesAttach)
+            {
+                var file = new FileAttach();
+                file.Id = Guid.NewGuid().ToString();
+                file.DisplayName = fileAttach.DisplayName;
+                file.Size = fileAttach.Size;
+                var realName = fileAttach.RealName.Replace("/Files/","").Replace("/","-");
+                //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
+                file.RealName = realName;
+                listTemp.Add(file);
+            }
+
+            comment.ListFilesAttach = listTemp;
+
             topic.ListComment.Add(comment);
             topic.NumberOfComment += 1;
             topic.LastModified = DateTime.Now;

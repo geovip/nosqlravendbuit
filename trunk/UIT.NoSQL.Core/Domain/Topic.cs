@@ -30,10 +30,12 @@ namespace UIT.NoSQL.Core.Domain
         public bool isDeleted { get; set; }
 
         public List<CommentObject> ListComment { get; set; }
+        public List<FileAttach> ListFilesAttach { get; set; }
 
         public TopicObject()
         {
             ListComment = new List<CommentObject>();
+            ListFilesAttach = new List<FileAttach>();
         }
 
         public UInt32 GetNumberOfComment()
@@ -76,5 +78,20 @@ namespace UIT.NoSQL.Core.Domain
         public DenormalizedUser<UserObject> CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
         public bool isDeleted { get; set; }
+        public List<FileAttach> ListFilesAttach { get; set; }
+
+        public CommentObject()
+        {
+            ListFilesAttach = new List<FileAttach>();
+        }
     }
+
+    public class FileAttach
+    {
+        public string Id { get; set; }
+        public string DisplayName { get; set; }
+        public string Size { get; set; }
+        public string RealName { get; set; }
+    }
+
 }
