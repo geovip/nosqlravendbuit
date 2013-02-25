@@ -18,24 +18,141 @@
     </section>
 }
 
+<link href="~/styles/Bootstrap/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="~/styles/Bootstrap/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+<link href="~/styles/Bootstrap/bootstrap-image-gallery.css" rel="stylesheet" type="text/css" />
+<link href="~/styles/FileUpload/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+
 <script type="text/javascript">
+    var currentPositionAttachFile;
+    var editor;
     function BackGroup(id) {
-        window.location = "/Group/Detail/" + id;
+        var checkstr = confirm('Are you sure you want to cancel?');
+        if (checkstr == true) {
+            window.location = "/Group/Detail/" + id;
+        } else {
+            return false;
+        }       
+    }
+    function BackGroupNoConfirm(id) {
+            window.location = "/Group/Detail/" + id;
     }
 
+    function FileAttach(id, displayName, size, realName) {
+        this.Id = id;
+        this.DisplayName = displayName;
+        this.Size = size;
+        this.RealName = realName;
+    }
+
+    function createEditor() {
+        if (editor)
+            return;
+        var config = { startupFocus: true };
+        editor = CKEDITOR.appendTo('editor', config);
+    }
+
+
     $(document).ready(function () {
+        createEditor();
+
         $('.POSTTOPIC').click(function () {
-            $('#myForm').submit();
+            var GroupId = $('#GroupId').val();
+            var TopicName = $('#TopicName').val();
+            var Content = editor.getData();
+            var filesAttach = $('.file');
+            var arrFilesAttach = new Array();
+            for (i = 0; i < filesAttach.length; i++) {
+                var displayName = $(filesAttach[i]).children().get(0).textContent;
+                var size = $(filesAttach[i]).children().get(1).textContent;
+                var realName = $(filesAttach[i]).children().get(2).getAttribute("data-url");
+                var file = new FileAttach('', displayName, size, realName);
+                arrFilesAttach.push(file);
+            }
+            var dataJson =  JSON.stringify({ GroupId:GroupId,TopicName:TopicName,Content:Content, listFilesAttach:arrFilesAttach });
+
+            var url = "/Topic/Create";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                data: dataJson,
+                success: function (data) {
+                    if (data == "success")
+                        BackGroupNoConfirm('@TempData["GroupId"]');
+                    else
+                        alert("Error");
+                }
+            });
+
+            //$("#message").hide();
+            //$("#message").stop().css({ opacity: 1 }).clearQueue();
+            //$("#message").html("Posting...");
+            //$("#message").show();
+
+            //var filesAttach = $('.file');
+            //var arrFilesAttach = new Array();
+            //for (i = 0; i < filesAttach.length; i++) {
+            //    var displayName = $(filesAttach[i]).children().get(0).textContent;
+            //    var size = $(filesAttach[i]).children().get(1).textContent;
+            //    var realName = $(filesAttach[i]).children().get(2).getAttribute("data-url");
+            //    var file = new FileAttach('', displayName, size, realName);
+            //    arrFilesAttach.push(file);
+            //}
+            //var dataJson = JSON.stringify({listFilesAttach: arrFilesAttach });
+            //$.ajax({
+            //    url: url,
+            //    type: 'POST',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: dataJson,
+            //    dataType: 'json',
+            //    success: function (data) {
+            //        $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);;
+            //        // xoa editor va cac html cac file da upload len
+            //        destroyEditor();
+            //        currentPositionAttachFile = _this;
+            //        var divFiles = currentPositionAttachFile.parents('.fullEditor').find('.files');
+            //        divFiles.empty();
+            //        _this.parent().hide();
+            //        $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
+            //        modifyLinkDownload();
+            //    }
+            //});
+        });
+
+           
+
+
+        // dinh kem tap tin
+        $('.attach-files').live('click', function () {
+            $('.box-attach-files').css('visibility', 'visible');
+            currentPositionAttachFile = $(this);
+        });
+        $('.close-attach-files').live('click', function () {
+            $('.box-attach-files').css('visibility', 'hidden');
+            $('.template-download').remove();
+            $('.template-upload').remove();
+        });
+        // xoa tap tin dinh kem
+        $('.delete-file').live('click', function () {
+            var url = $(this).attr("data-url");
+            $.ajax({
+                url: url,
+                type: 'DELETE'
+            });
+
+            $(this).parents('.file').remove();
         });
     });
 </script>
 
-<br/>
-Group&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp<span style="font-size:medium;font-weight:bold">@ViewBag.GroupName</span><br/>
-Create by: @ViewBag.FullName<br/><br/>
+<br />
+Group&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp<span style="font-size: medium; font-weight: bold">@ViewBag.GroupName</span><br />
+Create by: @ViewBag.FullName<br />
+<br />
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "myForm" }))
 {    
@@ -52,25 +169,158 @@ Create by: @ViewBag.FullName<br/><br/>
             @Html.ValidationMessageFor(model => model.TopicName)
         </div>
 
+        <div class="files">
+        </div>
+        <img src="~/Images/clear.cache.gif" style="width: 21px; height: 21px; background: url(/Images/gm_icon.png) no-repeat -288px -2px;" border="0" alt="Đính kèm tệp" />
+        <a class="attach-files" href="#" style="text-decoration: none; color: blue">Attach files</a>
+
         <div class="editor-label">
             @Html.LabelFor(model => model.Content)
         </div>
-        <div class="editor-field">
+        <div id="editor" style="margin-bottom:4px;margin-top:4px">
+	    </div>
+        @*<div class="editor-field">
             @Html.TextAreaFor(model => model.Content, new { @id = "ckeContent" })
             <script type="text/javascript">
                 CKEDITOR.replace("ckeContent");
-//                CKEDITOR.replace("ckeContent", {toolbar: 'Basic'});
             </script>
-            @*@Html.EditorFor(model => model.Content)
-            @Html.ValidationMessageFor(model => model.Content)*@
-        </div>
-
-        <p>
+        </div>*@
+        <br />
+        <div class="BUTTONSTYLE POSTTOPIC">Post Topic</div>
+        @*<p>
             <input type="submit" value="POST" />
-        </p>
+        </p>*@
     </fieldset>
 }
 
-@*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        @*<td class="preview"><span class="fade"></span></td>*@
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        {% if (file.error) { %}
+            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+            <td>
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+            </td>
+            <td class="start">{% if (!o.options.autoUpload) { %}
+                <button class="btn btn-primary">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}</td>
+        {% } else { %}
+            <td colspan="2"></td>
+        {% } %}
+        <td class="cancel">{% if (!i) { %}
+            <button class="btn btn-warning">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>Cancel</span>
+            </button>
+        {% } %}</td>
+    </tr>
+{% } %}
+</script>
+
+
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        {% if (file.error) { %}
+            <td></td>
+            <td class="name"><span>{%=file.name%}</span></td>
+            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else { %}
+            @*<td class="preview"> 
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+            </td>
+            <td class="name">
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+            </td>*@
+            <td class="name">
+                <span>{%=file.name%}</span>
+            </td>
+            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td colspan="2"></td>
+        {% } %}
+        <td class="delete">
+            <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <i class="icon-trash icon-white"></i>
+                <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1">
+        </td>
+    </tr>
+{% } %}
+</script>
+
+<script type="text/javascript" src="~/Scripts/FileUpload/vendor/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/tmpl.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/load-image.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/canvas-to-blob.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.fileupload.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.fileupload-fp.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/main.js"></script>
+
+<div class="box-attach-files" style="position: absolute; width: 1280px; height: 768px; top: 0; left: 0; background: white; opacity: 0.5; z-index: 1000; visibility: hidden"></div>
+<div class="box-attach-files" style="position: absolute; width: 800px; height: 400px; top: 20px; margin: auto; background: white; box-shadow: 0 0 2px 2px #888; z-index: 1001; visibility: hidden">
+
+    <form id="fileupload" action="@Url.Action("Uploads")" method="POST" enctype="multipart/form-data">
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <noscript>
+            <input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div style="height: 20px">
+            <img class="close-attach-files" src="~/Images/clear.cache.gif" style="float: right; width: 15px; height: 15px; background: url(/Images/gm_icon.png) no-repeat -274px -42px; cursor: pointer" border="0" alt="Đóng" title="Đóng" />
+        </div>
+
+        <div class="row fileupload-buttonbar" style="margin-left: 10px">
+            <div class="span7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-success fileinput-button">
+                    <i class="icon-plus icon-white"></i>
+                    <span>Add files...</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="icon-ban-circle icon-white"></i>
+                    <span>Cancel upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="icon-trash icon-white"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" class="toggle">
+            </div>
+            <!-- The global progress information -->
+            <div class="span5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="bar" style="width: 0%;"></div>
+                </div>
+                <!-- The extended global progress information -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The loading indicator is shown during file processing -->
+        <div class="fileupload-loading"></div>
+
+        <div style="width: 790px; height: 285px; margin-left: 10px; overflow: auto">
+            <!-- The table listing the files available for upload/download -->
+            <table role="presentation" class="table table-striped">
+                <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+            </table>
+        </div>
+    </form>
+</div>

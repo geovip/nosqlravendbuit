@@ -159,6 +159,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -212,6 +213,20 @@
     <Content Include="Images\clear.cache.gif" />
     <Content Include="Images\gm_icon.png" />
     <Content Include="Images\logo-DaHuGroup.gif" />
+    <Content Include="Scripts\FileUpload\canvas-to-blob.js" />
+    <Content Include="Scripts\FileUpload\canvas-to-blob.min.js" />
+    <Content Include="Scripts\FileUpload\cors\jquery.postmessage-transport.js" />
+    <Content Include="Scripts\FileUpload\cors\jquery.xdr-transport.js" />
+    <Content Include="Scripts\FileUpload\jquery.fileupload-fp.js" />
+    <Content Include="Scripts\FileUpload\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\FileUpload\jquery.fileupload.js" />
+    <Content Include="Scripts\FileUpload\jquery.iframe-transport.js" />
+    <Content Include="Scripts\FileUpload\load-image.js" />
+    <Content Include="Scripts\FileUpload\load-image.min.js" />
+    <Content Include="Scripts\FileUpload\main.js" />
+    <Content Include="Scripts\FileUpload\tmpl.js" />
+    <Content Include="Scripts\FileUpload\tmpl.min.js" />
+    <Content Include="Scripts\FileUpload\vendor\jquery.ui.widget.js" />
     <Content Include="Scripts\Plugin\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\Plugin\ckeditor\CHANGES.html" />
     <Content Include="Scripts\Plugin\ckeditor\ckeditor.asp" />
@@ -623,6 +638,19 @@
     <Content Include="Scripts\knockout-2.0.0.debug.js" />
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
+    <Content Include="styles\Bootstrap\bootstrap-image-gallery.css" />
+    <Content Include="styles\Bootstrap\bootstrap-image-gallery.min.css" />
+    <Content Include="styles\Bootstrap\bootstrap-responsive.css" />
+    <Content Include="styles\Bootstrap\bootstrap-responsive.min.css" />
+    <Content Include="styles\Bootstrap\bootstrap.css" />
+    <Content Include="styles\Bootstrap\bootstrap.min.css" />
+    <Content Include="styles\FileUpload\jquery.fileupload-ui-noscript.css" />
+    <Content Include="styles\FileUpload\jquery.fileupload-ui.css" />
+    <Content Include="styles\img\generalFile.png" />
+    <Content Include="styles\img\glyphicons-halflings-white.png" />
+    <Content Include="styles\img\loading.gif" />
+    <Content Include="styles\img\progressbar.gif" />
+    <Content Include="styles\site.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -657,7 +685,7 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Files\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

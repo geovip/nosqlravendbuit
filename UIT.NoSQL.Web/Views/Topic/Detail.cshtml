@@ -36,70 +36,42 @@
         <script type="text/javascript" src="../../Scripts/jquery.tmpl.js"></script>
 
         <script type="text/javascript">
-            var userId, isMember, groupPublic;
+            var userId;
+            var currentPositionAttachFile;
             var editor, html = '';
-            var id = 1;
-            function createEditor() {
-                if (editor)
-                    return;
-                
-                // Create a new editor inside the <div id="editor">, setting its value to html
-                var dateAndUser = $('#dateAndUser').html();
-                html = '<p></p>' +
-                    '<div class="hideContent" style="display:none"></div>'+ // cái này làm cờ tách phần content và parentcontent
-                    dateAndUser + 
-                    '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' + 
-                    $('#content').html() +
-                    '</blockquote>';
-                var config = { startupFocus: true };
-                editor = CKEDITOR.appendTo('editor', config, html);
-                document.getElementById('fullEditor').style.display = '';
-
-
-            }
-            function removeEditor() {
+            var id = 2;
+            var hostdata;
+            function destroyEditor() {
                 if (!editor)
                     return;
-
-                // Retrieve the editor contents. In an Ajax application, this data would be
-                // sent to the server or used in any other way.
-                //document.getElementById('editorcontents').innerHTML = html = editor.getData();
-                //document.getElementById('contents').style.display = '';
-
-                // Destroy the editor.
                 editor.destroy();
                 editor = null;
-                document.getElementById('fullEditor').style.display = 'none';
             }
 
             var flag1 = '<div class="hideContent"', flag2 = '</div>';
             var content = '', parentContent = '';
-            function addComment() {
-                $("#message").hide();
-                $("#message").stop().css({ opacity: 1 }).clearQueue();
-                $("#message").html("Replying...");
-                $("#message").show();
-
-                url = "/Topic/AddComment";
-                var topicId = document.getElementById('topicId').value;
-                var fullContent = editor.getData(); // fullContent = content + parentContent
-                content = fullContent.slice(0, fullContent.search(flag1));
-                parentContent = fullContent.slice((fullContent.search(flag2) + 6),fullContent.length-1);
-                $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
-                    $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000); ;
-                    removeEditor();
-                    $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
-                });
-                
+            function FileAttach(id, displayName, size, realName) {
+                this.Id = id;
+                this.DisplayName = displayName;
+                this.Size = size;
+                this.RealName = realName;
             }
+            
             function getTopicById() {
-                url = "/Topic/GetById";
+                var url = "/Topic/GetById";
                 var topicId = $('#topicId').val();
                 $.getJSON(url, { id: topicId }, function (data) {
                     $('#topicName').html(data.TopicName);
                     $('#content').html(data.Content);
                     $('#createBy').html(data.CreateBy.FullName);
                     $('#createDate').html(parseMicrosoftJsonDateTime(data.CreateDate));
+                    if (data.ListFilesAttach != 0) {
+                        $('#textFilesAttachment').text('Files Attachment (' + data.ListFilesAttach.length + ')');
+                        $.each(data.ListFilesAttach, function (key, value) {
+                            var tmpl = $('<div class="item"><span>-&nbsp<b>' + value.DisplayName + '</b></span><br /><span>&nbsp&nbsp' + value.Size + '</span><a href="#"  class="download" data-realName="' + value.RealName + '">Download</a></div>');
+                            tmpl.appendTo('#filesAttachmentForTopic');
+                        });
+                    }
                     if (data.ListComment != 0) {
                         $.each(data.ListComment, function (key, value) {
                             if (value.isDeleted == false) {
@@ -109,42 +81,62 @@
                                 $("#listComment").append('<div tabindex="0" style="border-top: 1px solid #DDD;padding: 4px;text-align: center;background-color: #D1CCCC;"><span>This post was deleted.</span></div> ');
                         });
                     }
+                    modifyLinkDownload();
+                });
+            }
+
+            function modifyLinkDownload() {
+                $('.download').each(function (key, value) {
+                    value.href = "/Files/Download/" + $(value).attr("data-realname");
                 });
             }
 
             $(document).ready(function () {
-                //test
-                //$('#fullEditor').attr('disabled','disabled');
-
                 userId = $('#userId').val();
-                isMember = $('#isMember').val();
+                hostdata = $('#hostdata').val();
                 role = $('#role').val();
-                groupPublic = $('#groupPublic').val();
                 getTopicById();
+                
 
-                $('.REPLYBUTTON').live('click', function () {
+                $('.POSTORREPLY').live('click', function () {
                     if (editor)
                         return;
-                    var divMainComment = $(this).parents('.mainComment');
-                    var divFullSubEditor = divMainComment.children('.footerComment').children('.fullSubEditor');
-                    var divSubEditor = divFullSubEditor.find('.subEditor');
-                    divSubEditor.attr("id", "subEditor" + id);
-                    var divComment = divMainComment.children('.bodyComment').children('.divComment');
-
-                    var html = '<p></p>' +
-                        '<div class="hideContent" style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
-                        divComment.find('.dateAndUser').html() +
-                        '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
-                        divComment.find('.comment').html() +
-                        divComment.find('.parentComment').html() +
-                        '</blockquote>';
                     var config = { startupFocus: true };
-                    editor = CKEDITOR.appendTo('subEditor' + id, config, html);
-                    divFullSubEditor.attr('style', 'display:""');
-                    id += 1;
+
+                    var isPOSTBUTTON = $(this).attr("class").indexOf("POSTBUTTON");
+                    if (isPOSTBUTTON != -1) { // isPOSTBUTTON = true
+                        // Create a new editor inside the <div id="editor">, setting its value to html
+                        var dateAndUser = $('#dateAndUser').html();
+                        html = '<p></p>' +
+                            '<div class="hideContent" style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
+                            dateAndUser +
+                            '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
+                            $('#content').html() +
+                            '</blockquote>';
+                        
+                        editor = CKEDITOR.appendTo('editor1', config, html);
+                        document.getElementById('firstEditor').style.display = '';
+                    } else {
+                        var divMainComment = $(this).parents('.mainComment');
+                        var divFullEditor = divMainComment.children('.footerComment').children('.fullEditor');
+                        var divEditor = divFullEditor.find('.editor');
+                        divEditor.attr("id", "editor" + id);
+                        var divComment = divMainComment.children('.bodyComment').children('.divComment');
+
+                        var html = '<p></p>' +
+                            '<div class="hideContent" style="display:none"></div>' + // cái này làm cờ tách phần content và parentcontent
+                            divComment.find('.dateAndUser').html() +
+                            '<blockquote style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0px 0px 0px 0.8ex; border-left-width: 1px; border-left-color: rgb(204, 204, 204); border-left-style: solid; padding-left: 1ex; ">' +
+                            divComment.find('.comment').html() +
+                            divComment.find('.parentComment').html() +
+                            '</blockquote>';
+                        editor = CKEDITOR.appendTo('editor' + id, config, html);
+                        divFullEditor.attr('style', 'display:""');
+                        id += 1;
+                    }
                 });
 
-                $('.addComment').live('click', function () {
+                $('.SUBMITEDITOR').live('click', function () {
                     var _this = $(this);
                     $("#message").hide();
                     $("#message").stop().css({ opacity: 1 }).clearQueue();
@@ -156,25 +148,58 @@
                     var fullContent = editor.getData(); // fullContent = content + parentContent
                     content = fullContent.slice(0, fullContent.search(flag1));
                     parentContent = fullContent.slice((fullContent.search(flag2) + 6), fullContent.length - 1);
-                    $.post(url, { Id: topicId, content: content, parentContent: parentContent }, function (data) {
-                        $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);
-                        //remove editor
-                        if (!editor)
-                            return;
-                        editor.destroy();
-                        editor = null;
-                        _this.parent().hide();
 
-                        $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
+                    var filesAttach = _this.parents('.fullEditor').find('.file');
+                    var arrFilesAttach = new Array();
+                    for (i = 0; i < filesAttach.length; i++) {
+                        var displayName = $(filesAttach[i]).children().get(0).textContent;
+                        var size = $(filesAttach[i]).children().get(1).textContent;
+                        var realName = $(filesAttach[i]).children().get(2).getAttribute("data-url");
+                        var file = new FileAttach('', displayName, size, realName);
+                        arrFilesAttach.push(file);
+                    }
+                    var dataJson = JSON.stringify({ Id: topicId, content: content, parentContent: parentContent, listFilesAttach: arrFilesAttach });
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        data: dataJson,
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);;
+                            // xoa editor va cac html cac file da upload len
+                            destroyEditor();
+                            currentPositionAttachFile = _this;
+                            var divFiles = currentPositionAttachFile.parents('.fullEditor').find('.files');
+                            divFiles.empty();
+                            _this.parent().hide();
+                            $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
+                            modifyLinkDownload();
+                        }
                     });
-
                 });
-                $('.hideSubEditor').live('click', function () {
-                    if (!editor)
-                        return;
-                    editor.destroy();
-                    editor = null;
-                    $(this).parent().hide();
+
+                $('.CANCELEDITOR').live('click', function () {
+                    var checkstr = confirm('Are you sure you want to cancel?');
+                    if (checkstr == true) {
+                        destroyEditor();
+                        $(this).parent().hide(); // this = div class="fullEditor"
+
+                        // xoa cac file vua upload len
+                        currentPositionAttachFile = $(this);
+                        var divFiles = currentPositionAttachFile.parents('.fullEditor').find('.file');
+                        divFiles.each(function (index, domEle) {
+                            var url = $(domEle).find('a.delete-file').attr("data-url");
+                            $.ajax({
+                                url: url,
+                                type: 'DELETE'
+                            });
+                            $(domEle).remove();
+                        });
+                    } else {
+                        return false;
+                    }
+
                 });
 
                 // hien thi noi dung trich dan
@@ -216,6 +241,37 @@
                         return false;
                     }
                 });
+
+                // dinh kem tap tin
+                $('.attach-files').live('click', function () {
+                    $('.box-attach-files').css('visibility', 'visible');
+                    currentPositionAttachFile = $(this);
+                });
+                $('.close-attach-files').live('click', function () {
+                    $('.box-attach-files').css('visibility', 'hidden');
+                    $('.template-download').remove();
+                    $('.template-upload').remove();
+                });
+
+                // xoa tap tin dinh kem
+                $('.delete-file').live('click', function () {
+                    var url = $(this).attr("data-url");
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE'
+                    });
+
+                    $(this).parents('.file').remove();
+                });
+
+                // download file
+                $('.download').live('click', function () {
+                    var id = $(this).attr("data-realName");
+                    var url = "/Files/Download";
+                    $.get(url, { id: id }, function () {
+                        //alert("OK");
+                    });
+                });
             });
 
             function parseMicrosoftJsonDateTime(content) {
@@ -235,7 +291,9 @@
                 return false;
             }
 
-
+            function getHostData() {
+                return hostdata;
+            }
 	</script>
     <script id="commentTemplate" type="text/x-jquery-tmpl"> 
         <!--style="color: rgb(0, 104, 28); font-weight: bold"-->
@@ -245,7 +303,7 @@
                     <tbody>
                         <tr>
                             <td valign="top" width="5%">
-                                <img src="https://groups.google.com/forum/clear.cache.gif" style="background-image: url(/Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
+                                <img src="/Images/clear.cache.gif" style="background-image: url(/Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
                             </td>
                             <td align="left" class="GI2MSK2DP1" width="15%">
                                 <span style="color: rgb(0, 104, 28);font-weight:bold">${CreateBy.FullName}</span>
@@ -253,7 +311,7 @@
                              <td align="right" width=70%">
                                 <span>${$item.getCreateDate}</span> 
                                  {{if role == "Owner" || role == "Manager" || role == "Member"}}
-                                    <span class="BUTTONSTYLE REPLYBUTTON">Post Reply</span>
+                                    <span class="BUTTONSTYLE REPLYBUTTON POSTORREPLY">Post Reply</span>
                                  {{/if}}
                              </td>
                             <td align="left" width="10%">
@@ -265,15 +323,6 @@
                                     <input type="hidden" value="${Id}">
                                 {{/if}}
                              </td>
-                             @*<td align="left" width="10%">
-                                {{if !isMember}}
-                                    <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
-                                    <input type="hidden" value="${Id}">
-                                {{else $item.compareUserId }}
-                                    <span class="BUTTONSTYLE DELETECOMMENT">Delete</span>
-                                    <input type="hidden" value="${Id}">
-                                {{/if}}
-                             </td>*@
                         </tr>
                     </tbody>                 
                 </table>
@@ -286,53 +335,208 @@
                     <div class="divShowHideParentComment" style="display:none">
                         <span class="parentComment" style="color: #500050;">{{html ParentContent}}</span>
                     </div>
+                    <br />
+                    {{if ListFilesAttach.length > 0 }}
+                    <span><b>Files Attachment (${ListFilesAttach.length})</b></span>
+                    {{/if}}
+                    <div class="divFilesAttachment">
+                        {{each(index,file) ListFilesAttach}}
+                            <div class="item">
+                                <span>-&nbsp<b>${file.DisplayName}</b></span><br />
+                                <span>&nbsp&nbsp${file.Size}</span>
+                                <a href="#"  class="download" data-realName="${file.RealName}">Download</a>
+                            </div>
+                        {{/each}}
+                    </div>
                 </div>
             </div>
             <div tabindex="0" class="footerComment" style="margin-left: 40px">
-                <div class = "fullSubEditor" style="display: none">
-                    <!--<a href="#" class="addComment">Đăng</a>
-                    <a href="#" class="hideSubEditor">Hủy</a>-->
-                    <span class="addComment"><span class="BUTTONSTYLE SUBMITEDITOR">Post</span></span>
-                    <span class="hideSubEditor"><span  class="BUTTONSTYLE CANCELEDITOR">Cancel</span></span>
-                    <div class="subEditor" style="margin-bottom:4px;margin-top:4px">                    
+                <div class = "fullEditor" style="display: none">
+                    <span class="BUTTONSTYLE SUBMITEDITOR">Post</span>
+                    <span class="BUTTONSTYLE CANCELEDITOR">Cancel</span><br /><br />
+                    <div class="files">
+                
+                    </div>
+                    <img src="/Images/clear.cache.gif" style="width:21px;height:21px;background:url(/Images/gm_icon.png) no-repeat -288px -2px;" border="0" alt="Đính kèm tệp" /><a class="attach-files" href="#" style="text-decoration:none;color:blue">Attach files</a>
+                    <div class="editor" style="margin-bottom:4px;margin-top:4px">                    
 	                </div>
-                    <span class="addComment"><span class="BUTTONSTYLE SUBMITEDITOR">Post</span></span>
-                    <span class="hideSubEditor"><span  class="BUTTONSTYLE CANCELEDITOR">Cancel</span></span>
+                    <span class="BUTTONSTYLE SUBMITEDITOR">Post</span>
+                    <span  class="BUTTONSTYLE CANCELEDITOR">Cancel</span>
                 </div>  
             </div>
         </div>     
     </script>
 
         
-        <br/>
-        <input id="topicId" type="hidden" value="@Model.Id" />
-        <input id="userId" type="hidden" value="@ViewBag.UserId" />
-        <input id="isMember" type="hidden" value="@ViewBag.IsMember" />
-        <input id="role" type="hidden" value="@ViewBag.Role" />
-        <input id="groupPublic" type="hidden" value="@ViewBag.GroupPublic" />
+    <br/>
+    <input id="topicId" type="hidden" value="@Model.Id" />
+    <input id="userId" type="hidden" value="@ViewBag.UserId" />
+    <input id="hostdata" type="hidden" value="@ViewBag.HostData" />
+    <input id="role" type="hidden" value="@ViewBag.Role" />
 
-        <input id="time" type="hidden" value="@ViewBag.time" />
+    <input id="time" type="hidden" value="@ViewBag.time" />
 
-        <div id="topic" tabindex="0">
-            <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/><br/>
-            <span id="dateAndUser" >At <span id="createDate"></span>, <span id="createBy" style="color: rgb(0, 104, 28);font-weight:bold"></span> wrote:</span><br />
-            <div tabindex="0">
-                <span id="content"></span><br />
+    <div id="topic" tabindex="0">
+        <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/><br/>
+        <span id="dateAndUser" >At <span id="createDate"></span>, <span id="createBy" style="color: rgb(0, 104, 28);font-weight:bold"></span> wrote:</span><br />
+        <div tabindex="0">
+            <span id="content"></span><br />
+        </div>
+        <b><span id="textFilesAttachment"></span></b>
+        <div id="filesAttachmentForTopic">
+
+        </div>
+    </div>
+
+    <!-- This div will hold the editor. -->
+    <div id="firstEditor" class = "fullEditor" style="display:none">
+        <span class="BUTTONSTYLE SUBMITEDITOR">Post</span>
+        <span class="BUTTONSTYLE CANCELEDITOR">Cancel</span><br /><br />
+        <div class="files">
+                
+        </div>
+        <img src="~/Images/clear.cache.gif" style="width:21px;height:21px;background:url(/Images/gm_icon.png) no-repeat -288px -2px;" border="0" alt="Đính kèm tệp" /><a class="attach-files" href="#" style="text-decoration:none;color:blue">Attach files</a>
+        <div id="editor1" class="editor" style="margin-bottom:4px;margin-top:4px">
+	    </div>
+        <span class="BUTTONSTYLE SUBMITEDITOR">Post</span>
+        <span class="BUTTONSTYLE CANCELEDITOR">Cancel</span>
+    </div>
+    <div id = "listComment">
+    </div>
+
+<link href="~/styles/Bootstrap/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="~/styles/Bootstrap/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+<link href="~/styles/Bootstrap/bootstrap-image-gallery.css" rel="stylesheet" type="text/css" />
+<link href="~/styles/FileUpload/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
+
+
+
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        @*<td class="preview"><span class="fade"></span></td>*@
+        <td class="name"><span>{%=file.name%}</span></td>
+        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        {% if (file.error) { %}
+            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+            <td>
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+            </td>
+            <td class="start">{% if (!o.options.autoUpload) { %}
+                <button class="btn btn-primary">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}</td>
+        {% } else { %}
+            <td colspan="2"></td>
+        {% } %}
+        <td class="cancel">{% if (!i) { %}
+            <button class="btn btn-warning">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>Cancel</span>
+            </button>
+        {% } %}</td>
+    </tr>
+{% } %}
+</script>
+
+
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        {% if (file.error) { %}
+            <td></td>
+            <td class="name"><span>{%=file.name%}</span></td>
+            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
+        {% } else { %}
+            @*<td class="preview"> 
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+            </td>
+            <td class="name">
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+            </td>*@
+            <td class="name">
+                <span>{%=file.name%}</span>
+            </td>
+            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td colspan="2"></td>
+        {% } %}
+        <td class="delete">
+            <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <i class="icon-trash icon-white"></i>
+                <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1">
+        </td>
+    </tr>
+{% } %}
+</script>
+
+<script type="text/javascript" src="~/Scripts/FileUpload/vendor/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/tmpl.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/load-image.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/canvas-to-blob.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.fileupload.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.fileupload-fp.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="~/Scripts/FileUpload/main.js"></script>
+
+<div class="box-attach-files" style="position:absolute;width:1280px;height:768px;top:0;left:0;background:white;opacity:0.5;z-index:1000;visibility:hidden" ></div>
+<div class="box-attach-files" style="position:absolute;width:800px;height:400px;top:20px;margin:auto;background:white;box-shadow: 0 0 2px 2px #888;z-index:1001;visibility:hidden">
+
+        <form id="fileupload" action="@Url.Action("Uploads")" method="POST" enctype="multipart/form-data">
+            <!-- Redirect browsers with JavaScript disabled to the origin page -->
+            <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
+                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+            <div style="height:20px">
+                <img class="close-attach-files" src="~/Images/clear.cache.gif" style="float:right;width:15px;height:15px;background:url(/Images/gm_icon.png) no-repeat -274px -42px;cursor:pointer" border="0" alt="Đóng" title="Đóng" />
             </div>
-        </div>
 
-        <!-- This div will hold the editor. -->
-        <div id = "fullEditor" style="display:none">
-            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Post</span>
-            <span class="BUTTONSTYLE CANCELEDITOR"  onclick="removeEditor()">Cancel</span>
-            <div id="editor" style="margin-bottom:4px;margin-top:4px">
-	        </div>
-            <span class="BUTTONSTYLE SUBMITEDITOR"  onclick="addComment()">Post</span>
-            <span class="BUTTONSTYLE CANCELEDITOR" onclick="removeEditor()">Cancel</span>
-        </div>
-        <div id = "listComment">
-        </div>
+            <div class="row fileupload-buttonbar" style="margin-left:10px">
+                <div class="span7">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <span class="btn btn-success fileinput-button">
+                        <i class="icon-plus icon-white"></i>
+                        <span>Add files...</span>
+                        <input type="file" name="files[]" multiple>
+                    </span>
+                    <button type="submit" class="btn btn-primary start">
+                        <i class="icon-upload icon-white"></i>
+                        <span>Start upload</span>
+                    </button>
+                    <button type="reset" class="btn btn-warning cancel">
+                        <i class="icon-ban-circle icon-white"></i>
+                        <span>Cancel upload</span>
+                    </button>
+                    <button type="button" class="btn btn-danger delete">
+                        <i class="icon-trash icon-white"></i>
+                        <span>Delete</span>
+                    </button>
+                    <input type="checkbox" class="toggle">
+                </div>
+                <!-- The global progress information -->
+                <div class="span5 fileupload-progress fade">
+                    <!-- The global progress bar -->
+                    <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="bar" style="width:0%;"></div>
+                    </div>
+                    <!-- The extended global progress information -->
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
+            </div>
+            <!-- The loading indicator is shown during file processing -->
+            <div class="fileupload-loading"></div>
 
-
-
-
+            <div style="width:790px;height:285px;margin-left:10px;overflow:auto">
+                <!-- The table listing the files available for upload/download -->
+                <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+            </div>
+        </form>  
+</div>

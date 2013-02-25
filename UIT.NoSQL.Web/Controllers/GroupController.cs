@@ -98,7 +98,6 @@ namespace UIT.NoSQL.Web.Controllers
         {
             var group = groupService.Load(id);
             string roleStr = "unlogin";
-
             UserObject userSession = (UserObject)Session["user"];
             if (userSession != null)
             {
@@ -115,8 +114,7 @@ namespace UIT.NoSQL.Web.Controllers
             ViewBag.Role = roleStr;
             ViewBag.GroupName = group.GroupName;
             ViewBag.GroupId = group.Id;
-            TempData["Role"] = roleStr;
-
+            //TempData["Role"] = roleStr;
             return View(group.ListTopic);
         }
 
