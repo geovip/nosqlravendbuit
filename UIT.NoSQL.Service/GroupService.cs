@@ -17,10 +17,12 @@ namespace UIT.NoSQL.Service
     public class GroupService : IGroupService
     {
         private IDocumentSession session;
+        private IDocumentStore[] documentStores;
 
-        public GroupService(IDocumentSession session)
+        public GroupService(IDocumentSession session, IDocumentStore[] documentStores)
         {
             this.session = session;
+            this.documentStores = documentStores;
         }
 
         public GroupObject Load(string id)
@@ -94,82 +96,30 @@ namespace UIT.NoSQL.Service
             return group;
         }
 
-        public List<GroupObject> Search(string searchStr, int take, out int totalResult)
+        public List<GroupObject> Search(string searchStr, out int totalResult)
         {
-            //string str = string.Format("GroupName: *\"{0}\"* OR Description: *\"{0}\"*", searchStr);
-            //str = str.Replace("\\","");// OR Description: \"{0}\"
-            //"GroupName"
             RavenQueryStatistics stats;
-            //var listGroup = session.Advanced.LuceneQuery<GroupObject>("GroupName")
-            //    .Statistics(out stats)
-            //    .Skip(skip)
-            //    .Take(take)
-            //    .Where(string.Format("GroupName:*{0}* OR Description:*{0}*", searchStr)).ToList();
+            totalResult = 0;
 
-            //var listGroup = session.Query<GroupObject>("Groupname")
-            //    .Statistics(out stats)
-            //    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-            //    .Skip(skip)
-            //    .Take(take)
-            //    .Where(g => g.GroupName.StartsWith(searchStr) || g.GroupName.StartsWith("*" + searchStr))
-            //    .ToList();
+            List<GroupObject> listGroup;
 
-            /* doan nay thay thanh doan duoi fulltext search
-            var listGroup = session.Query<GroupObject_Search.ReduceResult, GroupObject_Search>()
+            listGroup = session.Query<GroupObject_Search_NotAnalyed.ReduceResult, GroupObject_Search_NotAnalyed>()
                 .Statistics(out stats)
-                .Skip(skip)
-                .Take(take)
-                .Where(c => c.Query.In((object)searchStr))
+                .Where(c => c.Query.Equals((object)searchStr))
+                //.Search(x => x.GroupName, searchStr)
                 .As<GroupObject>()
                 .ToList();
 
-            if (listGroup.Count == 0)
+            if (stats.TotalResults == 0)
             {
-                searchStr = string.Format("*{0}*", searchStr);
-
-                listGroup = session.Query<GroupObject_Search.ReduceResult, GroupObject_Search>()
-                .Statistics(out stats)
-                .Skip(skip)
-                .Take(take)
-                .Where(c => c.Query.In((object)searchStr))
-                .As<GroupObject>()
-                .ToList();
+                listGroup = session.Query<GroupObject, GroupObject_Search>()
+                 .Statistics(out stats)
+                .Search(x => x.GroupName, searchStr)
+                 .ToList();
             }
-            */
-            //Raven.Client.Linq.IRavenQueryable<GroupObject> listGroup;
 
-            //List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search_NotAnalyed>()
-            //    .Statistics(out stats)
-            //    .Skip(skip)
-            //    .Take(take)
-            //    .Search(x => x.GroupName, searchStr)
-            //    .ToList();
+            totalResult = stats.TotalResults;                
 
-            //if (listGroup.Count == 0)
-            //{
-                //searchStr = string.Format("*{0}*", searchStr);
-
-                List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search>()
-                .Statistics(out stats)
-                //.Skip(skip)
-                //.Take(10)
-                .Search(x=>x.GroupName, searchStr)
-                .ToList();
-            //}
-
-                totalResult = stats.TotalResults;
-
-            return listGroup;
-        }
-
-        public List<GroupObject> Search(string searchStr, int skip, int take)
-        {
-            List<GroupObject> listGroup = session.Query<GroupObject, GroupObject_Search>()
-            .Skip(skip)
-            .Take(take)
-            .Search(x => x.GroupName, searchStr)
-            .ToList();
-            
             return listGroup;
         }
 
@@ -254,48 +204,33 @@ namespace UIT.NoSQL.Service
             Map = groups => from g in groups
                             select new
                             {
-                                g.GroupName,
-                                g.Description,
-                                g.CreateBy.FullName
+                                    g.GroupName,
+                                    //g.Description,
+                                    //g.CreateBy.FullName
                             };
             Indexes.Add(x => x.GroupName, FieldIndexing.Analyzed);
-            Indexes.Add(x=> x.Description, FieldIndexing.Analyzed);
+            //Indexes.Add(x => x.Description, FieldIndexing.Analyzed);
+            //Indexes.Add(x => x.CreateBy.FullName, FieldIndexing.Analyzed);
         }
     }
 
     public class GroupObject_Search_NotAnalyed : AbstractIndexCreationTask<GroupObject>
     {
+        public class ReduceResult
+        {
+            public object[] Query { get; set; }
+        }
+
         public GroupObject_Search_NotAnalyed()
         {
             Map = groups => from g in groups
                             select new
                             {
-                                g.GroupName
+                                Query = new[]
+                                    {
+                                        g.GroupName
+                                    }
                             };
-            Indexes.Add(x => x.GroupName, FieldIndexing.NotAnalyzed);
         }
     }
-
-    //public class GroupObject_Search : AbstractIndexCreationTask<GroupObject, GroupObject_Search.ReduceResult>
-    //{
-    //    public class ReduceResult
-    //    {
-    //        public object[] Query { get; set; }
-    //    }
-
-    //    public GroupObject_Search()
-    //    {
-    //        Map = groups => from g in groups
-    //                        select new
-    //                        {
-    //                            Query = new[]
-    //                                {
-    //                                    g.Id,
-    //                                    g.GroupName,
-    //                                    g.Description,
-    //                                    g.CreateBy.FullName
-    //                                }
-    //                        };
-    //    }
-    //}
 }
