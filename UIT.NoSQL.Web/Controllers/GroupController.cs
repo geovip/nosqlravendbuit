@@ -283,14 +283,13 @@ namespace UIT.NoSQL.Web.Controllers
         [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Member(string id)
         {
-            List<UserObject> listUser;
-            List<UserGroupObject> listUserGroup;
-            var group = groupService.LoadWithUser(id, out listUser, out listUserGroup);
+            var group = groupService.LoadWithUser(id);
             if (group != null)
             {
+                List<UserGroupObject> listUserGroup = group.ListUserGroup;
                 List<ListUserModels> listUserModel = new List<ListUserModels>();
                 ListUserModels userModels = null;
-                for (int i = 0; i < listUser.Count; i++)
+                for (int i = 0; i < group.ListUserGroup.Count; i++)
                 {
                     if (listUserGroup[i].IsApprove != UserGroupStatus.Approve)
                     {
@@ -298,9 +297,9 @@ namespace UIT.NoSQL.Web.Controllers
                     }
                     userModels = new ListUserModels();
                     userModels.UserGroupID = listUserGroup[i].Id;
-                    userModels.FullName = listUser[i].FullName;
-                    userModels.UserName = listUser[i].UserName;
-                    userModels.Email = listUser[i].Email;
+                    userModels.FullName = group.ListUserGroup[i].User.FullName;
+                    userModels.UserName = group.ListUserGroup[i].User.UserName;
+                    userModels.Email = group.ListUserGroup[i].User.Email;
                     userModels.Role = listUserGroup[i].GroupRole.GroupName;
 
                     listUserModel.Add(userModels);
@@ -456,6 +455,11 @@ namespace UIT.NoSQL.Web.Controllers
             groupOld.Description = group.Description;
 
             groupService.Save(groupOld);
+
+            //IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+            //var userOld = userService.Load(
+
+
             return "Success";
         }
 
