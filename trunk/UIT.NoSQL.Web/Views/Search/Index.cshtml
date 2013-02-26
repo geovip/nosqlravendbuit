@@ -4,80 +4,34 @@
     ViewBag.Title = "Index";
     Layout = null;
 }
-
-<script type="text/javascript">
-    var pageSearch = 0;
-    var maxPageSearch = @TempData["paging"] - 1;
     
-    $(document).ready(function () {
-        $("#main").scroll(function () {
-            if ((this.scrollHeight - $(this).scrollTop()) - $(this).innerHeight() < 5) {
-                //LoadSearchPaging();
-            }
-        });
-    });
-
-    function LoadSearchPaging() {
-        pageSearch += 1;
-
-        if (pageSearch > maxPageSearch) {
-            return;
-        }
-
-        $.post("/Search/More", getquerystr(pageSearch), function (data) {
-            
-            $("#tbGroup tr:last").after(data);
-        });
-    }
-
-    function getquerystr(_pageSearch) {
-        var _searchStr = document.getElementById("hdSearchStr").value;
-
-        var qstr =
-            {
-                searchStr: _searchStr,
-                page: _pageSearch
-            };
-
-        return qstr;
-    }
-</script>
-
 <h2>Search Result</h2>
 <p style="margin-top:0;">Found @TempData["totalResult"] results (@TempData["time"])</p>
 
-<input type="hidden" id="hdSearchStr" value="@TempData["searchStr"]" />
 <div id="divSearchResult">
     <table id="tbGroup" style="width:100%;">
         <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td style="width:70%;">
-                <div class="GLTURNLNJ">
-                    <div class="GLTURNLCK">
-                        <div class="GLTURNLKW"></div>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="width:70%;">
+                        <div class="GLTURNLNJ">
+                            <div class="GLTURNLCK">
+                                <div class="GLTURNLKW"></div>
                       
-                        @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.Id }, null)
-                    </div>
-                    <div class="GLTURNLNK">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </div>
-                </div>
-            </td>
-            <td>
-                <b>@item.CreateBy.FullName</b>
-                <div>@item.CreateDate</div>
-            </td>
-        </tr>
-    }
-</tbody>
+                                @Html.ActionLink(item.GroupName, "Detail", "Group", new { id = item.Id }, null)
+                            </div>
+                            <div class="GLTURNLNK">
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <b>@item.CreateBy.FullName</b>
+                        <div>@item.CreateDate</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
-
-@*<a id="LoadMore" href="javascript:{}" onclick="LoadSearchPaging()">Load more item</a>*@
-
-@*@for (int i = 0; i < (int)TempData["paging"]; i++)
-{
-    <a href="javascript:{}" onclick="PostSearchPaging(@i)">@(i+1)</a>
-}*@
