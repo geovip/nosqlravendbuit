@@ -12,11 +12,9 @@ namespace UIT.NoSQL.Core.IService
         GroupObject LoadByUser(string userId);
         List<GroupObject> GetAll();
         List<GroupObject> GetTenGroupPublic();
-        List<GroupObject> GetByUser(string userId);
         void Save(GroupObject group);
         GroupObject Load(string id);
-        GroupObject LoadWithUser(string groupID, out List<UserObject> listUser, out List<UserGroupObject> listUserGroup);
-        GroupObject LoadWithUser(string id);
+        GroupObject LoadWithUser(string groupID);
         List<GroupObject> Search(string searchStr, out int totalResult);
         List<GroupObject> LoadList(string[] arrId);
         bool SendEmail(List<UserGroupObject> listUser, string subject, string body);
