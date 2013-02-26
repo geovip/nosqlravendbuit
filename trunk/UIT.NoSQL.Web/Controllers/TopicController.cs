@@ -284,21 +284,23 @@ namespace UIT.NoSQL.Web.Controllers
             comment.CreateDate = DateTime.Now;
             comment.isDeleted = false;
 
-            List<FileAttach> listTemp = new List<FileAttach>();
-            foreach (var fileAttach in listFilesAttach)
+            if (listFilesAttach!=null)
             {
-                var file = new FileAttach();
-                file.Id = Guid.NewGuid().ToString();
-                file.DisplayName = fileAttach.DisplayName;
-                file.Size = fileAttach.Size;
-                var realName = fileAttach.RealName.Replace("/Files/","").Replace("/","-");
-                //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
-                file.RealName = realName;
-                listTemp.Add(file);
+                List<FileAttach> listTemp = new List<FileAttach>();
+                foreach (var fileAttach in listFilesAttach)
+                {
+                    var file = new FileAttach();
+                    file.Id = Guid.NewGuid().ToString();
+                    file.DisplayName = fileAttach.DisplayName;
+                    file.Size = fileAttach.Size;
+                    var realName = fileAttach.RealName.Replace("/Files/", "").Replace("/", "-");
+                    //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
+                    file.RealName = realName;
+                    listTemp.Add(file);
+                }
+                comment.ListFilesAttach = listTemp;
             }
-
-            comment.ListFilesAttach = listTemp;
-
+            
             topic.ListComment.Add(comment);
             topic.NumberOfComment += 1;
             topic.LastModified = DateTime.Now;
