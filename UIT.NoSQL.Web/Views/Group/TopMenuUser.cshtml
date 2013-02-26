@@ -16,42 +16,34 @@
     
     @if( TempData["account"].Equals("PostReply"))
     {
-        <div style="float:left;">
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
                 <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
             </div>
 
             <div tabindex="0" class="BUTTONSTYLE POSTBUTTON POSTORREPLY">POST REPLY</div>
-        </div>
     }
     @if (TempData["account"].Equals("WaitForAccepting"))
     {
-        <div style="float:left;">
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
                 <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
             </div>
 
             <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Wait for Accepting...</div>
-        </div>
     }
     @if (TempData["account"].Equals("JoinGroup"))
     {
-        <div style="float:left;">
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
                 <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
             </div>
 
             <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Register for discussion</div>
-        </div>
     }
 
     @if (TempData["account"].Equals("Manage"))
     {
-        <div style="float:left;">
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
                 <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
             </div>
-        </div>
     }
     @*<div style="float:right;">
         <ul id="menu">

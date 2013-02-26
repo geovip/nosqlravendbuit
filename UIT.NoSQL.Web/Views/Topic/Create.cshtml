@@ -55,75 +55,48 @@
         editor = CKEDITOR.appendTo('editor', config);
     }
 
+    //window.onbeforeunload = function (e) {
+    //    return "Sure you want to leave?";
+    //};
+
+    //window.unload =  function (e) { alert("Bye now!"); };
 
     $(document).ready(function () {
         createEditor();
 
         $('.POSTTOPIC').click(function () {
-            var GroupId = $('#GroupId').val();
             var TopicName = $('#TopicName').val();
-            var Content = editor.getData();
-            var filesAttach = $('.file');
-            var arrFilesAttach = new Array();
-            for (i = 0; i < filesAttach.length; i++) {
-                var displayName = $(filesAttach[i]).children().get(0).textContent;
-                var size = $(filesAttach[i]).children().get(1).textContent;
-                var realName = $(filesAttach[i]).children().get(2).getAttribute("data-url");
-                var file = new FileAttach('', displayName, size, realName);
-                arrFilesAttach.push(file);
-            }
-            var dataJson =  JSON.stringify({ GroupId:GroupId,TopicName:TopicName,Content:Content, listFilesAttach:arrFilesAttach });
-
-            var url = "/Topic/Create";
-            $.ajax({
-                url: url,
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                data: dataJson,
-                success: function (data) {
-                    if (data == "success")
-                        BackGroupNoConfirm('@TempData["GroupId"]');
-                    else
-                        alert("Error");
+            if (TopicName != "") {
+                var GroupId = $('#GroupId').val();
+                var Content = editor.getData();
+                var filesAttach = $('.file');
+                var arrFilesAttach = new Array();
+                for (i = 0; i < filesAttach.length; i++) {
+                    var displayName = $(filesAttach[i]).children().get(0).textContent;
+                    var size = $(filesAttach[i]).children().get(1).textContent;
+                    var realName = $(filesAttach[i]).children().get(2).getAttribute("data-url");
+                    var file = new FileAttach('', displayName, size, realName);
+                    arrFilesAttach.push(file);
                 }
-            });
+                var dataJson = JSON.stringify({ GroupId: GroupId, TopicName: TopicName, Content: Content, listFilesAttach: arrFilesAttach });
 
-            //$("#message").hide();
-            //$("#message").stop().css({ opacity: 1 }).clearQueue();
-            //$("#message").html("Posting...");
-            //$("#message").show();
-
-            //var filesAttach = $('.file');
-            //var arrFilesAttach = new Array();
-            //for (i = 0; i < filesAttach.length; i++) {
-            //    var displayName = $(filesAttach[i]).children().get(0).textContent;
-            //    var size = $(filesAttach[i]).children().get(1).textContent;
-            //    var realName = $(filesAttach[i]).children().get(2).getAttribute("data-url");
-            //    var file = new FileAttach('', displayName, size, realName);
-            //    arrFilesAttach.push(file);
-            //}
-            //var dataJson = JSON.stringify({listFilesAttach: arrFilesAttach });
-            //$.ajax({
-            //    url: url,
-            //    type: 'POST',
-            //    contentType: 'application/json; charset=utf-8',
-            //    data: dataJson,
-            //    dataType: 'json',
-            //    success: function (data) {
-            //        $("#message").html("Sent.").show().animate({ opacity: 1.0 }, 2000).fadeOut(4000);;
-            //        // xoa editor va cac html cac file da upload len
-            //        destroyEditor();
-            //        currentPositionAttachFile = _this;
-            //        var divFiles = currentPositionAttachFile.parents('.fullEditor').find('.files');
-            //        divFiles.empty();
-            //        _this.parent().hide();
-            //        $("#commentTemplate").tmpl(data, { getCreateDate: parseMicrosoftJsonDateTime(data.CreateDate), compareUserId: compareUserId(data.CreateBy.Id) }).appendTo("#listComment");
-            //        modifyLinkDownload();
-            //    }
-            //});
+                var url = "/Topic/Create";
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    data: dataJson,
+                    success: function (data) {
+                        if (data == "success")
+                            BackGroupNoConfirm('@TempData["GroupId"]');
+                        else
+                            alert("Error");
+                    }
+                });
+            } else {
+                $('#ValidTopicName').text('The topic name field is required!');
+            }
         });
-
-           
 
 
         // dinh kem tap tin
@@ -167,6 +140,7 @@ Create by: @ViewBag.FullName<br />
         <div class="editor-field">
             @Html.EditorFor(model => model.TopicName)
             @Html.ValidationMessageFor(model => model.TopicName)
+            <span id="ValidTopicName" style="color:#e80c4d"></span>
         </div>
 
         <div class="files">

@@ -115,7 +115,7 @@
             <div class="clear"></div>
         </header>
         <div id="body">
-            <div align="center" style="height:19px">   
+            <div align="center" style="height:0px">   
             <span id="message" class="MESSAGE" style="display:none">
                 Replying...
             </span>
@@ -152,13 +152,14 @@
             </table>*@
 
             <div style="overflow:hidden">
-                <div style="float:left;width:240px">
-                    <div style="padding: 15px 10px 10px 25px">
-                        <span style="color:#DD4B39; font-size:medium">Group</span>
+                <div style="float:left;width:240px;height:54px">
+                    <div style="padding: 15px 10px 10px 25px;height: 25px;color:#DD4B39;font-size:25px;">
+                        @*<span style="color:#DD4B39;font-size:25px;">Groups</span>*@
+                        <span>Groups</span>
                     </div>
                 </div>
                 <div style="float:left">
-                    <div style="padding: 10px 10px 10px 25px">
+                    <div style="padding: 15px 10px 10px 25px;">
                         @RenderSection("menu", required: false)
                     </div>    
                 </div>
