@@ -19,9 +19,46 @@
             });
         }
     }
+
+    function BeginChange(divID, currentRole) {
+        document.getElementById(divID).style.visibility = "visible";
+        document.getElementById(currentRole).style.visibility = "hidden";
+    }
+
+    function SaveChange(divID, currentRole, userGroupID) {
+        document.getElementById(divID).style.visibility = "hidden";
+        document.getElementById(currentRole).style.visibility = "visible";
+
+        //save
+        var url = "/Group/ChangeRole";
+        $.post(url, getUserObject(userGroupID), function (data) {
+            alert(data);
+        });
+    }
+
+    function CancelChange(divID, currentRole) {
+        document.getElementById(divID).style.visibility = "hidden";
+        document.getElementById(currentRole).style.visibility = "visible";
+    }
+
+    function getUserObject(_userGroupID) {
+        var _groupId = document.getElementById("hdID").value;
+        var _role = document.getElementById("select " + _userGroupID).value;
+
+        var qstr =
+            {
+                groupId: _groupId,
+                userGroupID: _userGroupID,
+                role: _role
+            };
+
+        return qstr;
+    }
 </script>
 
 <h2>List Members</h2>
+<input id="hdID" type="hidden" value="@TempData["GroupID"]" />
+
 <br/>
 <table>
     <tr style="background-color:White">
@@ -38,7 +75,7 @@
             @Html.DisplayName("Role")
         </th>
         <th  width="10%">
-            
+            @Html.DisplayName("Remove")
         </th>
     </tr>
 
@@ -54,7 +91,21 @@
             @Html.DisplayFor(modelItem => item.FullName)
         </td>
         <td  width="20%">
-            @Html.DisplayFor(modelItem => item.Role)
+            <div id="currentRole @item.UserGroupID" style="display:inline;">
+                @Html.DisplayFor(modelItem => item.Role)
+            <a href="javascript:{}" onclick="BeginChange('dropdownlist @item.UserGroupID', 'currentRole @item.UserGroupID')">Change</a>
+            </div>
+
+            <div id="dropdownlist @item.UserGroupID" style="visibility:hidden; display:inline;">
+                <select id="select @item.UserGroupID">
+                    <option>Manager</option>
+                    <option>Member</option>
+                </select>
+                
+            <a href="javascript:{}" onclick="SaveChange('dropdownlist @item.UserGroupID', 'currentRole @item.UserGroupID', '@item.UserGroupID')">Save</a>
+            <a href="javascript:{}" onclick="CancelChange('dropdownlist @item.UserGroupID', 'currentRole @item.UserGroupID')">Cancel</a>
+            </div>
+
         </td>
         <td  width="10%">
             <a href="javascript:{}" onclick="remove('@item.FullName', '@item.UserGroupID');">Remove</a>
