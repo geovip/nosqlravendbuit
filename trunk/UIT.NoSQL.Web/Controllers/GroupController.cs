@@ -305,10 +305,55 @@ namespace UIT.NoSQL.Web.Controllers
                     listUserModel.Add(userModels);
                 }
 
+                TempData["GroupID"] = id;
                 return View(listUserModel);
             }
 
             return RedirectToAction("AccessDenied", new { id });
+        }
+
+
+        [HttpPost]
+        public string ChangeRole(string groupID, string userGroupID, string role)
+        {
+            if (!role.Equals(GroupRoleEnum.Manager.ToString()) && !role.Equals(GroupRoleEnum.Member.ToString()))
+            {
+                return "fail";
+            }
+
+            IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+            IUserGroupService userGroupService =
+                MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
+
+            var userGroup = userGroupService.Load(userGroupID);
+            userGroup.GroupRole.GroupName = role;
+            userGroupService.Save(userGroup);
+
+            var user = userService.Load(userGroup.UserId);
+            foreach (var userGroupObject in user.ListUserGroup)
+            {
+                if (userGroupObject.GroupId.Equals(groupID))
+                {
+                    userGroupObject.GroupRole.GroupName = role;
+                    userService.Save(user);
+
+                    break;
+                }
+            }
+
+            var group = groupService.Load(userGroup.GroupId);
+            foreach (var userGroupObject in group.ListUserGroup)
+            {
+                if (userGroupObject.Id.Equals(userGroupID))
+                {
+                    userGroupObject.GroupRole.GroupName = role;
+                    groupService.Save(group);
+
+                    break;
+                }
+            }
+
+            return "success";
         }
 
         [HttpPost]
@@ -456,6 +501,7 @@ namespace UIT.NoSQL.Web.Controllers
 
             groupService.Save(groupOld);
 
+            //chua cap nhap GroupName, GroupDescription cho UserGroup, User
             //IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             //var userOld = userService.Load(
 
