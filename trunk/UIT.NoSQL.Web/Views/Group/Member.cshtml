@@ -20,40 +20,46 @@
         }
     }
 
-    function BeginChange(divID, currentRole) {
-        document.getElementById(divID).style.visibility = "visible";
-        document.getElementById(currentRole).style.visibility = "hidden";
+    function BeginChange(_userGroupID) {
+        document.getElementById("dropdownlist " + _userGroupID).style.visibility = "visible";
+        document.getElementById("currentRole " + _userGroupID).style.visibility = "hidden";
+
+        var currentRole = document.getElementById("currentRoleName " + _userGroupID).innerHTML.trim();
+        var newRole = document.getElementById("select " + _userGroupID).value = currentRole;        
     }
 
-    function SaveChange(divID, currentRole, userGroupID) {
-        document.getElementById(divID).style.visibility = "hidden";
-        document.getElementById(currentRole).style.visibility = "visible";
+    function SaveChange(_userGroupID) {
+        document.getElementById("dropdownlist " + _userGroupID).style.visibility = "hidden";
+        document.getElementById("currentRole " + _userGroupID).style.visibility = "visible";
+        
+        var newRole = document.getElementById("select " + _userGroupID).value;
+        document.getElementById("currentRoleName " + _userGroupID).innerHTML = newRole;
 
         //save
         var url = "/Group/ChangeRole";
-        $.post(url, getUserObject(userGroupID), function (data) {
+        $.post(url, getUserObject(_userGroupID, newRole), function (data) {
             alert(data);
         });
     }
 
-    function CancelChange(divID, currentRole) {
-        document.getElementById(divID).style.visibility = "hidden";
-        document.getElementById(currentRole).style.visibility = "visible";
+    function CancelChange(_userGroupID) {
+        document.getElementById("dropdownlist " + _userGroupID).style.visibility = "hidden";
+        document.getElementById("currentRole " + _userGroupID).style.visibility = "visible";
     }
 
-    function getUserObject(_userGroupID) {
+    function getUserObject(_userGroupID, _newRole) {
         var _groupId = document.getElementById("hdID").value;
-        var _role = document.getElementById("select " + _userGroupID).value;
 
         var qstr =
             {
                 groupId: _groupId,
                 userGroupID: _userGroupID,
-                role: _role
+                role: _newRole
             };
 
         return qstr;
     }
+
 </script>
 
 <h2>List Members</h2>
@@ -91,21 +97,30 @@
             @Html.DisplayFor(modelItem => item.FullName)
         </td>
         <td  width="20%">
-            <div id="currentRole @item.UserGroupID" style="display:inline;">
+            @if(TempData["UserRole"].Equals("Owner"))
+            {
+                <div id="currentRole @item.UserGroupID" style="display:block;">
+                    <div id="currentRoleName @item.UserGroupID">
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </div>
+                    <a href="javascript:{}" onclick="BeginChange('@item.UserGroupID')">Change</a>
+                </div>
+
+                <div id="dropdownlist @item.UserGroupID" style="visibility:hidden; float:left;">
+                    <select id="select @item.UserGroupID">
+                        <option>Manager</option>
+                        <option>Member</option>
+                    </select>
+                    <div>
+                        <a href="javascript:{}" onclick="SaveChange('@item.UserGroupID')">Save</a>
+                        <a href="javascript:{}" onclick="CancelChange('@item.UserGroupID')">Cancel</a>
+                    </div>
+                </div>
+            }
+            else
+            {
                 @Html.DisplayFor(modelItem => item.Role)
-            <a href="javascript:{}" onclick="BeginChange('dropdownlist @item.UserGroupID', 'currentRole @item.UserGroupID')">Change</a>
-            </div>
-
-            <div id="dropdownlist @item.UserGroupID" style="visibility:hidden; display:inline;">
-                <select id="select @item.UserGroupID">
-                    <option>Manager</option>
-                    <option>Member</option>
-                </select>
-                
-            <a href="javascript:{}" onclick="SaveChange('dropdownlist @item.UserGroupID', 'currentRole @item.UserGroupID', '@item.UserGroupID')">Save</a>
-            <a href="javascript:{}" onclick="CancelChange('dropdownlist @item.UserGroupID', 'currentRole @item.UserGroupID')">Cancel</a>
-            </div>
-
+            }
         </td>
         <td  width="10%">
             <a href="javascript:{}" onclick="remove('@item.FullName', '@item.UserGroupID');">Remove</a>

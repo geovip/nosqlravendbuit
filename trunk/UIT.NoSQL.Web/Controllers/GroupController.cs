@@ -306,6 +306,17 @@ namespace UIT.NoSQL.Web.Controllers
                 }
 
                 TempData["GroupID"] = id;
+                var sessionUserObject = ((UserObject)Session["user"]).ListUserGroup;
+                foreach (var item in sessionUserObject)
+	            {
+                    if(item.GroupId.Equals(id))
+                    {
+                        //if role is owner, UserRole = true, else false
+                        TempData["UserRole"] = item.GroupRole.GroupName;
+                        break;
+                    }
+                }
+                
                 return View(listUserModel);
             }
 
