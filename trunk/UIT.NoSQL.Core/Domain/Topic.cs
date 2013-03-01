@@ -14,6 +14,7 @@ namespace UIT.NoSQL.Core.Domain
         UInt32 NumberOfView { get; set; }
         UInt32 NumberOfComment { get; set; }
         bool isDeleted { get; set; }
+        List<UserTopic> ListUserTopic { get; set; }
     }
 
     public class TopicObject : ITopicObjectDocument
@@ -31,11 +32,13 @@ namespace UIT.NoSQL.Core.Domain
 
         public List<CommentObject> ListComment { get; set; }
         public List<FileAttach> ListFilesAttach { get; set; }
+        public List<UserTopic> ListUserTopic { get; set; }
 
         public TopicObject()
         {
             ListComment = new List<CommentObject>();
             ListFilesAttach = new List<FileAttach>();
+            ListUserTopic = new List<UserTopic>();
         }
 
         public UInt32 GetNumberOfComment()
@@ -54,6 +57,7 @@ namespace UIT.NoSQL.Core.Domain
         public UInt32 NumberOfView { get; set; }
         public UInt32 NumberOfComment { get; set; }
         public bool isDeleted { get; set; }
+        public List<UserTopic> ListUserTopic { get; set; }
 
         public static implicit operator DenormalizedTopic<T>(T doc)
         {
@@ -65,7 +69,8 @@ namespace UIT.NoSQL.Core.Domain
                 LastModified = doc.LastModified,
                 NumberOfView = doc.NumberOfView,
                 NumberOfComment = doc.NumberOfComment,
-                isDeleted = doc.isDeleted
+                isDeleted = doc.isDeleted,
+                ListUserTopic = doc.ListUserTopic
             };
         }
     }
@@ -94,4 +99,13 @@ namespace UIT.NoSQL.Core.Domain
         public string RealName { get; set; }
     }
 
+    public class UserTopic
+    {
+        public string UserId { get; set; }
+        public int NumberOfNewPosts { get; set; }
+        public UserTopic()
+        {
+            NumberOfNewPosts = 0; 
+        }
+    }
 }

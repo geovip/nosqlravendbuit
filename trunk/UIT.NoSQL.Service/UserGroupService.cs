@@ -5,6 +5,7 @@ using System.Text;
 using UIT.NoSQL.Core.Domain;
 using UIT.NoSQL.Core.IService;
 using Raven.Client;
+using Raven.Abstractions.Commands;
 
 namespace UIT.NoSQL.Service
 {
@@ -49,9 +50,10 @@ namespace UIT.NoSQL.Service
 
         public void Delete(string id)
         {
-            var userGroup = Load(id);
-            session.Delete<UserGroupObject>(userGroup);
-            session.SaveChanges();
+            //var userGroup = session.Load<UserGroupObject>(id);
+            //session.Delete(userGroup);//<UserGroupObject>(userGroup);
+            //session.SaveChanges();
+            session.Advanced.Defer(new DeleteCommandData { Key = id });
         }
     }
 }

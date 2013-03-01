@@ -219,9 +219,18 @@ top: 17px;
                 <td style="padding-top:4px;padding-left:4px;border-top: 1px solid #DDDCDC" width="5%">
                     <img src="../../Images/clear.cache.gif" style="background-image: url(../../Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat;" border="0">
                 </td>
-                <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="40%">
-                    @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
-                </td>
+                @if (ViewBag.Role == "unlogin" || ViewBag.Role == "JoinRequest" || item.ListUserTopic.Exists(ut => ut.UserId == ViewBag.UserId) == false || item.ListUserTopic.Find(ut => ut.UserId == ViewBag.UserId).NumberOfNewPosts <= 0)
+                {
+                    <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="40%">
+                        @Html.ActionLink(item.TopicName as string, "Detail", "Topic", new { id = item.Id }, null)       
+                    </td>
+                }
+                else
+                {
+                    <td style="padding-left:10px;border-top: 1px solid #DDDCDC;font-weight:bold;" width="40%">
+                        @Html.ActionLink(item.TopicName + "     (" + item.ListUserTopic.Find(ut => ut.UserId == ViewBag.UserId).NumberOfNewPosts + ")" as string, "Detail", "Topic", new { id = item.Id }, null)       
+                    </td>
+                }
                 <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="8%">
                     @Html.DisplayFor(modelItem => item.NumberOfComment)
                 </td>
