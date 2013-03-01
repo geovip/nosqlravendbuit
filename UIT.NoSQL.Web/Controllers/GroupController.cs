@@ -105,15 +105,21 @@ namespace UIT.NoSQL.Web.Controllers
                 if (userGroup != null)
                 {
                     if (userGroup.IsApprove == UserGroupStatus.Approve)
+                    {
                         roleStr = userGroup.GroupRole.GroupName;
+                        ViewBag.UserId = userSession.Id; 
+                    }
                     else
                         roleStr = "JoinRequest";
                 }
+                
             }
 
             ViewBag.Role = roleStr;
             ViewBag.GroupName = group.GroupName;
             ViewBag.GroupId = group.Id;
+            
+            
             //TempData["Role"] = roleStr;
             return View(group.ListTopic);
         }

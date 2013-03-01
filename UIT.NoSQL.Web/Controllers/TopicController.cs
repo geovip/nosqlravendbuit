@@ -41,13 +41,7 @@ namespace UIT.NoSQL.Web.Controllers
             var topic = topicService.Load(id);
             if (topic != null)
             {
-                topic.NumberOfView += 1;
-                topicService.Save(topic);
-
                 var group = groupService.Load(topic.GroupId);
-                group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfView += 1;
-                groupService.Save(group);
-
                 // Get Current Role
                 string roleStr = "unlogin";
                 UserObject userSession = (UserObject)Session["user"];
@@ -56,16 +50,40 @@ namespace UIT.NoSQL.Web.Controllers
                     var userGroup = userSession.ListUserGroup.Find(u => u.GroupId == topic.GroupId);
                     if (userGroup != null)
                     {
-                        if (userGroup.IsApprove == UserGroupStatus.Approve)
+                        if (userGroup.IsApprove == UserGroupStatus.Approve) // la member, manager, owner
+                        {
                             roleStr = userGroup.GroupRole.GroupName;
+
+                            //update lai so luong bai dang moi = 0
+                            var userTopic = topic.ListUserTopic.Find(ut => ut.UserId == userSession.Id);
+                            if (userTopic != null)
+                            {
+                                userTopic.NumberOfNewPosts = 0;
+                            }
+                            var topicInGroup = group.ListTopic.Find(t => t.Id.Equals(topic.Id));
+                            if (topicInGroup != null)
+                            {
+                                var userTopicInGroup = topicInGroup.ListUserTopic.Find(ut => ut.UserId.Equals(userSession.Id));
+                                if (userTopicInGroup != null)
+                                {
+                                    userTopicInGroup.NumberOfNewPosts = 0;
+                                }
+                            }
+                        }
                         else
                             roleStr = "JoinRequest";
                         ViewBag.UserId = userSession.Id;
-                    }
+                    }    
                 }
                 ViewBag.Role = roleStr;
                 ViewBag.HostData = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-                
+
+                topic.NumberOfView += 1;
+                topicService.Save(topic);
+
+                group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfView += 1;
+                groupService.Save(group);
+              
                 return View(topic);
             }
             else
@@ -95,9 +113,7 @@ namespace UIT.NoSQL.Web.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
                 var user = (UserObject)Session["user"];
-                //string groupId = TempData["GroupId"].ToString();
                 TopicObject topic = new TopicObject();
                 topic.Id = Guid.NewGuid().ToString();
                 topic.TopicName = TopicName;
@@ -119,17 +135,29 @@ namespace UIT.NoSQL.Web.Controllers
                         file.DisplayName = fileAttach.DisplayName;
                         file.Size = fileAttach.Size;
                         var realName = fileAttach.RealName.Replace("/Files/", "").Replace("/", "-");
-                        //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
                         file.RealName = realName;
                         listTemp.Add(file);
                     }
                     topic.ListFilesAttach = listTemp;
                 }
-                
-
-                topicService.Save(topic);
 
                 var group = groupService.Load(topic.GroupId);
+                List<UserTopic> listUserTopicTemp = new List<UserTopic>();
+                foreach (var userGroup in group.ListUserGroup)
+                {
+                    if (userGroup.IsApprove == UserGroupStatus.Approve)
+                    {
+                        UserTopic userTopic = new UserTopic();
+                        userTopic.UserId = userGroup.UserId;
+                        if (userGroup.UserId != user.Id)
+                            userTopic.NumberOfNewPosts += 1;
+                        listUserTopicTemp.Add(userTopic);
+                    }
+                }
+                topic.ListUserTopic = listUserTopicTemp;
+
+                topicService.Save(topic);
+            
                 group.ListTopic.Add(topic);
                 group.NewEvent.Title = topic.TopicName;
                 group.NewEvent.CreateDate = topic.CreateDate;
@@ -142,12 +170,10 @@ namespace UIT.NoSQL.Web.Controllers
                 groupService.SendEmail(group.ListUserGroup, subject, body);
 
                 return "success";
-                //return RedirectToAction("Detail", "Group", new { id = topic.GroupId });
             }
             catch
             {
                 return "error";
-                //return View();
             }
         }
         //public ActionResult Create(string GroupId,string TopicName, string Content, List<FileAttach> listFilesAttach)
@@ -294,7 +320,6 @@ namespace UIT.NoSQL.Web.Controllers
                     file.DisplayName = fileAttach.DisplayName;
                     file.Size = fileAttach.Size;
                     var realName = fileAttach.RealName.Replace("/Files/", "").Replace("/", "-");
-                    //url = Path.Combine("/" + ConfigurationManager.AppSettings["DIR_FILE_UPLOADS"] + "/", url);
                     file.RealName = realName;
                     listTemp.Add(file);
                 }
@@ -304,26 +329,48 @@ namespace UIT.NoSQL.Web.Controllers
             topic.ListComment.Add(comment);
             topic.NumberOfComment += 1;
             topic.LastModified = DateTime.Now;
-            topicService.Save(topic);
 
-            
+            // cap nhap lai danh sach user voi so luong bai viet moi
+            //for (int i = 0; i< topic.ListUserTopic.Count; i++ )
+            //{
+            //    if (topic.ListUserTopic[i].UserId != user.Id) 
+            //        topic.ListUserTopic[i].NumberOfNewPosts += 1;
+            //}
+
             var group = groupService.Load(topic.GroupId);
-            
+            List<UserTopic> listUserTopicTemp = new List<UserTopic>();
+            foreach (var userGroup in group.ListUserGroup)
+            {
+                if (userGroup.IsApprove == UserGroupStatus.Approve)
+                {
+                    UserTopic userTopic = new UserTopic();
+                    userTopic.UserId = userGroup.UserId;
+                    if (userGroup.UserId != user.Id)
+                        userTopic.NumberOfNewPosts += 1;
+                    listUserTopicTemp.Add(userTopic);
+                }
+            }
+            foreach (var userTopic in listUserTopicTemp)
+            {
+                UserTopic temp = topic.ListUserTopic.Find(t => t.UserId.Equals(userTopic.UserId));
+                if (temp != null)
+                {
+                    userTopic.NumberOfNewPosts += temp.NumberOfNewPosts;
+                }
+            }
+            topic.ListUserTopic = listUserTopicTemp;
 
+            topicService.Save(topic);
+            
             group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfComment += 1;
             group.ListTopic.Find(t => t.Id.Equals(topic.Id)).LastModified = DateTime.Now;
+            group.ListTopic.Find(t=> t.Id.Equals(topic.Id)).ListUserTopic = topic.ListUserTopic;
 
             group.NewEvent.Title = "RE: " + topic.TopicName;
             group.NewEvent.CreateDate = comment.CreateDate;
             group.NewEvent.CreateBy = user.FullName;
 
-            // Create new stopwatch
-            //Stopwatch stopwatch = new Stopwatch();
-            // Begin timing
-            //stopwatch.Start();
             groupService.Save(group);
-            // Stop timing
-            //stopwatch.Stop();
             
             //send email
             string subject = user.FullName + " replied topic: " + topic.TopicName;
@@ -331,7 +378,6 @@ namespace UIT.NoSQL.Web.Controllers
             groupService.SendEmail(group.ListUserGroup, subject, body);
 
             return Json(comment, JsonRequestBehavior.AllowGet);
-            //return Json(stopwatch.Elapsed.ToString(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

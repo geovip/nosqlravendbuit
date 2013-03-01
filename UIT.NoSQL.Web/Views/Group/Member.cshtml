@@ -6,14 +6,13 @@
     ViewBag.Title = "Member";
 }
 <script type="text/javascript">
-    function remove(_fullname, _id){
-        
+    function removeMember(_fullname, _id) {
         var confirm = window.confirm('Are you sure to remove ' + _fullname + ' ?');
         if (confirm == true) {
             $.post("/Group/RemoveMember", { id: _id }, function (data)
             {
                 if (data == "success") {
-                    $("#" + _id).remove();
+                    $('#' + _id).remove();
                 }
                 alert(data);
             });
@@ -123,7 +122,7 @@
             }
         </td>
         <td  width="10%">
-            <a href="javascript:{}" onclick="remove('@item.FullName', '@item.UserGroupID');">Remove</a>
+            <a href="javascript:{}" onclick="removeMember('@item.FullName', '@item.UserGroupID');">Remove</a>
         </td>
     </tr>
 }
