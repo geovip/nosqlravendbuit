@@ -10,6 +10,7 @@ using UIT.NoSQL.Web.Factory;
 using UIT.NoSQL.Web.Filters;
 using UIT.NoSQL.Web.Models;
 using Raven.Abstractions.Data;
+using System.Diagnostics;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -289,6 +290,9 @@ namespace UIT.NoSQL.Web.Controllers
         [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Member(string id)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             var group = groupService.LoadWithUser(id);
             if (group != null)
             {
@@ -322,7 +326,9 @@ namespace UIT.NoSQL.Web.Controllers
                         break;
                     }
                 }
-                
+
+                sw.Stop();
+                TempData["Elapsed"] = sw.Elapsed;
                 return View(listUserModel);
             }
 

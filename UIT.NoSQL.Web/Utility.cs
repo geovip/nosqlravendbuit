@@ -400,7 +400,8 @@ namespace UIT.NoSQL.Web
             {
                 InitalIndex(store);
             }
-            new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
+            //new GroupObject_Search().Execute(MvcApplication.documentStoreShard);
+            //new GroupObject_Search_NotAnalyed().Execute(MvcApplication.documentStoreShard);
         }
 
         private void InitalIndex(IDocumentStore documentStore)
@@ -412,6 +413,13 @@ namespace UIT.NoSQL.Web
             {
                 Map = users => from u in users
                             select new { u.UserName, u.Password }
+            });
+
+            documentStore.DatabaseCommands.DeleteIndex("ByGroupIdAndJoinDateSortByJoinDate");
+            documentStore.DatabaseCommands.PutIndex("ByGroupIdAndJoinDateSortByJoinDate", new IndexDefinitionBuilder<UserGroupObject>
+            {
+                Map = groups => from g in groups
+                               select new { g.GroupId, g.JoinDate }
             });
         }
 

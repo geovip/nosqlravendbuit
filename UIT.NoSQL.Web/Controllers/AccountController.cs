@@ -75,22 +75,28 @@ namespace UIT.NoSQL.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserObject user = new UserObject();
+                if (userService.LoadByUserName(model.UserName) != null)
+                {
+                    ModelState.AddModelError("", "The UserName is already exist.");
+                }
+                else
+                {
+                    UserObject user = new UserObject();
 
-                // TODO: Add insert logic here
-                user.Id = Guid.NewGuid().ToString();
-                user.FullName = model.FullName;
-                user.UserName = model.UserName;
-                user.Email = model.Email;
-                user.Password = Utility.GetMd5Hash(model.Password);
-                user.CreateDate = DateTime.Now;
-                user.Region = MvcApplication.ServerGeneral;
-                userService.Save(user);
+                    // TODO: Add insert logic here
+                    user.Id = Guid.NewGuid().ToString();
+                    user.FullName = model.FullName;
+                    user.UserName = model.UserName;
+                    user.Email = model.Email;
+                    user.Password = Utility.GetMd5Hash(model.Password);
+                    user.CreateDate = DateTime.Now;
+                    user.Region = MvcApplication.ServerGeneral;
+                    userService.Save(user);
 
-                //
-                //ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                    
-                return Json(new { success = true });
+                    //
+                    //ModelState.AddModelError("", ErrorCodeToString(createStatus));
+                    return Json(new { success = true });
+                }
             }
 
             // If we got this far, something failed

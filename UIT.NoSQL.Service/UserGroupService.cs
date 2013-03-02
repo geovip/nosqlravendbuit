@@ -50,9 +50,6 @@ namespace UIT.NoSQL.Service
 
         public void Delete(string id)
         {
-            //var userGroup = session.Load<UserGroupObject>(id);
-            //session.Delete(userGroup);//<UserGroupObject>(userGroup);
-            //session.SaveChanges();
             session.Advanced.Defer(new DeleteCommandData { Key = id });
         }
     }
