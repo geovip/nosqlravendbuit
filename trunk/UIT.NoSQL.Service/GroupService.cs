@@ -59,8 +59,7 @@ namespace UIT.NoSQL.Service
         {
             var group = session.Include<GroupObject>(u => u.ListUserGroup).Load(groupID);
             
-            var userGroups = session.Query<UserGroupObject>()
-                //.OrderByDescending(x => x.JoinDate)
+            var userGroups = session.Query<UserGroupObject>("ByGroupIdAndJoinDateSortByJoinDate")
                 .Customize(x => x.Include<UserGroupObject>(o => o.UserId))
                 .Where(x => x.GroupId.Equals(groupID))
                 .OrderByDescending(x => x.JoinDate)

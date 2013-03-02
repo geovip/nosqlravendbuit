@@ -9,8 +9,7 @@
     function removeMember(_fullname, _id) {
         var confirm = window.confirm('Are you sure to remove ' + _fullname + ' ?');
         if (confirm == true) {
-            $.post("/Group/RemoveMember", { id: _id }, function (data)
-            {
+            $.post("/Group/RemoveMember", { id: _id }, function (data) {
                 if (data == "success") {
                     $('#' + _id).remove();
                 }
@@ -24,13 +23,13 @@
         document.getElementById("currentRole " + _userGroupID).style.visibility = "hidden";
 
         var currentRole = document.getElementById("currentRoleName " + _userGroupID).innerHTML.trim();
-        var newRole = document.getElementById("select " + _userGroupID).value = currentRole;        
+        var newRole = document.getElementById("select " + _userGroupID).value = currentRole;
     }
 
     function SaveChange(_userGroupID) {
         document.getElementById("dropdownlist " + _userGroupID).style.visibility = "hidden";
         document.getElementById("currentRole " + _userGroupID).style.visibility = "visible";
-        
+
         var newRole = document.getElementById("select " + _userGroupID).value;
         document.getElementById("currentRoleName " + _userGroupID).innerHTML = newRole;
 
@@ -63,9 +62,10 @@
 
 <h2>List Members</h2>
 <input id="hdID" type="hidden" value="@TempData["GroupID"]" />
+@TempData["Elapsed"]
 
 <br/>
-<table>
+<table width="100%">
     <tr style="background-color:White">
         <th width="20%">
             @Html.DisplayName("User Name")
@@ -86,16 +86,16 @@
 
 @foreach (var item in Model) {
     <tr id="@item.UserGroupID" style="background-color:White;border: 1px solid #DDDCDC">
-        <td  width="20%">
+        <td>
             @Html.DisplayFor(modelItem => item.UserName)
         </td>
-        <td  width="25%">
+        <td>
             @Html.DisplayFor(modelItem => item.Email)
         </td>
-        <td  width="25%">
+        <td>
             @Html.DisplayFor(modelItem => item.FullName)
         </td>
-        <td  width="20%">
+        <td>
             @if(TempData["UserRole"].Equals("Owner"))
             {
                 <div id="currentRole @item.UserGroupID" style="display:block;">
@@ -121,7 +121,7 @@
                 @Html.DisplayFor(modelItem => item.Role)
             }
         </td>
-        <td  width="10%">
+        <td>
             <a href="javascript:{}" onclick="removeMember('@item.FullName', '@item.UserGroupID');">Remove</a>
         </td>
     </tr>
