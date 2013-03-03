@@ -290,9 +290,6 @@ namespace UIT.NoSQL.Web.Controllers
         [ManagerFilter(TypeID = TypeIDEnum.GroupID)]
         public ActionResult Member(string id)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
             var group = groupService.LoadWithUser(id);
             if (group != null)
             {
@@ -327,15 +324,12 @@ namespace UIT.NoSQL.Web.Controllers
                     }
                 }
 
-                sw.Stop();
-                TempData["Elapsed"] = sw.Elapsed;
                 return View(listUserModel);
             }
 
             return RedirectToAction("AccessDenied", new { id });
         }
-
-
+        
         [HttpPost]
         public string ChangeRole(string groupID, string userGroupID, string role)
         {

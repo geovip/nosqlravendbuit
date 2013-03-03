@@ -288,3 +288,23 @@
     
     .aimg:link {text-decoration: none}
     .aimg:hover {background-color: #ffffff}
+
+#profile {
+
+}
+    #profile .item {
+        margin-bottom:5px;
+        padding-bottom:5px;
+        border-bottom-color:rgba(0, 0, 0, 0.1);
+        border-bottom-style:solid;
+        border-bottom-width:1px;
+    }
+    #profile .left {
+        margin-left:20px;
+        font-weight:bolder;
+        float:left;
+        width:150px;
+    }
+    #profile .right {
+        
+    }

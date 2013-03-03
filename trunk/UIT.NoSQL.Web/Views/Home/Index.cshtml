@@ -18,20 +18,8 @@
 </script>
 
 
-@*@section featured {
-<section class="featured">
-    <div class="content-wrapper">
-        <span style="font-size:medium; color:White">Welcom to DaHu Groups. Learn more?</span>
-    </div>
-</section>
-}*@
 @section menu {
-    @*<ul id="menu">
-        <li>@Html.ActionLink("New Group", "Create", "Group")</li>
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
-        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>*@
+
     @if(@ViewBag.IsLogin)
     {
         <div class="BUTTONSTYLE CREATEGROUP" onclick = "createNewGroup()">Create New Group</div>
