@@ -216,7 +216,11 @@ namespace UIT.NoSQL.Web.Controllers
         }
 
         public ActionResult ViewProfile()
-        { 
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             UserObject user =  userService.Load(((UserObject)Session["user"]).Id);
             return View(user);
         }
