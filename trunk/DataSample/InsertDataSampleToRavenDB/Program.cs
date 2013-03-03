@@ -47,7 +47,7 @@ namespace InsertDataSampleToRavenDB
             st.Start();
             
             Init();
-            //InsertDataSampleToServers();
+            InsertDataSampleToServers();
             InitIndexes();
             //FullTextSearch();
 
@@ -99,6 +99,8 @@ namespace InsertDataSampleToRavenDB
                 IndexCreation.CreateIndexes(typeof(LoginIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupRoleIndex).Assembly, doc);
+                IndexCreation.CreateIndexes(typeof(ByGroupIdAndJoinDateSortByJoinDate).Assembly, doc);
+                IndexCreation.CreateIndexes(typeof(GroupObject_ByIsPublic).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search_NotAnalyed).Assembly, doc);
             }     
@@ -131,6 +133,26 @@ namespace InsertDataSampleToRavenDB
             }
         }
 
+        public class GroupObject_ByIsPublic : AbstractIndexCreationTask<GroupObject>
+        {
+            public GroupObject_ByIsPublic()
+            {
+                Map = groupObjects => from g in groupObjects
+                                      select new { g.IsPublic };
+            }
+        }
+
+        public class ByGroupIdAndJoinDateSortByJoinDate : AbstractIndexCreationTask<UserGroupObject>
+        {
+            public ByGroupIdAndJoinDateSortByJoinDate()
+            {
+                {
+                    Map = groups => from g in groups
+                                    select new { g.GroupId, g.JoinDate };
+                }
+            }
+        }
+
         public class GroupObject_Search : AbstractIndexCreationTask<GroupObject>
         {
             public GroupObject_Search()
@@ -149,16 +171,35 @@ namespace InsertDataSampleToRavenDB
 
         public class GroupObject_Search_NotAnalyed : AbstractIndexCreationTask<GroupObject>
         {
+            public class ReduceResult
+            {
+                public object[] Query { get; set; }
+            }
+
             public GroupObject_Search_NotAnalyed()
             {
                 Map = groups => from g in groups
                                 select new
                                 {
-                                    g.GroupName
+                                    Query = new[]
+                                    {
+                                        g.GroupName
+                                    }
                                 };
-                Indexes.Add(x => x.GroupName, FieldIndexing.NotAnalyzed);                
             }
         }
+        //public class GroupObject_Search_NotAnalyed : AbstractIndexCreationTask<GroupObject>
+        //{
+        //    public GroupObject_Search_NotAnalyed()
+        //    {
+        //        Map = groups => from g in groups
+        //                        select new
+        //                        {
+        //                            g.GroupName
+        //                        };
+        //        Indexes.Add(x => x.GroupName, FieldIndexing.NotAnalyzed);                
+        //    }
+        //}
 
         /// <summary>
         ///  ham insert du lieu chinh
@@ -280,6 +321,7 @@ namespace InsertDataSampleToRavenDB
                     userGroupObject.IsApprove = UserGroupStatus.Approve;
                     userGroupObject.JoinDate = DateTime.Now;
                     userGroupObject.GroupRole = groupRoleOwner;
+                    userGroupObject.IsReceiveEmail = true;
 
                     var userGroupObjectTemp = new UserGroupObject();
                     userGroupObjectTemp.Id = region + "-" + userGroupObject.Id;
@@ -290,6 +332,7 @@ namespace InsertDataSampleToRavenDB
                     userGroupObjectTemp.IsApprove = userGroupObject.IsApprove;
                     userGroupObjectTemp.JoinDate = userGroupObject.JoinDate;
                     userGroupObjectTemp.GroupRole = userGroupObject.GroupRole;
+                    userGroupObjectTemp.IsReceiveEmail = true;
 
                     // them usergroup vap group
                     groupObject.ListUserGroup.Add(userGroupObjectTemp);
@@ -329,6 +372,7 @@ namespace InsertDataSampleToRavenDB
                         userGroupObjectMember.IsApprove = UserGroupStatus.Approve;
                         userGroupObjectMember.JoinDate = DateTime.Now;
                         userGroupObjectMember.GroupRole = groupRoleMember;
+                        userGroupObjectMember.IsReceiveEmail = true;
 
                         ugTemp = new UserGroupObject();
                         ugTemp.Id = user.Region + "-" + userGroupObjectMember.Id;
@@ -339,6 +383,7 @@ namespace InsertDataSampleToRavenDB
                         ugTemp.IsApprove = userGroupObjectMember.IsApprove;
                         ugTemp.JoinDate = userGroupObjectMember.JoinDate;
                         ugTemp.GroupRole = userGroupObjectMember.GroupRole;
+                        ugTemp.IsReceiveEmail = true;
 
                         // them member vao group
                         groupObject.ListUserGroup.Add(ugTemp);
