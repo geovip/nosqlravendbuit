@@ -1,7 +1,7 @@
 ﻿@model UIT.NoSQL.Core.Domain.UserObject
 
 @{
-    ViewBag.Title = "ViewProfile";
+    ViewBag.Title = "Account setting";
 }
 
 @section LeftMenu {
@@ -10,38 +10,61 @@
     </section>
 }
 
-<h2>Profile</h2>
+<h2>Account setting</h2><br />
 
 <fieldset>
     <legend>UserObject</legend>
+    <div id="profile">
+        <div class="item">
+            <div class="left">
+                 <span style="width:100px">@Html.DisplayNameFor(model => model.UserName)</span>
+            </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.UserName)
+            </div>
+            
+        </div>
 
-    <div>
-         <span style="width:100px">@Html.DisplayNameFor(model => model.UserName)</span>
-         @Html.DisplayFor(model => model.UserName)
-    </div>
+        <div class="item">
+            <div class="left">
+             <span style="width:100px">@Html.DisplayNameFor(model => model.Email)</span>
+                </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.Email)
+            </div>
+        </div>
 
-    <div>
-         <span style="width:100px">@Html.DisplayNameFor(model => model.Email)</span>
-        @Html.DisplayFor(model => model.Email)
-    </div>
+        <div class="item">
+            <div class="left">
+             <span style="width:100px">@Html.DisplayNameFor(model => model.FullName)</span>
+                </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.FullName)
+            </div>
+        </div>
 
-    <div>
-         <span style="width:100px">@Html.DisplayNameFor(model => model.FullName)</span>
-        @Html.DisplayFor(model => model.FullName)
-    </div>
+        <div class="item">
+            <div class="left">
+             <span style="width:100px">@Html.DisplayNameFor(model => model.CreateDate)</span>
+                </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.CreateDate)
+            </div>
+        </div>
 
-    <div>
-         <span style="width:100px">@Html.DisplayNameFor(model => model.CreateDate)</span>
-        @Html.DisplayFor(model => model.CreateDate)
-    </div>
+        <div class="item">
+            <div class="left">
+             <span style="width:100px">@Html.DisplayNameFor(model => model.Region)</span>
+                </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.Region)
+            </div>
+        </div>
+        <div class="clear"></div>
 
-    <div>
-         <span style="width:100px">@Html.DisplayNameFor(model => model.Region)</span>
-        @Html.DisplayFor(model => model.Region)
-    </div>
-
-    <div>
-        <a href="~/Account/ChangePassword">Change Password</a>
+        <div>
+            <a href="~/Account/ChangePassword">Change Password</a>
+        </div>
     </div>
 </fieldset>
 @*<p>

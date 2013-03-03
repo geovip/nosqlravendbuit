@@ -19,7 +19,6 @@
                 }).mouseout(function () {
                     $(this).css("overflow-y", "hidden");
                 });
-                $('#SectionMain').css("border-left", '1px solid rgba(0, 0, 0, 0.1)');
             });
             function AutoResize() {
                 var windowWidth = window.innerWidth;
@@ -33,7 +32,8 @@
 //                DivNav.style.width = (windowWidth - 240) + "px";
 
                 var leftmenu = document.getElementById("leftmenu");
-                leftmenu.style.height = (windowHeight - 180) + "px";           
+                leftmenu.style.height = (windowHeight - 180) + "px";
+                leftmenu.style.borderRight = "1px solid #ddd";
             }
             window.onresize = AutoResize;
 
@@ -121,37 +121,7 @@
             </span>
             </div>
             
-            @*
-            @RenderSection("featured", required: false)
-            thay dong nay bang doan code duoi
-            *@
-            @*<div style="overflow:hidden">
-                <div style="float:left;width:45%;height:50px">
-                    <div style="background-color: #4D90FE;color: #3e5667">
-                            <span style="font-size:medium; color:White; vertical-align:middle">Welcom to DaHu Groups. Learn more?</span>
-                    </div>  
-                </div>                   
-                <div style="float:left;width:55%">
-                    <div style="background-color: #4D90FE;color: #3e5667">
-                    sfdf
-                    </div>  
-                </div>                
-                    
-            </div>*@
-            @*<table style="background-color: #4D90FE;color: #3e5667;width:100%">
-                <tr style="height:40px">
-                    <td style="padding-left:50px; width:45%">
-                        <span style="font-size:medium; color:White; vertical-align:middle">Welcom to DaHu Groups. Learn more?</span>
-                    </td>
-                    <td style="width:55%">
-                        <span id="message" class="MESSAGE" style="display:none">
-                            Replying...
-                        </span>
-                    </td>
-                </tr>
-            </table>*@
-
-            <div style="overflow:hidden">
+            <div style="overflow:hidden; background-color:#efeeef;">
                 <div style="float:left;width:240px;height:54px">
                     <div style="padding: 15px 10px 10px 25px;height: 25px;color:#DD4B39;font-size:25px;">
                         @*<span style="color:#DD4B39;font-size:25px;">Groups</span>*@
@@ -166,7 +136,7 @@
             </div>
             <div style="width:100%; border-bottom: 1px solid rgba(0, 0, 0, 0.1)">
             </div>
-            
+
             @RenderSection("LeftMenu", required: false)
 
             <div id="main">
