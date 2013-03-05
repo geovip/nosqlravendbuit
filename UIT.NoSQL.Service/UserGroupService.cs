@@ -74,7 +74,7 @@ namespace UIT.NoSQL.Service
                     userGroup.Description = group.Description;
 
                     session.Store(user);
-                    break;
+                    //break;
                 }
             }
 

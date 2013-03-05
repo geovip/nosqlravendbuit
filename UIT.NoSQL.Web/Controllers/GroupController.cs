@@ -515,6 +515,16 @@ namespace UIT.NoSQL.Web.Controllers
             groupOld.IsPublic = group.IsPublic;
             groupOld.GroupName = group.GroupName;
             groupOld.Description = group.Description;
+
+            foreach (var userGroup in groupOld.ListUserGroup)
+            {
+                if (userGroup.GroupId.Equals(group.Id))
+                {
+                    userGroup.GroupName = group.GroupName;
+                    userGroup.Description = group.Description;
+                }
+            }
+
             groupService.Save(groupOld);
 
             userGroupService.UpdateSettingByGroupID(group);
