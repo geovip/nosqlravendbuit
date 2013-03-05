@@ -39,7 +39,7 @@
     }
 </script>
 
-<h2>ManagerUser</h2>
+<h2>User setting</h2><br />
 
 <div>
     @Html.ValidationSummary(true)
@@ -50,37 +50,40 @@
         <input type="hidden" id="Id" value="@Model.Id" />
         <input type="hidden" id="GroupId" value="@Model.GroupId" />
         <input type="hidden" id="UserId" value="@Model.UserId" />
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.GroupName)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.GroupName)
-            @Html.ValidationMessageFor(model => model.GroupName)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Description)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Description)
-            @Html.ValidationMessageFor(model => model.Description)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.JoinDate)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.JoinDate)
-            @Html.ValidationMessageFor(model => model.JoinDate)
-        </div>
         
-        <div class="editor-label">
-            @Html.LabelFor(model => model.IsReceiveEmail)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.IsReceiveEmail)
-            @Html.ValidationMessageFor(model => model.IsReceiveEmail)
+        <div id="profile">
+            <div class="item">
+                <div class="left">
+                     <span style="width:100px">@Html.DisplayNameFor(model => model.GroupName)</span>
+                </div>
+                <div class="right">
+                    @Html.DisplayFor(model => model.GroupName)
+                </div>            
+            </div>
+            <div class="item">
+                <div class="left">
+                     <span style="width:100px">@Html.DisplayNameFor(model => model.GroupRole.GroupName)</span>
+                </div>
+                <div class="right">
+                    @Html.DisplayFor(model => model.GroupRole.GroupName)
+                </div>            
+            </div>
+            <div class="item">
+                <div class="left">
+                     <span style="width:100px">@Html.DisplayNameFor(model => model.JoinDate)</span>
+                </div>
+                <div class="right">
+                    @Html.DisplayFor(model => model.JoinDate)
+                </div>            
+            </div>
+            <div class="item">
+                <div class="left">
+                     <span style="width:100px">@Html.DisplayNameFor(model => model.IsReceiveEmail)</span>
+                </div>
+                <div class="right">
+                    @Html.EditorFor(model => model.IsReceiveEmail)
+                </div>            
+            </div>
         </div>
 
         <p>
