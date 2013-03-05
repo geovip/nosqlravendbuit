@@ -48,6 +48,39 @@ namespace UIT.NoSQL.Service
             return userGroups.ToList();
         }
 
+        public void UpdateSettingByGroupID(GroupObject group)
+        {
+            var userGroups = session.Query<UserGroupObject>("ByGroupIdAndJoinDateSortByJoinDate")
+                .Customize(x => x.Include<UserGroupObject>(o => o.UserId))
+                .Where(x => x.GroupId.Equals(group.Id))
+                .ToList();
+
+            List<UserObject> listUsers = new List<UserObject>();
+            foreach (var userGroup in userGroups)
+            {
+                userGroup.GroupName = group.GroupName;
+                userGroup.Description = group.Description;
+
+                session.Store(userGroup);
+                listUsers.Add(session.Load<UserObject>(userGroup.UserId));
+            }
+
+            foreach (var user in listUsers)
+            {
+                var userGroup = user.ListUserGroup.Where<UserGroupObject>(x => x.GroupId.Equals(group.Id)).FirstOrDefault();
+                if (userGroup != null)
+                {
+                    userGroup.GroupName = group.GroupName;
+                    userGroup.Description = group.Description;
+
+                    session.Store(user);
+                    break;
+                }
+            }
+
+            session.SaveChanges();
+        }
+
         public void Delete(string id)
         {
             session.Advanced.Defer(new DeleteCommandData { Key = id });

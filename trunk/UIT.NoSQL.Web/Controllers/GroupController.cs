@@ -515,13 +515,23 @@ namespace UIT.NoSQL.Web.Controllers
             groupOld.IsPublic = group.IsPublic;
             groupOld.GroupName = group.GroupName;
             groupOld.Description = group.Description;
-
             groupService.Save(groupOld);
 
-            //chua cap nhap GroupName, GroupDescription cho UserGroup, User
-            //IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
-            //var userOld = userService.Load(
+            userGroupService.UpdateSettingByGroupID(group);
 
+            var userSession = (UserObject)Session["user"];
+            if (userSession != null)
+            {
+                foreach (var userGroup in userSession.ListUserGroup)
+                {
+                    if (userGroup.GroupId.Equals(group.Id))
+                    {
+                        userGroup.GroupName = group.GroupName;
+                        userGroup.Description = group.Description;
+                        break;
+                    }
+                }
+            }
 
             return "Success";
         }
