@@ -308,3 +308,9 @@
     #profile .right {
         
     }
+
+.nickName {
+    color: rgb(0, 104, 28) !important ;
+    font-weight:bold !important;
+    text-decoration:none !important ;
+}
