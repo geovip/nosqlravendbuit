@@ -7,6 +7,7 @@ using System.Web.Security;
 using UIT.NoSQL.Web.Models;
 using UIT.NoSQL.Core.IService;
 using UIT.NoSQL.Core.Domain;
+using UIT.NoSQL.Web.Factory;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -223,6 +224,20 @@ namespace UIT.NoSQL.Web.Controllers
             }
             UserObject user =  userService.Load(((UserObject)Session["user"]).Id);
             return View(user);
+        }
+
+        
+        public ActionResult ViewMember(string userId, string groupId)
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            IUserGroupService userGroupService = MvcUnityContainer.Container.Resolve(typeof(IUserGroupService), "") as IUserGroupService;
+            var userGroup = userGroupService.GetByUserIdGroupId(userId, groupId);
+
+            return View(userGroup);
         }
 
         #region Status Codes

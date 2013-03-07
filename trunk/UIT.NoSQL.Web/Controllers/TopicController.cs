@@ -162,6 +162,7 @@ namespace UIT.NoSQL.Web.Controllers
                 group.NewEvent.Title = topic.TopicName;
                 group.NewEvent.CreateDate = topic.CreateDate;
                 group.NewEvent.CreateBy = user.FullName; ;
+                group.NewEvent.UserId = user.Id;
                 groupService.Save(group);
 
                 //send email
@@ -369,6 +370,7 @@ namespace UIT.NoSQL.Web.Controllers
             group.NewEvent.Title = "RE: " + topic.TopicName;
             group.NewEvent.CreateDate = comment.CreateDate;
             group.NewEvent.CreateBy = user.FullName;
+            group.NewEvent.UserId = user.Id;
 
             groupService.Save(group);
             

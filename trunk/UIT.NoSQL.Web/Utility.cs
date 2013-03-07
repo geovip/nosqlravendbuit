@@ -408,18 +408,25 @@ namespace UIT.NoSQL.Web
         {
             var session = documentStore.OpenSession();
 
-            documentStore.DatabaseCommands.DeleteIndex("LoginIndex");
-            documentStore.DatabaseCommands.PutIndex("LoginIndex", new IndexDefinitionBuilder<UserObject>
-            {
-                Map = users => from u in users
-                            select new { u.UserName, u.Password }
-            });
+            //documentStore.DatabaseCommands.DeleteIndex("LoginIndex");
+            //documentStore.DatabaseCommands.PutIndex("LoginIndex", new IndexDefinitionBuilder<UserObject>
+            //{
+            //    Map = users => from u in users
+            //                select new { u.UserName, u.Password }
+            //});
 
-            documentStore.DatabaseCommands.DeleteIndex("ByGroupIdAndJoinDateSortByJoinDate");
-            documentStore.DatabaseCommands.PutIndex("ByGroupIdAndJoinDateSortByJoinDate", new IndexDefinitionBuilder<UserGroupObject>
+            //documentStore.DatabaseCommands.DeleteIndex("ByGroupIdAndJoinDateSortByJoinDate");
+            //documentStore.DatabaseCommands.PutIndex("ByGroupIdAndJoinDateSortByJoinDate", new IndexDefinitionBuilder<UserGroupObject>
+            //{
+            //    Map = groups => from g in groups
+            //                   select new { g.GroupId, g.JoinDate }
+            //});
+
+            documentStore.DatabaseCommands.DeleteIndex("GetUserGroupByUserIdGroupId");
+            documentStore.DatabaseCommands.PutIndex("GetUserGroupByUserIdGroupId", new IndexDefinitionBuilder<UserGroupObject>
             {
                 Map = groups => from g in groups
-                               select new { g.GroupId, g.JoinDate }
+                                select new { g.UserId, g.GroupId }
             });
         }
 

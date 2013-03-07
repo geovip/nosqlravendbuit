@@ -45,6 +45,7 @@ namespace UIT.NoSQL.Core.Domain
     public class GroupEvent
     {
         public string Title { get; set; }
+        public string UserId { get; set; }
         public string CreateBy { get; set; }
         public DateTime CreateDate { get; set; }
     }
