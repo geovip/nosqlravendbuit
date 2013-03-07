@@ -53,7 +53,7 @@
             </td>
             <td>
                 <div>@item.NewEvent.Title</div>
-                <a href="@item.NewEvent.UserId">
+                <a href="#">
                     @item.NewEvent.CreateBy
                 </a>
                 <div>@item.NewEvent.CreateDate</div>
@@ -99,14 +99,6 @@ else
 
             return qstr;
         }
-
-        //function ViewMember(userId, groupId) {
-            
-            
-        //    $.post("/Account/ViewMember", {userId: _userId, groupId: _groupId}, function (data) {
-        //        $("#tbGroup tr:last").after(data);
-        //    });
-        //}
     </script>
     
     <table id="tbGroup" style="width:100%;">
@@ -129,7 +121,6 @@ else
             <td>
                 <div>@item.NewEvent.Title</div>
                 
-                @*<a href="javascript:{}" onclick="ViewMember('@item.NewEvent.UserId','@item.Id'">*@
                 <a href="/Account/ViewMember?userId=@item.NewEvent.UserId&groupId=@item.Id">
                     @item.NewEvent.CreateBy
                 </a>

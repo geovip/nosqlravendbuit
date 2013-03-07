@@ -63,7 +63,7 @@
                 $.getJSON(url, { id: topicId }, function (data) {
                     $('#topicName').html(data.TopicName);
                     $('#content').html(data.Content);
-                    $('#createBy').html(data.CreateBy.FullName);
+                    $('#createBy').html("<a href='/Account/ViewMember?userId=" + data.CreateBy.Id + "&groupId=@Model.GroupId' class='nickName'>" + data.CreateBy.FullName + "</a>");
                     $('#createDate').html(parseMicrosoftJsonDateTime(data.CreateDate));
                     if (data.ListFilesAttach != 0) {
                         $('#textFilesAttachment').text('Files Attachment (' + data.ListFilesAttach.length + ')');
@@ -306,7 +306,11 @@
                                 <img src="/Images/clear.cache.gif" style="background-image: url(/Images/gm_icon.png); width: 34px; height: 34px; background-position: -128px 0px; background-repeat: no-repeat no-repeat; " border="0">
                             </td>
                             <td align="left" class="GI2MSK2DP1" width="15%">
-                                <span style="color: rgb(0, 104, 28);font-weight:bold">${CreateBy.FullName}</span>
+                                <span style="color: rgb(0, 104, 28);font-weight:bold">
+                                    <a href="/Account/ViewMember?userId=${CreateBy.Id}&groupId=@Model.GroupId" class='nickName'>
+                                        ${CreateBy.FullName}
+                                    </a>
+                                </span>
                              </td>
                              <td align="right" width=70%">
                                 <span>${$item.getCreateDate}</span> 
@@ -329,7 +333,7 @@
             </div>
             <div tabindex="0" class="bodyComment" style="margin-left: 40px">
                 <div class = "divComment">
-                    <span class="dateAndUser" style="display:none">Vào <span>${$item.getCreateDate}</span>, <span>${CreateBy.FullName}</span> đã viết:<br/></span>
+                    <span class="dateAndUser" style="display:none">At <span>${$item.getCreateDate}</span>, <span>${CreateBy.FullName}</span> wrote:<br/></span>
                     <span class="comment">{{html Content}}</span>
                     <a class="aShowHideParentComment" href="#" style="text-decoration:none;cursor: pointer;color: #500050;font-size: 10px;">-show quote-</a>
                     <div class="divShowHideParentComment" style="display:none">
@@ -378,7 +382,9 @@
 
     <div id="topic" tabindex="0">
         <span id="topicName" style="font-weight:bold;font-size:large; color:Black"></span><br/><br/>
-        <span id="dateAndUser" >At <span id="createDate"></span>, <span id="createBy" style="color: rgb(0, 104, 28);font-weight:bold"></span> wrote:</span><br />
+        <span id="dateAndUser" >At <span id="createDate"></span>, 
+            <span id="createBy"></span> 
+            wrote:</span><br />
         <div tabindex="0">
             <span id="content"></span><br />
         </div>

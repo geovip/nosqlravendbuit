@@ -45,6 +45,12 @@
                 <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
             </div>
     }
+    @if (TempData["account"].Equals("orther"))
+    {
+        <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
+            <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
+        </div>
+    }
     @*<div style="float:right;">
         <ul id="menu">
             <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
