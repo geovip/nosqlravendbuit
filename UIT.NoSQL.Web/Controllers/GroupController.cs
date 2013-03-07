@@ -69,6 +69,7 @@ namespace UIT.NoSQL.Web.Controllers
             group.NewEvent.Title = "New group";
             group.NewEvent.CreateDate = group.CreateDate;
             group.NewEvent.CreateBy = user.FullName;
+            group.NewEvent.UserId = user.Id;
             
             groupService.Save(group);
 
@@ -472,7 +473,7 @@ namespace UIT.NoSQL.Web.Controllers
         [HttpPost]
         public string UpdateManagerUser(UserGroupObject userGroup)
         {
-            IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;//var user = 
+            IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             var userGroupLoad = userGroupService.Load(userGroup.Id);
             var group = groupService.Load(userGroup.GroupId);
             var user = userService.Load(userGroup.UserId);

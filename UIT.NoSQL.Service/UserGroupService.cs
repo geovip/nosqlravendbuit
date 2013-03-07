@@ -85,5 +85,15 @@ namespace UIT.NoSQL.Service
         {
             session.Advanced.Defer(new DeleteCommandData { Key = id });
         }
+
+        public UserGroupObject GetByUserIdGroupId(string userId, string groupId)
+        {
+            var userGroupObject = (from userGroup in session.Query<UserGroupObject>("GetUserGroupByUserIdGroupId").Include<UserGroupObject>(u => u.UserId)
+                             where userGroup.UserId.Equals(userId) && userGroup.GroupId.Equals(groupId)
+                             select userGroup).FirstOrDefault();
+
+            userGroupObject.User = session.Load<UserObject>(userGroupObject.UserId);
+            return userGroupObject;
+        }
     }
 }
