@@ -10,6 +10,7 @@ using UIT.NoSQL.Web.Filters;
 using System.Diagnostics;
 using System.IO;
 using System.Configuration;
+using UIT.NoSQL.Web.Factory;
 
 namespace UIT.NoSQL.Web.Controllers
 {
@@ -47,6 +48,13 @@ namespace UIT.NoSQL.Web.Controllers
                 UserObject userSession = (UserObject)Session["user"];
                 if (userSession != null)
                 {
+                    // lấy lại thông tin mới cập nhật của user hiện tại
+                    string userId = userSession.Id;
+                    IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+                    Session["user"] = userService.Load(userId);
+                    userSession = (UserObject)Session["user"];
+                    ///////////////////////////////////////////////////
+
                     var userGroup = userSession.ListUserGroup.Find(u => u.GroupId == topic.GroupId);
                     if (userGroup != null)
                     {
