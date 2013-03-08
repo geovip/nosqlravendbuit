@@ -103,6 +103,13 @@ namespace UIT.NoSQL.Web.Controllers
             UserObject userSession = (UserObject)Session["user"];
             if (userSession != null)
             {
+                // lấy lại thông tin mới cập nhật của user hiện tại
+                string userId = userSession.Id;
+                IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
+                Session["user"] = userService.Load(userId);
+                userSession = (UserObject)Session["user"];
+                ///////////////////////////////////////////////////
+
                 var userGroup = userSession.ListUserGroup.Find(u => u.GroupId == id);
                 if (userGroup != null)
                 {
@@ -113,17 +120,15 @@ namespace UIT.NoSQL.Web.Controllers
                     }
                     else
                         roleStr = "JoinRequest";
-                }
-                
+                }                
             }
 
             ViewBag.Role = roleStr;
             ViewBag.GroupName = group.GroupName;
             ViewBag.GroupId = group.Id;
             
-            
             //TempData["Role"] = roleStr;
-            return View(group.ListTopic);
+            return View(group.ListTopic.OrderByDescending(t=> t.LastModified));
         }
 
         [HttpPost]
