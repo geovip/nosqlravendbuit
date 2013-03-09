@@ -238,7 +238,6 @@ top: 17px;
                     @Html.DisplayFor(modelItem => item.NumberOfView)
                 </td>
                 <td style="padding-left:10px;border-top: 1px solid #DDDCDC" width="15%">
-                    @Html.DisplayFor(modelItem => item.CreateBy.FullName)
                     <a href="/Account/ViewMember?userId=@item.CreateBy.Id&groupId=@ViewBag.GroupId">
                         @item.CreateBy.FullName
                     </a>

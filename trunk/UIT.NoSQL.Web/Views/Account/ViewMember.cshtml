@@ -1,0 +1,61 @@
+﻿@model UIT.NoSQL.Core.Domain.UserGroupObject
+
+@{
+    ViewBag.Title = "ViewMember";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home")
+    </section>
+}
+
+<h2>View Member</h2>
+
+<fieldset>
+    <legend>UserGroupObject</legend>
+    <div id="profile">
+        <div class="item">
+            <div class="left">
+                 <span style="width:100px">@Html.DisplayNameFor(model => model.User.FullName)</span>
+            </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.User.FullName)
+            </div>
+        </div>
+        <div class="item">
+            <div class="left">
+                 <span style="width:100px">@Html.DisplayNameFor(model => model.User.Email)</span>
+            </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.User.Email)
+            </div>
+        </div>
+        <div class="item">
+            <div class="left">
+                 <span style="width:100px">@Html.DisplayNameFor(model => model.JoinDate)</span>
+            </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.JoinDate)
+            </div>
+        </div>
+        <div class="item">
+            <div class="left">
+                 <span style="width:100px">@Html.DisplayNameFor(model => model.GroupName)</span>
+            </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.GroupName)
+            </div>
+        </div>
+        <div class="item">
+            <div class="left">
+                 <span style="width:100px">@Html.DisplayNameFor(model => model.GroupRole)</span>
+            </div>
+            <div class="right">
+                @Html.DisplayFor(model => model.GroupRole.GroupName)
+            </div>
+        </div>
+
+    </div>
+</fieldset>
