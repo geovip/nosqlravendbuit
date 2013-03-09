@@ -58,7 +58,7 @@ namespace InsertDataSampleToRavenDB
 
         public static void Init()
         {
-            databaseName = "UITNoSQLDB2";
+            databaseName = "UITNoSQLDB6";
             string[] connects = ConnectRavenDB.Split(';');
             documentStores = new DocumentStore[connects.Length];
             ServerRegion = new List<string>();
@@ -310,6 +310,7 @@ namespace InsertDataSampleToRavenDB
                     groupObject.NewEvent.Title = "New group";
                     groupObject.NewEvent.CreateDate = groupObject.CreateDate;
                     groupObject.NewEvent.CreateBy = userObjectRandom.FullName;
+                    groupObject.NewEvent.UserId = userObjectRandom.Id;
 
                     // tao user group cho group vua tao
                     var userGroupObject = new UserGroupObject();
@@ -319,6 +320,7 @@ namespace InsertDataSampleToRavenDB
                     userGroupObject.GroupName = groupObject.GroupName;
                     userGroupObject.Description = groupObject.Description;
                     userGroupObject.IsApprove = UserGroupStatus.Approve;
+                    userGroupObject.IsReceiveEmail = true;
                     userGroupObject.JoinDate = DateTime.Now;
                     userGroupObject.GroupRole = groupRoleOwner;
                     userGroupObject.IsReceiveEmail = true;
@@ -330,6 +332,7 @@ namespace InsertDataSampleToRavenDB
                     userGroupObjectTemp.GroupName = userGroupObject.GroupName;
                     userGroupObjectTemp.Description = userGroupObject.Description;
                     userGroupObjectTemp.IsApprove = userGroupObject.IsApprove;
+                    userGroupObjectTemp.IsReceiveEmail = true;
                     userGroupObjectTemp.JoinDate = userGroupObject.JoinDate;
                     userGroupObjectTemp.GroupRole = userGroupObject.GroupRole;
                     userGroupObjectTemp.IsReceiveEmail = true;
@@ -641,7 +644,7 @@ namespace InsertDataSampleToRavenDB
             List<string> ServerRegion;
             string ServerGeneral;
 
-            databaseName = "UITNoSQLDB2";
+            databaseName = "UITNoSQLDB6";
             string ConnectRavenDB = "http://localhost:8081,Asia;http://localhost:8082,MiddleEast;http://localhost:8083,America";
             string[] connects = ConnectRavenDB.Split(';');
 
@@ -772,6 +775,7 @@ namespace InsertDataSampleToRavenDB
                     groupObject.NewEvent.Title = "New group";
                     groupObject.NewEvent.CreateDate = groupObject.CreateDate;
                     groupObject.NewEvent.CreateBy = userObjectRandom.FullName;
+                    groupObject.NewEvent.UserId = userObjectRandom.Id;
 
                     // tao user group cho group vua tao
                     var userGroupObject = new UserGroupObject();
@@ -781,6 +785,7 @@ namespace InsertDataSampleToRavenDB
                     userGroupObject.GroupName = groupObject.GroupName;
                     userGroupObject.Description = groupObject.Description;
                     userGroupObject.IsApprove = UserGroupStatus.Approve;
+                    userGroupObject.IsReceiveEmail = true;
                     userGroupObject.JoinDate = DateTime.Now;
                     userGroupObject.GroupRole = groupRoleOwner;
 
