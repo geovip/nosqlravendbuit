@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateDataSample", "CreateD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsertDataSampleToRavenDB", "InsertDataSampleToRavenDB\InsertDataSampleToRavenDB.csproj", "{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsertLargeDataUsingBulkInsert", "InsertLargeDataUsingBulkInsert\InsertLargeDataUsingBulkInsert.csproj", "{960FF549-9E90-47D2-9E21-E0F60DA1F3BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{336AD5F6-C355-4909-BDB6-50FD9EBCAC82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{960FF549-9E90-47D2-9E21-E0F60DA1F3BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960FF549-9E90-47D2-9E21-E0F60DA1F3BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960FF549-9E90-47D2-9E21-E0F60DA1F3BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960FF549-9E90-47D2-9E21-E0F60DA1F3BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
