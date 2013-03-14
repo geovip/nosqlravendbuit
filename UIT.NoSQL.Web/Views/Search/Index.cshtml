@@ -1,12 +1,64 @@
 ﻿@model IEnumerable<UIT.NoSQL.Core.Domain.GroupObject>
 
 @{
-    ViewBag.Title = "Index";
-    Layout = null;
+    ViewBag.Title = "Search results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    
-<h2>Search Result</h2>
+
+@section LeftMenu {
+    <section id="leftmenu">
+        @Html.Action("LeftMenu", "Home", new { id = "" })
+    </section>
+}
+
+<h2>Search Results</h2>
 <p style="margin-top:0;">Found @TempData["totalResult"] results (@TempData["time"])</p>
+<input type="hidden" id="hdSearchStr" value="@TempData["searchStr"]" />
+<input type="hidden" id="results" value="@TempData["results"]" />
+
+<script type="text/javascript">
+    var page = 0;
+    var maxPage = @TempData["paging"] - 1;
+
+    $(document).ready(function () {
+        var searchStr = document.getElementById("hdSearchStr").value;
+        document.getElementById("searchStr").value = searchStr;
+
+        $("#main").scroll(function () {
+            if ((this.scrollHeight - $(this).scrollTop()) - $(this).innerHeight() < 190) {
+                LoadSearchPaging();
+            }
+        });
+    });
+
+    function LoadSearchPaging() {
+        //alert(page);
+        page += 1;
+
+        if (page > maxPage) {
+            return;
+        }
+
+        $.post("/Search/More", getquerystr(page), function (data) {
+            
+            $("#tbGroup tr:last").after(data);
+        });
+    }
+
+    function getquerystr(_page) {
+        var _searchStr = document.getElementById("hdSearchStr").value;
+        var _results = document.getElementById("results").value;
+
+        var qstr =
+            {
+                searchStr: _searchStr,
+                page: _page,
+                resultsStr: _results
+            };
+
+        return qstr;
+    }
+</script>
 
 <div id="divSearchResult">
     <table id="tbGroup" style="width:100%;">
