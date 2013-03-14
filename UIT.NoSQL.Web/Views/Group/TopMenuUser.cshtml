@@ -11,51 +11,62 @@
         function manage(id) {
             window.location = "/Group/Manager/" + id;
         }
+
+        function xmlhttpPost(_id) {
+
+            $.post("/Group/Join", { id: _id }, function (data) {
+                alert(data);
+            });
+
+        }
     </script>
 <div>
     
     @if( TempData["account"].Equals("PostReply"))
     {
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
-                <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
+                <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -41px;" border="0" alt="Back" />
             </div>
 
             <div tabindex="0" class="BUTTONSTYLE POSTBUTTON POSTORREPLY">POST REPLY</div>
     }
-    @if (TempData["account"].Equals("WaitForAccepting"))
+    
+    else if (TempData["account"].Equals("WaitForAccepting"))
     {
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
-                <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
+                <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -41px;" border="0" alt="Back" />
             </div>
 
             <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Wait for Accepting...</div>
     }
-    @if (TempData["account"].Equals("JoinGroup"))
+    else if (TempData["account"].Equals("JoinGroup"))
+    {
+            <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
+                <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -41px;" border="0" alt="Back" />
+            </div>
+
+            <div tabindex="0" class="BUTTONSTYLE JOINGROUP" onclick = "xmlhttpPost('@TempData["GroupId"]')">Join group for discussion</div>
+    }
+    else if (TempData["account"].Equals("Register"))
+    {
+        <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
+            <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -41px;" border="0" alt="Back" />
+        </div>
+
+        <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Register for discussion</div>
+    }
+
+    else if (TempData["account"].Equals("Manage"))
     {
             <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
                 <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
             </div>
-
-            <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Register for discussion</div>
     }
-
-    @if (TempData["account"].Equals("Manage"))
-    {
-            <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
-                <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
-            </div>
-    }
-    @if (TempData["account"].Equals("orther"))
+    else if (TempData["account"].Equals("orther"))
     {
         <div tabindex="0" class="BUTTONSTYLE GLTURNLHW" onclick = "BackGroup('@TempData["GroupId"]');">
             <img src="../../Images/clear.cache.gif" style="width:20px;height:20px;background:url(/Images/gm_icon.png) no-repeat -290px -38px;" border="0" alt="Back" />
         </div>
     }
-    @*<div style="float:right;">
-        <ul id="menu">
-            <li>@Html.ActionLink("Create New Topic", "Create", "Topic", new { id = TempData["GroupId"] }, null)</li>   
-            <li>@Html.ActionLink("Manager", "Manager", "Group", new { id = TempData["GroupId"] }, null)</li>
-        </ul>
-    </div>*@
         
 </div>
