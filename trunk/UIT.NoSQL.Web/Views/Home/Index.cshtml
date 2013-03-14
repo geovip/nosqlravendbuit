@@ -75,7 +75,7 @@ else
             
             $("#main").scroll(function () {
                 
-                if ((this.scrollHeight - $(this).scrollTop()) - $(this).innerHeight() < 10) {
+                if ((this.scrollHeight - $(this).scrollTop()) - $(this).innerHeight() < 190) {
                     LoadHomePaging();
                 }
             });
@@ -100,7 +100,7 @@ else
             return qstr;
         }
     </script>
-    
+   
     <table id="tbGroup" style="width:100%;">
 
     @foreach (var item in Model)

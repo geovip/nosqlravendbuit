@@ -38,10 +38,11 @@
             window.onresize = AutoResize;
 
             function PostSearch() {
-
-                $.post("/Search/Index", getquerystring(), function (data) {
-                    $("#SectionMain").html(data);
-                });
+                var _searchStr = document.getElementById("searchStr").value;
+                window.location = "/Search/Index?searchStr=" + _searchStr;
+                //$.post("/Search/Index", getquerystring(), function (data) {
+                //    $("#SectionMain").html(data);
+                //});
 
             }
             function getquerystring() {
