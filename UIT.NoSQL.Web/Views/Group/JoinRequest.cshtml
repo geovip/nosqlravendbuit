@@ -18,7 +18,7 @@
     }
 
 </script>
-<h2>Join Request</h2>
+<h2>Join Requests</h2>
 <br/>
 @if (Model == null || Model.Count() == 0)
 {
@@ -32,6 +32,13 @@ else
             @Html.DisplayName("User Name")
         </th>
         <th>
+            @Html.DisplayName("Full Name")
+        </th>
+        <th>
+            Accept Member
+        </th>
+        <th>
+            Reject
         </th>
     </tr>
 
@@ -41,10 +48,13 @@ else
         <td width="25%">
             @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
-        <td width="15%">
+        <td width="25%">
+            @Html.DisplayFor(modelItem => item.User.FullName)
+        </td>
+        <td width="15%" style="text-align:center">
             <a href="javascript:{}" onclick="xmlhttpPost('/Group/ActiveRequest','@item.Id')">Accept Member</a>
         </td>
-        <td width="15%">
+        <td width="15%" style="text-align:center">
             <a href="javascript:{}" onclick="xmlhttpPost('/Group/RejectRequest/','@item.Id')">Reject</a>
         </td>
     </tr>
