@@ -20,7 +20,9 @@
         </td>
         <td>
             <div>@item.NewEvent.Title</div>
-            <b>@item.NewEvent.CreateBy</b>
+            <a href="/Account/ViewMember?userId=@item.NewEvent.UserId&groupId=@item.Id">
+                @item.NewEvent.CreateBy
+            </a>
             <div>@item.NewEvent.CreateDate</div>
         </td>
     </tr>
