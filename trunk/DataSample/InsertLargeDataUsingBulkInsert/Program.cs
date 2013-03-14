@@ -31,79 +31,68 @@ namespace InsertLargeDataUsingBulkInsert
             Console.WriteLine("Inserting...!");
             Stopwatch st = new Stopwatch();
 
-            documentStore1 = new DocumentStore { Url = "http://localhost:8081/", DefaultDatabase = databaseName};
-            documentStore1.Conventions.IdentityPartsSeparator = "-";
-            documentStore1.Initialize();
+            //documentStore1 = new DocumentStore { Url = "http://localhost:8081/", DefaultDatabase = databaseName};
+            //documentStore1.Conventions.IdentityPartsSeparator = "-";
+            //documentStore1.Initialize();
             documentStore2 = new DocumentStore { Url = "http://localhost:8082/", DefaultDatabase = databaseName };
             documentStore2.Conventions.IdentityPartsSeparator = "-";
             documentStore2.Initialize();
-            documentStore3 = new DocumentStore { Url = "http://localhost:8083/", DefaultDatabase = databaseName };
-            documentStore3.Conventions.IdentityPartsSeparator = "-";
-            documentStore3.Initialize();
+            //documentStore3 = new DocumentStore { Url = "http://localhost:8083/", DefaultDatabase = databaseName };
+            //documentStore3.Conventions.IdentityPartsSeparator = "-";
+            //documentStore3.Initialize();
 
 
 
-            var session3 = documentStore3.OpenSession();
+            //var session3 = documentStore3.OpenSession();
             groupRoleManager = new GroupRoleObject();
             groupRoleManager.Id = "America-7E946ED1-69E6-4B45-8273-FB7AC7367F50";
             groupRoleManager.GroupName = "Manager";
             groupRoleManager.IsGeneral = "America";
-            session3.Store(groupRoleManager);
+            //session3.Store(groupRoleManager);
 
             groupRoleMember = new GroupRoleObject();
             groupRoleMember.Id = "America-9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
             groupRoleMember.GroupName = "Member";
             groupRoleMember.IsGeneral = "America";
-            session3.Store(groupRoleMember);
+            //session3.Store(groupRoleMember);
 
             groupRoleOwner = new GroupRoleObject();
             groupRoleOwner.Id = "America-79C6B725-F787-4FDF-B820-42A21174449D";
             groupRoleOwner.GroupName = "Owner";
             groupRoleOwner.IsGeneral = "America";
-            session3.Store(groupRoleOwner);
-            session3.SaveChanges();
-            session3.Dispose();
+            //session3.Store(groupRoleOwner);
+            //session3.SaveChanges();
+            //session3.Dispose();
 
             //dt = GetListFullName(300);
 
             st.Start();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 10; i++)
             {
                 // Asia
-                metadataRegion = "Asia";
-                InsertDataToParticular(regions[0], documentStore1);
-                // Middle East
+                //metadataRegion = "Asia";
+                //InsertDataToParticular(regions[0], documentStore1);
+                //// Middle East
+                //metadataRegion = "MiddleEast";
+                //InsertDataToParticular(regions[1], documentStore2);
+                //// America
+                //metadataRegion = "America";
+                //InsertDataToParticular(regions[2], documentStore3);
+
                 metadataRegion = "MiddleEast";
-                InsertDataToParticular(regions[1], documentStore2);
-                // America
-                metadataRegion = "America";
-                InsertDataToParticular(regions[2], documentStore3);
+                InsertDataToParticularImprovePerformance(regions[1], documentStore2);
             }
             st.Stop();
             Console.WriteLine("Insert Data Sample Success!");
             Console.WriteLine(st.Elapsed);
 
-            st = new Stopwatch();
-            st.Start();
-            InitIndexes();
-            st.Stop();
-            #region doc danh sach group len tu file xml
-            // doc du lieu danh sách Groups tu ListGroups.xml
-            //string groupsInfoXmlFilePath = STR_DATA_SERVER_GROUPS + "ListGroups.xml";
-            //if (File.Exists(groupsInfoXmlFilePath))
-            //{
-            //    XElement xmlGroupRSS = XElement.Load(groupsInfoXmlFilePath);
-            //    List<Group> listGroups = (from u in xmlGroupRSS.Elements("Group")
-            //                              select new Group
-            //                              {
-            //                                  GroupName = u.Element("GroupName").Value,
-            //                              }).ToList();
-
-            //}
-            #endregion
-
-            Console.WriteLine("Insert index Success!");
-            Console.WriteLine("Time create index: {0}", st.Elapsed);
+            //st = new Stopwatch();
+            //st.Start();
+            //InitIndexes();
+            //st.Stop();
+           
+            //Console.WriteLine("Insert index Success!");
+            //Console.WriteLine("Time create index: {0}", st.Elapsed);
 
             Console.Read();
             Console.Read();
@@ -456,6 +445,206 @@ namespace InsertLargeDataUsingBulkInsert
                 Console.WriteLine("Insert Error!");
             }
             #endregion
+
+        }
+
+        public static void InsertDataToParticularImprovePerformance(string region, IDocumentStore documentStore)
+        {
+            int numberOfGroups = 100, numberOfTopicsForEachGroup = 50, numberOfCommentsForEachTopic = 100;
+            int numberOfUsers = 300;
+
+            List<UserObject> listUserObject = new List<UserObject>();
+            List<UserObject> list50MemberFirst = new List<UserObject>();
+            List<TopicObject> listTopicObjectForEachGroup = new List<TopicObject>();
+            int i, j, k, l;
+            Random random = new Random();
+            int indexRandomUser;
+            UserObject userObjectRandom;
+            UserObject userObject;
+
+            // them user
+            if (region == regions[0]) // Asia
+            {
+                for (i = 1; i <= numberOfUsers / 3; i++)
+                {
+                    userObject = new UserObject();
+                    userObject.Id = region + "-" + Guid.NewGuid().ToString();
+                    //userObject.FullName = dt.Rows[i - 1]["FullName"].ToString();
+                    userObject.FullName = Guid.NewGuid().ToString();
+                    userObject.UserName = userObject.FullName;
+                    userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
+                    userObject.Email = userObject.FullName + "@gmail.com";
+                    userObject.Region = region;
+                    listUserObject.Add(userObject);
+                }
+            }
+            else
+            {
+                if (region == regions[1]) // Middle East
+                {
+                    for (i = numberOfUsers / 3 + 1; i <= numberOfUsers / 3 * 2; i++)
+                    {
+                        userObject = new UserObject();
+                        userObject.Id = region + "-" + Guid.NewGuid().ToString();
+                        userObject.FullName = Guid.NewGuid().ToString();
+                        userObject.UserName = userObject.FullName;
+                        userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
+                        userObject.Email = userObject.FullName + "@gmail.com";
+                        userObject.Region = region;
+                        listUserObject.Add(userObject);
+                    }
+                }
+                else // America
+                {
+                    for (i = numberOfUsers / 3 * 2 + 1; i <= numberOfUsers; i++)
+                    {
+                        userObject = new UserObject();
+                        userObject.Id = region + "-" + Guid.NewGuid().ToString();
+                        userObject.FullName = Guid.NewGuid().ToString();
+                        userObject.UserName = userObject.FullName;
+                        userObject.Password = "c4ca4238a0b923820dcc509a6f75849b";
+                        userObject.Email = userObject.FullName + "@gmail.com";
+                        userObject.Region = region;
+                        listUserObject.Add(userObject);
+                    }
+                }
+            }
+            GroupObject groupObject;
+            using (var bulkInsert = documentStore2.BulkInsert())
+            {
+                bulkInsert.OnBeforeEntityInsert += bulkInsert_OnBeforeEntityInsert;
+                for (i = 1; i <= numberOfGroups; i++)
+                {
+                    // tao group
+                    groupObject = new GroupObject();
+                    groupObject.Id = region + "-" + Guid.NewGuid().ToString();
+                    groupObject.GroupName = "Group " + Guid.NewGuid();
+                    groupObject.Description = "This is new group";
+                    groupObject.IsPublic = false;
+                    groupObject.CreateDate = DateTime.Now;
+
+                    // tao ngau nhien user trong 5.000 Users o Asia
+                    indexRandomUser = random.Next(listUserObject.Count());
+                    userObjectRandom = listUserObject[indexRandomUser];
+
+                    groupObject.CreateBy = userObjectRandom;
+                    groupObject.NewEvent = new GroupEvent();
+                    groupObject.NewEvent.Title = "New post";
+                    groupObject.NewEvent.CreateDate = DateTime.Now;
+                    groupObject.NewEvent.CreateBy = userObjectRandom.FullName;
+                    groupObject.NewEvent.UserId = userObjectRandom.Id;
+
+                    // tao user group cho group vua tao
+                    var userGroupObject = new UserGroupObject();
+                    userGroupObject.Id = region + "-" + Guid.NewGuid().ToString();
+                    userGroupObject.UserId = userObjectRandom.Id;
+                    userGroupObject.GroupId = groupObject.Id;
+                    userGroupObject.GroupName = groupObject.GroupName;
+                    userGroupObject.Description = groupObject.Description;
+                    userGroupObject.IsApprove = UserGroupStatus.Approve;
+                    userGroupObject.IsReceiveEmail = true;
+                    userGroupObject.JoinDate = DateTime.Now;
+                    userGroupObject.GroupRole = groupRoleOwner;
+                    userGroupObject.IsReceiveEmail = true;
+
+                    bulkInsert.Store(userGroupObject);
+
+                    // them usergroup vap group
+                    groupObject.ListUserGroup.Add(userGroupObject);
+                    // them user group vao user
+                    listUserObject.Find(u => u.UserName == userObjectRandom.UserName).ListUserGroup.Add(userGroupObject);
+
+                    // lay 50 member dau tien
+                    list50MemberFirst = listUserObject.GetRange(new Random().Next(0, numberOfUsers / 3 - 51), 50);
+                    if (list50MemberFirst.Exists(u => u.UserName == userObjectRandom.UserName))
+                    {
+                        list50MemberFirst.Remove(userObjectRandom);
+                    }
+
+                    UserGroupObject userGroupObjectMember;
+                    foreach (var user in list50MemberFirst) // duyet qua danh sach 50 member de luu xuong db
+                    {
+                        userGroupObjectMember = new UserGroupObject();
+                        userGroupObjectMember.Id = region + "-" + Guid.NewGuid().ToString();
+                        userGroupObjectMember.UserId = user.Id;
+                        userGroupObjectMember.GroupId = groupObject.Id;
+                        userGroupObjectMember.GroupName = groupObject.GroupName;
+                        userGroupObjectMember.Description = groupObject.Description;
+                        userGroupObjectMember.IsApprove = UserGroupStatus.Approve;
+                        userGroupObjectMember.JoinDate = DateTime.Now;
+                        userGroupObjectMember.GroupRole = groupRoleMember;
+                        userGroupObjectMember.IsReceiveEmail = true;
+
+                        bulkInsert.Store(userGroupObjectMember);
+                        
+                        // them member vao group
+                        groupObject.ListUserGroup.Add(userGroupObjectMember);
+                        // cap nhat danh sach listUserGroup
+                        listUserObject.Find(u => u.UserName == user.UserName).ListUserGroup.Add(userGroupObjectMember);
+                    }
+
+                    // tao 100 topics
+                    TopicObject topicObject;
+                    int indexRandomIn50Members;
+                    UserObject userObjectRandomIn50Members;
+                    listTopicObjectForEachGroup = new List<TopicObject>();
+                    for (j = 1; j <= numberOfTopicsForEachGroup; j++)
+                    {
+                        topicObject = new TopicObject();
+                        topicObject.Id = region + "-" + Guid.NewGuid().ToString();
+                        topicObject.TopicName = "Topic " + j + " group " + groupObject.GroupName;
+                        topicObject.Content = "Content topic here.";
+
+                        // tao ngau nhien user
+                        indexRandomIn50Members = random.Next(list50MemberFirst.Count());
+                        userObjectRandomIn50Members = list50MemberFirst[indexRandomIn50Members];
+                        topicObject.CreateBy = userObjectRandomIn50Members;
+                        topicObject.GroupId = groupObject.Id;
+                        topicObject.CreateDate = DateTime.Now;
+                        topicObject.LastModified = topicObject.CreateDate;
+                        topicObject.NumberOfView = 0;
+                        topicObject.isDeleted = false;
+
+                        // tao 100 comments
+                        CommentObject commentObject;
+                        List<CommentObject> listCommentObject = new List<CommentObject>();
+                        for (k = 1; k <= numberOfCommentsForEachTopic; k++)
+                        {
+                            commentObject = new CommentObject();
+                            commentObject.Id = Guid.NewGuid().ToString();
+                            commentObject.Content = "This is comment " + k;
+                            commentObject.ParentContent = "This is parent content.";
+                            // tao user ngau nhien trong 50 thanh vien cua nhom
+                            indexRandomIn50Members = random.Next(list50MemberFirst.Count());
+                            userObjectRandomIn50Members = list50MemberFirst[indexRandomIn50Members];
+                            commentObject.CreateBy = userObjectRandomIn50Members;
+                            commentObject.CreateDate = DateTime.Now;
+                            commentObject.isDeleted = false;
+                            listCommentObject.Add(commentObject);
+                        }
+                        topicObject.ListComment = listCommentObject;
+                        topicObject.NumberOfComment = Convert.ToUInt32(listCommentObject.Count);
+
+                        listTopicObjectForEachGroup.Add(topicObject);
+                        bulkInsert.Store(topicObject);
+                    }
+
+                    // them denormalize topic vao group
+                    foreach (TopicObject topic in listTopicObjectForEachGroup)
+                    {
+                        groupObject.ListTopic.Add(topic);
+                    }
+
+                    bulkInsert.Store(groupObject);
+
+                }
+
+                // insert users last
+                foreach (UserObject u in listUserObject)
+                {
+                    bulkInsert.Store(u);
+                }
+            }
 
         }
 
