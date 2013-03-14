@@ -94,9 +94,13 @@ top: 17px;
         }
         else
         {
-            if(ViewBag.Role == "JoinRequest")
+            if (ViewBag.Role == "WaitingForAccepting")
             {
                 <div tabindex="0" class="BUTTONSTYLE JOINGROUP">Wait for Accepting...</div>
+            }
+            else if (ViewBag.Role == "JoinGroup")
+            {
+                <div tabindex="0" class="BUTTONSTYLE JOINGROUP" onclick = "xmlhttpPost('@ViewBag.GroupId')">Join group for discussion</div>
             }
             else
             {

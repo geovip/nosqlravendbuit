@@ -61,7 +61,6 @@ namespace UIT.NoSQL.Web.Controllers
                         if (userGroup.IsApprove == UserGroupStatus.Approve) // la member, manager, owner
                         {
                             roleStr = userGroup.GroupRole.GroupName;
-
                             //update lai so luong bai dang moi = 0
                             var userTopic = topic.ListUserTopic.Find(ut => ut.UserId == userSession.Id);
                             if (userTopic != null)
@@ -78,10 +77,14 @@ namespace UIT.NoSQL.Web.Controllers
                                 }
                             }
                         }
+                        else if (userGroup.IsApprove == UserGroupStatus.JoinRequest)
+                            roleStr = "WaitingForAccepting";
                         else
-                            roleStr = "JoinRequest";
+                            roleStr = "JoinGroup";
                         ViewBag.UserId = userSession.Id;
-                    }    
+                    }
+                    else
+                        roleStr = "JoinGroup";
                 }
                 ViewBag.Role = roleStr;
                 ViewBag.HostData = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
@@ -91,7 +94,7 @@ namespace UIT.NoSQL.Web.Controllers
 
                 group.ListTopic.Find(t => t.Id.Equals(topic.Id)).NumberOfView += 1;
                 groupService.Save(group);
-              
+
                 return View(topic);
             }
             else

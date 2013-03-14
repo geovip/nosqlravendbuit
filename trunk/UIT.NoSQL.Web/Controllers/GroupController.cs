@@ -118,9 +118,13 @@ namespace UIT.NoSQL.Web.Controllers
                         roleStr = userGroup.GroupRole.GroupName;
                         ViewBag.UserId = userSession.Id; 
                     }
+                    else if (userGroup.IsApprove == UserGroupStatus.JoinRequest)
+                        roleStr = "WaitingForAccepting";
                     else
-                        roleStr = "JoinRequest";
-                }                
+                        roleStr = "JoinGroup";
+                }
+                else
+                    roleStr = "JoinGroup";
             }
 
             ViewBag.Role = roleStr;
@@ -152,6 +156,7 @@ namespace UIT.NoSQL.Web.Controllers
                     else if (usergroup.IsApprove == UserGroupStatus.Reject)
                     {
                         reSend = true;
+                        break;
                     }
                     else
                     {
@@ -170,9 +175,24 @@ namespace UIT.NoSQL.Web.Controllers
                     if (usergroup.UserId.Equals(userId))
                     {
                         usergroup.IsApprove = UserGroupStatus.JoinRequest;
+                        break;
                     }
                 }
+
+                foreach (var usergroup in user.ListUserGroup)
+                {
+                    if (usergroup.GroupId.Equals(id))
+                    {
+                        usergroup.IsApprove = UserGroupStatus.JoinRequest;
+
+                        var userGroupObject = userGroupService.Load(usergroup.Id);
+                        userGroupObject.IsApprove = UserGroupStatus.JoinRequest;
+                        userGroupService.Save(userGroupObject);
+                        break;
+                    }
+                }  
             }
+
             else
             {
                 var groupRole = groupRoleService.LoadByName(GroupRoleType.Member);
@@ -189,10 +209,10 @@ namespace UIT.NoSQL.Web.Controllers
                 group.ListUserGroup.Add(userGroup);
                 user.ListUserGroup.Add(userGroup);
 
-                Session["user"] = user;
-                userService.Save(user);
                 userGroupService.Save(userGroup);
             }
+            Session["user"] = user;
+            userService.Save(user);
             groupService.Save(group);
 
             return "Request success";
