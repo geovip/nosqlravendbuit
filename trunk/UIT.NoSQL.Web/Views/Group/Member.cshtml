@@ -19,16 +19,16 @@
     }
 
     function BeginChange(_userGroupID) {
-        document.getElementById("dropdownlist " + _userGroupID).style.visibility = "visible";
-        document.getElementById("currentRole " + _userGroupID).style.visibility = "hidden";
+        document.getElementById("dropdownlist " + _userGroupID).style.display = "block";
+        document.getElementById("currentRole " + _userGroupID).style.display = "none";
 
         var currentRole = document.getElementById("currentRoleName " + _userGroupID).innerHTML.trim();
         var newRole = document.getElementById("select " + _userGroupID).value = currentRole;
     }
 
     function SaveChange(_userGroupID) {
-        document.getElementById("dropdownlist " + _userGroupID).style.visibility = "hidden";
-        document.getElementById("currentRole " + _userGroupID).style.visibility = "visible";
+        document.getElementById("dropdownlist " + _userGroupID).style.display = "none";
+        document.getElementById("currentRole " + _userGroupID).style.display = "block";
 
         var newRole = document.getElementById("select " + _userGroupID).value;
         document.getElementById("currentRoleName " + _userGroupID).innerHTML = newRole;
@@ -41,8 +41,8 @@
     }
 
     function CancelChange(_userGroupID) {
-        document.getElementById("dropdownlist " + _userGroupID).style.visibility = "hidden";
-        document.getElementById("currentRole " + _userGroupID).style.visibility = "visible";
+        document.getElementById("dropdownlist " + _userGroupID).style.display = "none";
+        document.getElementById("currentRole " + _userGroupID).style.display = "block";
     }
 
     function getUserObject(_userGroupID, _newRole) {
@@ -65,7 +65,7 @@
 
 <br/>
 <table width="100%">
-    <tr style="background-color:White">
+    <tr>
         <th width="20%">
             @Html.DisplayName("User Name")
         </th>
@@ -84,7 +84,7 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr id="@item.UserGroupID" style="background-color:White;border: 1px solid #DDDCDC">
+    <tr id="@item.UserGroupID" style="border: 1px solid #DDDCDC">
         <td>
             @Html.DisplayFor(modelItem => item.UserName)
         </td>
@@ -94,33 +94,40 @@
         <td>
             @Html.DisplayFor(modelItem => item.FullName)
         </td>
-        <td>
+        <td style="text-align:center">
             @if(TempData["UserRole"].Equals("Owner"))
             {
-                <div id="currentRole @item.UserGroupID" style="display:block;">
-                    <div id="currentRoleName @item.UserGroupID">
-                        @Html.DisplayFor(modelItem => item.Role)
+                if (item.Role.Equals("Owner"))
+                {
+                    @Html.DisplayFor(modelItem => item.Role)
+                }
+                else
+                {
+                    <div id="currentRole @item.UserGroupID" style="display:block;">
+                        <div id="currentRoleName @item.UserGroupID">
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </div>
+                        <a href="javascript:{}" onclick="BeginChange('@item.UserGroupID')">Change</a>
                     </div>
-                    <a href="javascript:{}" onclick="BeginChange('@item.UserGroupID')">Change</a>
-                </div>
 
-                <div id="dropdownlist @item.UserGroupID" style="visibility:hidden; float:left;">
-                    <select id="select @item.UserGroupID">
-                        <option>Manager</option>
-                        <option>Member</option>
-                    </select>
-                    <div>
-                        <a href="javascript:{}" onclick="SaveChange('@item.UserGroupID')">Save</a>
-                        <a href="javascript:{}" onclick="CancelChange('@item.UserGroupID')">Cancel</a>
+                    <div id="dropdownlist @item.UserGroupID" style="display:none;">
+                        <select id="select @item.UserGroupID">
+                            <option>Manager</option>
+                            <option>Member</option>
+                        </select>
+                        <div>
+                            <a href="javascript:{}" onclick="SaveChange('@item.UserGroupID')">Save</a>
+                            <a href="javascript:{}" onclick="CancelChange('@item.UserGroupID')">Cancel</a>
+                        </div>
                     </div>
-                </div>
+                }
             }
             else
             {
                 @Html.DisplayFor(modelItem => item.Role)
             }
         </td>
-        <td>
+        <td style="text-align:center">
             <a href="javascript:{}" onclick="removeMember('@item.FullName', '@item.UserGroupID');">Remove</a>
         </td>
     </tr>
