@@ -1,4 +1,5 @@
-﻿@model UIT.NoSQL.Core.Domain.GroupObject
+﻿@*@model UIT.NoSQL.Core.Domain.GroupObject*@
+@model UIT.NoSQL.Web.Models.GroupModels
 
 @{
     ViewBag.Title = "Create";
@@ -18,7 +19,7 @@
         <legend>GroupObject</legend>
 
         <div class="editor-label">
-            @Html.Label("Group Name")
+            @Html.LabelFor(model => model.GroupName)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.GroupName)
@@ -33,9 +34,8 @@
             @Html.ValidationMessageFor(model => model.Description)
         </div>
 
-
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Create" class="CREATEGROUP"/>
         </p>
     </fieldset>
 }

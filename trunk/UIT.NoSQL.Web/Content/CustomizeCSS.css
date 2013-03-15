@@ -15,7 +15,7 @@
 		border-radius: 2px;
 		display: inline-block;
     }
-    .POSTBUTTON, .CREATEGROUP, .CREATETOPIC, .POSTTOPIC, .JOINGROUP{
+    .POSTBUTTON, .CREATEGROUP, .CREATETOPIC, .POSTTOPIC, .JOINGROUP, CREATEGROUP{
 		border: 1px solid transparent;
 		color: white;
 		background-color: #D14836;
@@ -27,7 +27,7 @@
 		text-shadow: 0 1px rgba(0, 0, 0, 0.1);
 		text-transform: uppercase;
     }
-    .POSTBUTTON, .CREATEGROUP, .CREATETOPIC, .POSTTOPIC, .JOINGROUP:hover {
+    .POSTBUTTON, .CREATEGROUP, .CREATETOPIC, .POSTTOPIC, .JOINGROUP, CREATEGROUP:hover {
 		border: 1px solid #B0281A;
 		border-bottom-color: #AF301F;
 		background-color: #C53727;
@@ -313,4 +313,14 @@
     color: rgb(0, 104, 28) !important ;
     font-weight:bold !important;
     text-decoration:none !important ;
+}
+
+/*a.aRegister:link{
+    color:white !important;
+    text-decoration:none !important;
+}*/
+a.aRegister:hover{
+    color:white;
+    text-decoration:none;
+    background:none;
 }
