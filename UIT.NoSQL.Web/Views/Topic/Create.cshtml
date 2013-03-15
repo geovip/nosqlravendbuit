@@ -62,6 +62,10 @@
     //window.unload =  function (e) { alert("Bye now!"); };
 
     $(document).ready(function () {
+        $('#myForm').submit(function() {
+            return false;
+        });
+
         createEditor();
 
         $('.POSTTOPIC').click(function () {

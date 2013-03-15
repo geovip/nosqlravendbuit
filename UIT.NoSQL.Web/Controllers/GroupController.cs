@@ -51,7 +51,7 @@ namespace UIT.NoSQL.Web.Controllers
 
         [HttpPost]
         [LoginFilter]
-        public ActionResult Create(GroupObject group)
+        public ActionResult Create(GroupModels groupModel)
         {
             IUserService userService = MvcUnityContainer.Container.Resolve(typeof(IUserService), "") as IUserService;
             IGroupRoleService groupRoleService = MvcUnityContainer.Container.Resolve(typeof(IGroupRoleService), "") as IGroupRoleService;
@@ -60,7 +60,9 @@ namespace UIT.NoSQL.Web.Controllers
 
             string userId = ((UserObject)Session["user"]).Id;
             UserObject user = userService.Load(userId);
-
+            GroupObject group = new GroupObject();
+            group.GroupName = groupModel.GroupName;
+            group.Description = groupModel.Description;
             group.Id = Guid.NewGuid().ToString();
             group.CreateDate = DateTime.Now;
             group.CreateBy = user;
