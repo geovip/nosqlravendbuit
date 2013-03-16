@@ -19,14 +19,13 @@
 
 </script>
 <h2>Join Requests</h2>
-<br/>
 @if (Model == null || Model.Count() == 0)
 {
-    <h2>No request</h2>
+    <h3>No request</h3>
 }
 else
 {
-<table>
+<table border="1" style="border-spacing:0;">
     <tr>
         <th>
             @Html.DisplayName("User Name")

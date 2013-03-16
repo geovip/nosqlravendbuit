@@ -19,19 +19,19 @@
     }
 </script>
 @section menu {
-    <ul id="menu">
-        @if(!TempData["GroupId"].Equals("null"))
-        {
-        @*<li>
-            <a href="javascript:{}" onclick="xmlhttpPost('@TempData["GroupId"]')">Join Group</a>
-        </li>    *@
-            <div tabindex="0" class="BUTTONSTYLE JOINGROUP" onclick = "xmlhttpPost('@TempData["GroupId"]')">Join Group</div>
-        }
-
-        @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
-        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-</ul>
+    @if(Session["user"] != null)
+    {
+        <ul id="menu">
+            @if(!TempData["GroupId"].Equals("null"))
+            {
+                <div tabindex="0" class="BUTTONSTYLE JOINGROUP" onclick = "xmlhttpPost('@TempData["GroupId"]')">Join Group</div>
+            }
+        </ul>
+    }
+    else
+    {
+        <div tabindex="0" class="BUTTONSTYLE JOINGROUP"><a data-dialog-title="Login" href="/Account/Login" id="loginLink1" class="aRegister" style="color:white;text-decoration:none">Login for joining group</a></div>
+    }
 }
 
 <h2>Access Denied</h2>

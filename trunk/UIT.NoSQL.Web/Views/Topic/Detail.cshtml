@@ -1,7 +1,7 @@
 ﻿@model UIT.NoSQL.Core.Domain.TopicObject
 
 @{
-    ViewBag.Title = "Detail";
+    ViewBag.Title = @Model.TopicName;
 }
 
 @section LeftMenu {
@@ -93,11 +93,12 @@
             }
 
             $(document).ready(function () {
+
                 userId = $('#userId').val();
                 hostdata = $('#hostdata').val();
                 role = $('#role').val();
                 getTopicById();
-                
+  
 
                 $('.POSTORREPLY').live('click', function () {
                     if (editor)
