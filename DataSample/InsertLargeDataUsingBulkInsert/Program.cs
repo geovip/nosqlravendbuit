@@ -18,7 +18,7 @@ namespace InsertLargeDataUsingBulkInsert
     class Program
     {
         public static string STR_DATA_SERVER_GROUPS = "F:\\RavenServers-2230\\Data\\Groups\\";
-        public static string databaseName = "UITNoSQLDB3";
+        public static string databaseName = "UITNoSQLDB2";
 
         public static IDocumentStore documentStore1, documentStore2, documentStore3;
         public static GroupRoleObject groupRoleManager, groupRoleOwner, groupRoleMember;
@@ -31,68 +31,68 @@ namespace InsertLargeDataUsingBulkInsert
             Console.WriteLine("Inserting...!");
             Stopwatch st = new Stopwatch();
 
-            //documentStore1 = new DocumentStore { Url = "http://localhost:8081/", DefaultDatabase = databaseName};
-            //documentStore1.Conventions.IdentityPartsSeparator = "-";
-            //documentStore1.Initialize();
+            documentStore1 = new DocumentStore { Url = "http://localhost:8081/", DefaultDatabase = databaseName};
+            documentStore1.Conventions.IdentityPartsSeparator = "-";
+            documentStore1.Initialize();
             documentStore2 = new DocumentStore { Url = "http://localhost:8082/", DefaultDatabase = databaseName };
             documentStore2.Conventions.IdentityPartsSeparator = "-";
             documentStore2.Initialize();
-            //documentStore3 = new DocumentStore { Url = "http://localhost:8083/", DefaultDatabase = databaseName };
-            //documentStore3.Conventions.IdentityPartsSeparator = "-";
-            //documentStore3.Initialize();
+            documentStore3 = new DocumentStore { Url = "http://localhost:8083/", DefaultDatabase = databaseName };
+            documentStore3.Conventions.IdentityPartsSeparator = "-";
+            documentStore3.Initialize();
 
 
 
-            //var session3 = documentStore3.OpenSession();
+            var session3 = documentStore3.OpenSession();
             groupRoleManager = new GroupRoleObject();
             groupRoleManager.Id = "America-7E946ED1-69E6-4B45-8273-FB7AC7367F50";
             groupRoleManager.GroupName = "Manager";
             groupRoleManager.IsGeneral = "America";
-            //session3.Store(groupRoleManager);
+            session3.Store(groupRoleManager);
 
             groupRoleMember = new GroupRoleObject();
             groupRoleMember.Id = "America-9A17E51B-7EAB-4E80-B3E4-6C3D44DCE3EB";
             groupRoleMember.GroupName = "Member";
             groupRoleMember.IsGeneral = "America";
-            //session3.Store(groupRoleMember);
+            session3.Store(groupRoleMember);
 
             groupRoleOwner = new GroupRoleObject();
             groupRoleOwner.Id = "America-79C6B725-F787-4FDF-B820-42A21174449D";
             groupRoleOwner.GroupName = "Owner";
             groupRoleOwner.IsGeneral = "America";
-            //session3.Store(groupRoleOwner);
-            //session3.SaveChanges();
-            //session3.Dispose();
+            session3.Store(groupRoleOwner);
+            session3.SaveChanges();
+            session3.Dispose();
 
             //dt = GetListFullName(300);
 
             st.Start();
             for (int i = 0; i < 10; i++)
             {
-                // Asia
-                //metadataRegion = "Asia";
-                //InsertDataToParticular(regions[0], documentStore1);
-                //// Middle East
-                //metadataRegion = "MiddleEast";
-                //InsertDataToParticular(regions[1], documentStore2);
-                //// America
-                //metadataRegion = "America";
-                //InsertDataToParticular(regions[2], documentStore3);
+                //Asia
+                metadataRegion = regions[0];
+                InsertDataToParticular(regions[0], documentStore1);
+                // Middle East
+                metadataRegion = regions[1];
+                InsertDataToParticular(regions[1], documentStore2);
+                // America
+                metadataRegion = regions[2];
+                InsertDataToParticular(regions[2], documentStore3);
 
-                metadataRegion = "MiddleEast";
-                InsertDataToParticularImprovePerformance(regions[1], documentStore2);
+                //metadataRegion = "MiddleEast";
+                //InsertDataToParticularImprovePerformance(regions[1], documentStore2);
             }
             st.Stop();
             Console.WriteLine("Insert Data Sample Success!");
             Console.WriteLine(st.Elapsed);
 
-            //st = new Stopwatch();
-            //st.Start();
-            //InitIndexes();
-            //st.Stop();
-           
-            //Console.WriteLine("Insert index Success!");
-            //Console.WriteLine("Time create index: {0}", st.Elapsed);
+            st = new Stopwatch();
+            st.Start();
+            InitIndexes();
+            st.Stop();
+
+            Console.WriteLine("Insert index Success!");
+            Console.WriteLine("Time create index: {0}", st.Elapsed);
 
             Console.Read();
             Console.Read();

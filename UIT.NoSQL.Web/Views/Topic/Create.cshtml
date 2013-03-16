@@ -51,7 +51,7 @@
     function createEditor() {
         if (editor)
             return;
-        var config = { startupFocus: true };
+        var config = { startupFocus: false };
         editor = CKEDITOR.appendTo('editor', config);
     }
 
@@ -62,6 +62,7 @@
     //window.unload =  function (e) { alert("Bye now!"); };
 
     $(document).ready(function () {
+        document.getElementById('TopicName').focus();
         $('#myForm').submit(function() {
             return false;
         });

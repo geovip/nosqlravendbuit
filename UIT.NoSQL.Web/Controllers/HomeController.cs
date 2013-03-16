@@ -112,23 +112,11 @@ namespace UIT.NoSQL.Web.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your quintessential app description page.";
-
-            //TopicObject topic = new TopicObject();
-            //topic.TopicID = "T02";
-            //topic.Title = "new title";
-            //topic.Content = "new content";
-            //topic.CreateDate = DateTime.Now;
-
-            //topicService.Save(topic);
-
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your quintessential contact page.";
-
             return View();
         }
 

@@ -2,9 +2,6 @@
 @{
     Layout = null;
 }
-@{
-    ViewBag.Title = "Member";
-}
 <script type="text/javascript">
     function removeMember(_fullname, _id) {
         var confirm = window.confirm('Are you sure to remove ' + _fullname + ' ?');
@@ -64,7 +61,7 @@
 <input id="hdID" type="hidden" value="@TempData["GroupID"]" />
 
 <br/>
-<table width="100%">
+<table width="100%" border="1" style="border-spacing:0;">
     <tr>
         <th width="20%">
             @Html.DisplayName("User Name")
@@ -84,7 +81,7 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr id="@item.UserGroupID" style="border: 1px solid #DDDCDC">
+    <tr id="@item.UserGroupID">
         <td>
             @Html.DisplayFor(modelItem => item.UserName)
         </td>
@@ -133,3 +130,4 @@
     </tr>
 }
 </table>
+

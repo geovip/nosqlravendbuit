@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<UIT.NoSQL.Core.Domain.GroupObject>
 
 @{
-    ViewBag.Title = "Search results";
+    ViewBag.Title = "Search results for \"" + @TempData["searchStr"] + "\"";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
