@@ -39,6 +39,9 @@
 
             function PostSearch() {
                 var _searchStr = document.getElementById("searchStr").value;
+                if (_searchStr == "") {
+                    return;
+                }
                 window.location = "/Search/Index?searchStr=" + _searchStr;
                 //$.post("/Search/Index", getquerystring(), function (data) {
                 //    $("#SectionMain").html(data);

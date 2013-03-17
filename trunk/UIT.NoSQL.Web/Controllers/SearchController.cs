@@ -39,6 +39,11 @@ namespace UIT.NoSQL.Web.Controllers
 
             for (int i = 0; i < totalServer; i++)
             {
+                if (results[i] == 0)
+                {
+                    continue;
+                }
+
                 if (begin == false)
                 {
                     skip += results[i];
@@ -46,33 +51,69 @@ namespace UIT.NoSQL.Web.Controllers
                     {
                         begin = true;
                         skip -= results[i];
+
+                        if (skip <= 0)
+                        {
+                            skip = total;
+                        }
+                        else
+                        {
+                            skip = total - skip;
+                        }
+
+                        take = pageSize - listGroups.Count();
+
+                        var session = MvcApplication.documentStores[i].OpenSession();
+                        var listResults = session.Query<GroupObject, GroupObject_Search>()
+                            .Skip(skip)
+                            .Take(take)
+                            .Search(x => x.GroupName, searchStr)
+                            .ToList();
+
+                        listGroups.AddRange(listResults);
+                        if (listGroups.Count >= pageSize)
+                        {
+                            break;
+                        }
+
+                        continue;
                     }
                 }
 
                 if (begin == true)
                 {
-                    if (skip <= 0)
+                    skip = 0;
+                    //skip += results[i-1];
+                    //if (skip <= 0)
+                    //{
+                    //    skip = total;
+                    //}
+                    //else
+                    //{
+                    //    if (skip < total)
+                    //    {
+                    //        skip = total - skip;
+                    //    }
+                    //    else
+                    //    {
+                    //        skip -= total;
+                    //    }
+                    //}
+
+                    take = pageSize - listGroups.Count();
+
+                    var session = MvcApplication.documentStores[i].OpenSession();
+                    var listResults = session.Query<GroupObject, GroupObject_Search>()
+                        .Skip(skip)
+                        .Take(take)
+                        .Search(x => x.GroupName, searchStr)
+                        .ToList();
+
+                    listGroups.AddRange(listResults);
+                    if (listGroups.Count >= pageSize)
                     {
-                        skip = total;
+                        break;
                     }
-                    else
-                    {
-                        skip -= total;
-                    }
-                }
-
-
-                var session = MvcApplication.documentStores[i].OpenSession();
-                var listResults = session.Query<GroupObject, GroupObject_Search>()
-                    .Skip(skip)
-                    .Take(take)
-                    .Search(x => x.GroupName, searchStr)
-                    .ToList();
-
-                listGroups.AddRange(listResults);
-                if (listGroups.Count >= pageSize)
-                {
-                    break;
                 }
             }
 
@@ -99,8 +140,15 @@ namespace UIT.NoSQL.Web.Controllers
                 totalResult += results[i];
             }
 
-
-            var listGroups = DoSearch(0, searchStr, 10, results, totalServer);
+            List<GroupObject> listGroups;
+            if (totalResult == 0)
+            {
+                listGroups = new List<GroupObject>();
+            }
+            else
+            {
+                listGroups = DoSearch(0, searchStr, 10, results, totalServer);
+            }
 
             string resultsStr = string.Empty;
             for (int i = 0; i < totalServer; i++)
