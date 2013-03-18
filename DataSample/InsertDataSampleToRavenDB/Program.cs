@@ -52,13 +52,13 @@ namespace InsertDataSampleToRavenDB
             
             Init();
             CreateGroupRoles();
-            //InsertDataSampleToServers();
+            InsertDataSampleToServers();
             // ~ insert 1.000.000 records
 
 
-            InsertLargeDataNewestTest(); // ham nay hien tai la chinh thuc
+            //InsertLargeDataNewestTest(); // ham nay hien tai la chinh thuc
             //InsertLargeDataUsingPatchingAPI();
-            InitIndexes();
+            //InitIndexes();
 
             st.Stop();
             Console.WriteLine("Insert Data Sample Success!");
@@ -112,6 +112,7 @@ namespace InsertDataSampleToRavenDB
                 IndexCreation.CreateIndexes(typeof(GroupIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupRoleIndex).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(ByGroupIdAndJoinDateSortByJoinDate).Assembly, doc);
+                IndexCreation.CreateIndexes(typeof(GetUserGroupByUserIdGroupId).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_ByIsPublic).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search).Assembly, doc);
                 IndexCreation.CreateIndexes(typeof(GroupObject_Search_NotAnalyed).Assembly, doc);
@@ -1487,7 +1488,7 @@ namespace InsertDataSampleToRavenDB
                         // group xong het roi, luu xuong thoi
                         session.Store(groupObject);
                         count++;
-                        if (count == 8)
+                        if (count == 5)
                         {
                             session.SaveChanges();
                             session.Dispose();
