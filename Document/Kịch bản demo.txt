@@ -1,0 +1,13 @@
+﻿Kịch bản demo:
+
+1. Đăng ký tài khoản X
+2. Đăng nhập
+3. Tạo group A
+4. Đăng bài (attach files)
+5. Đăng bình luận (attach files)
+6. Search group B
+7. Tham gia group B
+8. Đăng nhập owner B
+9. Accept X
+10. Đăng nhập X
+11. Đăng bài, đăng bình luận trong group B
